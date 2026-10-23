@@ -56,6 +56,22 @@ await cw(`/inboxes/${inbox.id}/set_agent_bot`, 'POST', { agent_bot: bot.id });
 // 4b. inbox members: agents only see conversations of inboxes they belong to (create adds only missing ids)
 await cw('/inbox_members', 'POST', { inbox_id: inbox.id, user_ids: list(await cw('/agents')).map((a) => a.id) });
 
+// 4c. optional WhatsApp Cloud API inbox: only when every WHATSAPP_* value is in .env. Chatwoot checks the credentials
+//     against graph.facebook.com on create. The bot is attached so WhatsApp messages become portal tickets (lld-backend §12).
+const waKeys = ['WHATSAPP_PHONE_NUMBER', 'WHATSAPP_PHONE_NUMBER_ID', 'WHATSAPP_BUSINESS_ACCOUNT_ID', 'WHATSAPP_API_KEY'];
+if (waKeys.every((k) => env[k])) {
+  let wa = list(await cw('/inboxes')).find((i) => i.channel_type === 'Channel::Whatsapp' && i.phone_number === env.WHATSAPP_PHONE_NUMBER);
+  if (!wa) {
+    wa = await cw('/inboxes', 'POST', { name: 'WhatsApp', channel: { type: 'whatsapp', phone_number: env.WHATSAPP_PHONE_NUMBER, provider: 'whatsapp_cloud',
+      provider_config: { api_key: env.WHATSAPP_API_KEY, phone_number_id: env.WHATSAPP_PHONE_NUMBER_ID, business_account_id: env.WHATSAPP_BUSINESS_ACCOUNT_ID } } });
+    console.log(`WhatsApp inbox created (${wa.id})`);
+  } else console.log('WhatsApp inbox exists');
+  await cw(`/inboxes/${wa.id}/set_agent_bot`, 'POST', { agent_bot: bot.id });
+  await cw('/inbox_members', 'POST', { inbox_id: wa.id, user_ids: list(await cw('/agents')).map((a) => a.id) });
+  console.log(`Meta app → WhatsApp → Configuration: callback <public Chatwoot URL>/webhooks/whatsapp/${env.WHATSAPP_PHONE_NUMBER}, ` +
+    'verify token = Chatwoot → Settings → Inboxes → WhatsApp → Configuration');
+} else if (waKeys.some((k) => env[k])) console.log(`WhatsApp skipped: set all of ${waKeys.join(', ')}`);
+
 // 5. conversation custom attributes
 const attrs = [
   { attribute_key: 'ticket_number', attribute_display_name: 'Ticket number', attribute_display_type: 'text' },
@@ -63,6 +79,7 @@ const attrs = [
   { attribute_key: 'ai_tier', attribute_display_name: 'AI tier', attribute_display_type: 'list', attribute_values: ['auto', 'draft', 'human'] },
   { attribute_key: 'ai_confidence', attribute_display_name: 'AI confidence', attribute_display_type: 'number' },
   { attribute_key: 'csat', attribute_display_name: 'CSAT', attribute_display_type: 'number' },
+  { attribute_key: 'ai_summary', attribute_display_name: 'AI summary', attribute_display_type: 'text' },
 ];
 const haveAttrs = new Set(list(await cw('/custom_attribute_definitions?attribute_model=0')).map((a) => a.attribute_key));
 for (const a of attrs.filter((x) => !haveAttrs.has(x.attribute_key))) {

@@ -58,13 +58,40 @@ export function fakeMailer() {
   return m;
 }
 
+/** Bag-of-words embedder (64 dims, unit length). `synonyms` maps a word onto another before hashing. */
+export function fakeEmbedder(synonyms = {}) {
+  const e = { model: 'fake', calls: 0, fail: null };
+  e.embed = vi.fn(async (texts) => {
+    e.calls += texts.length;
+    if (e.fail) throw e.fail;
+    return texts.map((t) => {
+      const v = new Array(64).fill(0);
+      for (const w of t.toLowerCase().match(/\p{L}+/gu) ?? []) {
+        const x = synonyms[w] ?? w;
+        let h = 0; for (const ch of x) h = (h * 31 + ch.codePointAt(0)) % 64;
+        v[h] += 1;
+      }
+      const n = Math.hypot(...v) || 1;
+      return v.map((x) => x / n);
+    });
+  });
+  return e;
+}
+
+export function fakeSms(on = true) {
+  const s = { sent: [], fail: null, configured: () => on };
+  s.sendOtp = vi.fn(async (phone, code, text) => { if (s.fail) throw s.fail; s.sent.push({ phone, code, text }); });
+  return s;
+}
+
 export async function setup() {
   const chatwoot = fakeChatwoot();
   const groq = fakeGroq();
   const mailer = fakeMailer();
-  const app = createApp({ chatwoot, groq, mailer });
+  const sms = fakeSms(false);
+  const app = createApp({ chatwoot, groq, mailer, sms });
   await upsertArticles();
-  return { app, chatwoot, groq, mailer };
+  return { app, chatwoot, groq, mailer, sms };
 }
 
 let ipSeq = 1;

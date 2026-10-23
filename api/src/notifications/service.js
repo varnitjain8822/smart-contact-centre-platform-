@@ -48,7 +48,7 @@ export async function notify(ticket, type, extra = {}) {
 async function sendEmail(ticket, user, type, { title, body = '' }) {
   const locale = user.locale ?? 'en';
   try {
-    if (user.notify?.email?.[PREF[type]] === false) return;
+    if (!user.email || user.notify?.email?.[PREF[type]] === false) return;   // WhatsApp phone-only customers have no email
     const claim = await Ticket.updateOne({ _id: ticket._id, $or: [{ notifyEmailAt: null }, { notifyEmailAt: { $lte: new Date(Date.now() - EMAIL_THROTTLE_MS) } }] },
       { $set: { notifyEmailAt: new Date() } }, { timestamps: false });
     if (!claim.modifiedCount) return log.info({ evt: 'notification_email_throttled', ticket: ticket.number, type });

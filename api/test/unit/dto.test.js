@@ -29,6 +29,6 @@ test('detail shape', () => {
   expect(d.sla.activeDueAt).toBeNull();
   expect(d.sla.state).toBe('met');
   expect(d.csat).toEqual({ rating: 5, comment: 'ok', submittedAt: c.toISOString() });
-  expect(Object.keys(d).sort()).toEqual(['actions', 'ai', 'aiTier', 'category', 'createdAt', 'csat', 'customerCategory', 'delivery',
+  expect(Object.keys(d).sort()).toEqual(['actions', 'ai', 'aiTier', 'category', 'channel', 'createdAt', 'csat', 'customerCategory', 'delivery',
     'description', 'lastMessageAt', 'number', 'priority', 'resolutionType', 'sla', 'status', 'statusHistory', 'subject', 'updatedAt']);
 });

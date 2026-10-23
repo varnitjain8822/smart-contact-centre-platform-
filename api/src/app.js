@@ -5,6 +5,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import { cfg } from './config.js';
 import { deps } from './deps.js';
+import { adminRouter } from './admin/analytics.js';
 import { aiRouter, assistantRouter } from './ai/routes.js';
 import { attachmentsRouter } from './attachments/routes.js';
 import { notificationsRouter } from './notifications/routes.js';
@@ -63,6 +64,7 @@ export function createApp(overrides = {}) {
   app.use('/api/attachments', attachmentsRouter);
   app.use('/api/notifications', notificationsRouter);
   app.use('/api/assistant', assistantRouter);
+  app.use('/api/admin', adminRouter);
 
   app.use((req, res, next) => next(new AppError(404, 'NOT_FOUND', 'Not found')));
   app.use(errorMiddleware);

@@ -20,6 +20,7 @@ export function toTicketSummary(t, now = new Date()) {
       activeDueAt: t.status === 'resolved' ? null : iso(sla.activeDue(t)), state: sla.state(t, now) },
     aiTier: t.ai?.tier ?? null,
     delivery: delivery(t),
+    channel: t.channel ?? 'portal',
   };
 }
 

@@ -5,6 +5,7 @@ import { ago, categoryLabel } from '../../lib/format';
 import { PriorityTag } from './PriorityTag';
 import { SlaChip } from './SlaChip';
 import { StatusPill } from './StatusPill';
+import { ChannelBadge } from './ChannelBadge';
 
 /** A paper ticket: number + status up top, a perforated tear line, SLA countdown on the stub. */
 export function TicketCard({ t, now }: { t: TicketSummary; now: number }) {
@@ -14,7 +15,8 @@ export function TicketCard({ t, now }: { t: TicketSummary; now: number }) {
       className="group relative flex h-full flex-col overflow-hidden rounded-md border border-line bg-surface shadow-card transition-[border-color,transform] hover:-translate-y-px hover:border-line-strong">
       <div className="flex-1 p-4 pb-3.5 sm:p-5 sm:pb-4">
         <div className="flex items-center justify-between gap-3">
-          <span className="font-display text-[15px] font-semibold tracking-tight text-muted tnum">{t.number}</span>
+          <span className="flex items-center gap-2"><span className="font-display text-[15px] font-semibold tracking-tight text-muted tnum">{t.number}</span>
+            <ChannelBadge channel={t.channel} /></span>
           <StatusPill status={t.status} />
         </div>
         <h3 className="mt-2.5 line-clamp-2 font-text text-[17px] font-semibold leading-snug text-ink group-hover:underline group-hover:decoration-line-strong group-hover:underline-offset-4">

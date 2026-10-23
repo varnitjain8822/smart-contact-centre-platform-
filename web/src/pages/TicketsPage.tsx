@@ -13,6 +13,7 @@ import { useNow } from '../lib/useNow';
 import { CATEGORIES, PRIORITIES, STATUSES, type TicketFilters, type TicketSort, type TicketSummary } from '../lib/types';
 import { Button, buttonClass } from '../ui/Button';
 import { DataTable, type Column } from '../ui/DataTable';
+import { ChannelBadge } from '../features/tickets/ChannelBadge';
 import { EmptyState, RetryBlock } from '../ui/EmptyState';
 import { PageTitle } from '../ui/PageTitle';
 import { Popover } from '../ui/Popover';
@@ -52,7 +53,7 @@ export default function TicketsPage() {
 
   const cols: Column<TicketSummary>[] = [
     { key: 'created', header: t('tickets.col.number'), serverSort: 'desc', cell: (r) => <span className="font-display font-semibold tracking-tight text-muted tnum">{r.number}</span> },
-    { key: 'subject', header: t('tickets.col.subject'), primary: true, cell: (r) => <span className="line-clamp-2">{r.subject}</span> },
+    { key: 'subject', header: t('tickets.col.subject'), primary: true, cell: (r) => <span className="line-clamp-2">{r.subject} <ChannelBadge channel={r.channel} /></span> },
     { key: 'status', header: t('tickets.col.status'), cell: (r) => <StatusPill status={r.status} /> },
     { key: 'priority', header: t('tickets.col.priority'), serverSort: 'desc', cell: (r) => <PriorityTag priority={r.priority} /> },
     { key: 'sla', header: t('tickets.col.sla'), serverSort: 'asc', cell: (r) => <SlaChip sla={r.sla} now={now} start={r.createdAt} /> },

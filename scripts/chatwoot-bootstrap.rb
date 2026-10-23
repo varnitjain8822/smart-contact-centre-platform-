@@ -20,8 +20,11 @@ svc = ensure_user(ENV.fetch('CW_ADMIN_EMAIL'), 'Portal Service', ENV.fetch('CW_A
 ensure_user(ENV.fetch('CW_AGENT_EMAIL'), 'Demo Agent', ENV.fetch('CW_AGENT_PASSWORD'), account, :agent)
 
 { 'INSTALLATION_NAME' => 'SmartCC', 'BRAND_NAME' => 'SmartCC',
-  'CAPTAIN_OPEN_AI_API_KEY' => ENV['GROQ_API_KEY'], 'CAPTAIN_OPEN_AI_ENDPOINT' => 'https://api.groq.com/openai',
-  'CAPTAIN_OPEN_AI_MODEL' => ENV.fetch('GROQ_MODEL', 'openai/gpt-oss-120b') }.each do |k, v|
+  # Captain (copilot tasks) on Groq's OpenAI-compatible API; Chatwoot appends /v1. Captain takes one key: the first of GROQ_API_KEY
+  'CAPTAIN_OPEN_AI_API_KEY' => ENV['GROQ_API_KEY'].to_s.split(',').first&.strip, 'CAPTAIN_OPEN_AI_ENDPOINT' => 'https://api.groq.com/openai',
+  'CAPTAIN_OPEN_AI_MODEL' => ENV.fetch('GROQ_MODEL', 'openai/gpt-oss-120b'),
+  # browser-reachable portal api for Reports → SmartCC Analytics
+  'PORTAL_API_URL' => ENV.fetch('PORTAL_PUBLIC_API_URL', 'http://localhost:4000') }.each do |k, v|
   next if v.blank?
 
   c = InstallationConfig.find_or_initialize_by(name: k)
@@ -29,5 +32,6 @@ ensure_user(ENV.fetch('CW_AGENT_EMAIL'), 'Demo Agent', ENV.fetch('CW_AGENT_PASSW
   c.save!
 end
 GlobalConfig.clear_cache
+account.enable_features!('captain_tasks') unless account.feature_enabled?('captain_tasks')
 
 puts({ account_id: account.id, admin_token: svc.access_token.token }.to_json)

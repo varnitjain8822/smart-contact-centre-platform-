@@ -10,6 +10,7 @@ import { overview } from '../me/overview.js';
 import { pushContactProfile } from '../tickets/service.js';
 import * as hub from '../realtime/hub.js';
 import { bumpSessionVersion, clearSession, requireUser, setSession } from './session.js';
+import { otpRouter } from './otp.js';
 
 const name = z.string().trim().min(2, 'Name must be at least 2 characters').max(80, 'Name must be at most 80 characters');
 const email = z.string().trim().toLowerCase().max(254).email('Enter a valid email address');
@@ -17,6 +18,7 @@ const password = z.string().min(8, 'Password must be at least 8 characters').max
 const DUMMY_HASH = bcrypt.hashSync('timing-equaliser', 12);
 
 export const authRouter = Router();
+authRouter.use('/otp', otpRouter);   // v3 sign-in codes (auth/otp.js)
 
 authRouter.post('/register', limit({ windowMs: 3600_000, max: 5, key: (req) => req.ip }), async (req, res) => {
   const b = z.object({ name, email, password }).parse(req.body);
@@ -82,7 +84,8 @@ meRouter.get('/overview', async (req, res) => res.json(await overview(req.user))
 meRouter.post('/password', async (req, res) => {
   const b = z.object({ currentPassword: z.string().max(128), newPassword: password }).parse(req.body);
   const user = await User.findById(req.user._id).select('+passwordHash');
-  if (!(await bcrypt.compare(b.currentPassword, user.passwordHash))) throw new AppError(400, 'WRONG_PASSWORD', 'Current password is incorrect');
+  // accounts made with a sign-in code have no password yet: they set one without a current password
+  if (user.passwordHash && !(await bcrypt.compare(b.currentPassword, user.passwordHash))) throw new AppError(400, 'WRONG_PASSWORD', 'Current password is incorrect');
   user.passwordHash = await bcrypt.hash(b.newPassword, 12);
   bumpSessionVersion(user);
   await user.save();

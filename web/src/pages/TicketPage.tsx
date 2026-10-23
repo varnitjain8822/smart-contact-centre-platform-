@@ -88,8 +88,12 @@ export default function TicketPage() {
             onRate={(rating, comment) => rate.mutate({ rating, comment })} />
         </div>
 
-        <Composer ticket={n} disabled={ticket.isPending} onSend={send.send}
-          placeholder={tr(t.status === 'resolved' ? 'ticket.replyReopen' : 'ticket.replyPlaceholder')} />
+        {t.channel === 'whatsapp' ? (
+          <p className="mt-6 rounded-md border border-line bg-surface-2/60 px-4 py-3 text-ink-2 print:hidden">{tr('ticket.whatsappReply')}</p>
+        ) : (
+          <Composer ticket={n} disabled={ticket.isPending} onSend={send.send}
+            placeholder={tr(t.status === 'resolved' ? 'ticket.replyReopen' : 'ticket.replyPlaceholder')} />
+        )}
       </div>
 
       <aside aria-label={tr('ticket.details')} className="hidden xl:block print:hidden">

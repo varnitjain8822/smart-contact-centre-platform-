@@ -35,12 +35,17 @@ const t = (n: string) => `/tickets/${encodeURIComponent(n)}`;
 const lang = () => (i18n.language === 'hi' ? 'hi' : 'en');
 type U = { user: User };
 type T = { ticket: TicketDetail };
+export type OtpTarget = { email: string } | { phone: string };
 export type MePatch = { name?: string; phone?: string; organization?: string; locale?: Locale; notify?: { email?: Partial<NotifyPrefs['email']>; inApp?: boolean } };
 
 export const api = {
   register: (v: { name: string; email: string; password: string }) => req<U>('POST', '/auth/register', v),
   login: (v: { email: string; password: string; remember?: boolean }) => req<U>('POST', '/auth/login', v),
   logout: () => req<void>('POST', '/auth/logout', {}),
+  otpOptions: () => req<{ email: boolean; sms: boolean }>('GET', '/auth/otp'),
+  otpRequest: (v: OtpTarget & { locale?: Locale }) => req<{ sent: true; expiresInS: number; resendInS: number }>('POST', '/auth/otp/request', v),
+  otpVerify: (v: OtpTarget & { code: string; name?: string; locale?: Locale; remember?: boolean }) =>
+    req<U & { created: boolean }>('POST', '/auth/otp/verify', v),
   logoutOthers: () => req<void>('POST', '/auth/logout-others', {}),
   me: () => req<U>('GET', '/auth/me'),
   updateMe: (v: MePatch) => req<U>('PATCH', '/me', v),

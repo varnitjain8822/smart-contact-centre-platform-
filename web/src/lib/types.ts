@@ -13,7 +13,7 @@ export interface Sla { responseDueAt: string; resolutionDueAt: string; firstResp
   resolvedAt: string | null; activeDueAt: string | null; state: SlaState }
 export interface TicketSummary { number: string; subject: string; status: Status; priority: Priority; category: Category;
   createdAt: string; updatedAt: string; lastMessageAt: string; sla: Sla; aiTier: 'auto' | 'draft' | 'human' | null;
-  delivery: 'synced' | 'queued' | 'delayed' }
+  delivery: 'synced' | 'queued' | 'delayed'; channel?: 'portal' | 'whatsapp' }
 export interface StatusEvent { status: Status; at: string; by: 'customer' | 'agent' | 'ai' | 'system' }
 export interface TicketActions { canAccept: boolean; canRequestHuman: boolean; canResolve: boolean; canRate: boolean }
 export interface TicketDetail extends TicketSummary { description: string; customerCategory: Category | null;
@@ -34,7 +34,8 @@ export interface Page<T> { items: T[]; nextCursor: string | null }
 export interface ApiErrorBody { error: { code: ErrorCode; message: string; details?: { path: string; message: string }[] | Record<string, unknown> } }
 export type ErrorCode = 'VALIDATION_FAILED' | 'WRONG_PASSWORD' | 'UNAUTHENTICATED' | 'INVALID_CREDENTIALS' | 'FORBIDDEN_ORIGIN' | 'NOT_FOUND'
   | 'EMAIL_TAKEN' | 'INVALID_STATE' | 'ALREADY_RATED' | 'UNSUPPORTED_MEDIA_TYPE' | 'RATE_LIMITED' | 'INTERNAL'
-  | 'INVALID_ATTACHMENT' | 'FILE_TOO_LARGE' | 'UNSUPPORTED_FILE_TYPE' | 'AI_UNAVAILABLE';
+  | 'INVALID_ATTACHMENT' | 'FILE_TOO_LARGE' | 'UNSUPPORTED_FILE_TYPE' | 'AI_UNAVAILABLE'
+  | 'OTP_INVALID' | 'OTP_EXPIRED' | 'OTP_SEND_FAILED' | 'SMS_UNAVAILABLE' | 'ACCOUNT_NOT_FOUND' | 'WHATSAPP_TICKET';
 export type LiveEvent = { type: 'message.created'; ticketNumber: string; message: Message }
   | { type: 'ticket.updated'; ticket: TicketDetail };
 

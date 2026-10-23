@@ -1,7 +1,25 @@
 // Deterministic OpenAI-compatible stand-in for Groq (e2e only). No deps.
 // JSON mode (bot/suggest; Hindi answer when the system prompt says 'Reply in Hindi'): 'refund' → draft tier; 'payment' → auto tier; anything else → human (low confidence).
 // stream:true (assistant chat): SSE deltas; 'payment' → confident answer citing the payment article; else unsure (suggestTicket).
+// Also a WhatsApp Cloud (Graph API) mock for Chatwoot sidekiq (WHATSAPP_CLOUD_BASE_URL=http://groq-stub:8080):
+// GET /v*/… → credential/template checks pass; POST /v*/<phone_number_id>/messages → recorded; GET /wa/sent → the recorded sends.
 import http from 'node:http';
+
+export const WA_PHONE_NUMBER_ID = '1555000111';
+const waSent = [];
+function graph(req, res, body) {
+  const json = (o) => res.writeHead(200, { 'Content-Type': 'application/json' }).end(JSON.stringify(o));
+  if (req.method === 'GET' && req.url === '/wa/sent') return json(waSent);
+  if (req.method === 'GET' && /\/phone_numbers/.test(req.url)) return json({ data: [{ id: WA_PHONE_NUMBER_ID }] });
+  if (req.method === 'GET') return json({ data: [], paging: {} });             // message_templates, health, …
+  const m = req.url.match(/^\/v[\d.]+\/([^/]+)\/messages/);
+  if (req.method === 'POST' && m) {
+    let b = {}; try { b = JSON.parse(body); } catch {}
+    waSent.push({ phoneNumberId: m[1], auth: req.headers.authorization ? 'bearer' : 'none', ...b });
+    return json({ messaging_product: 'whatsapp', contacts: [{ input: b.to, wa_id: b.to }], messages: [{ id: `wamid.mock.${waSent.length}` }] });
+  }
+  res.writeHead(404).end();
+}
 
 export function reply(user, sys = '') {
   const hindi = sys.includes('Reply in Hindi');
@@ -44,9 +62,9 @@ function writeStream(res, text) {
 
 const port = Number(process.env.PORT ?? 8080);
 http.createServer((req, res) => {
-  if (req.method !== 'POST' || !req.url.endsWith('/chat/completions')) { res.writeHead(404).end(); return; }
   let body = '';
   req.on('data', (c) => { body += c; });
+  if (req.method !== 'POST' || !req.url.endsWith('/chat/completions')) { req.on('end', () => graph(req, res, body)); return; }
   req.on('end', () => {
     let user = '', sys = '', parsed = {};
     try { parsed = JSON.parse(body); user = parsed.messages.filter((m) => m.role === 'user').map((m) => m.content).join('\n'); sys = parsed.messages.find((m) => m.role === 'system')?.content ?? ''; } catch {}

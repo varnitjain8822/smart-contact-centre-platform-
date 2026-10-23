@@ -5,8 +5,10 @@ const { Schema } = mongoose;
 const schema = new Schema({
   number: { type: String, required: true, unique: true, match: /^SC-\d+$/ },
   customerId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-  subject: { type: String, minlength: 5, maxlength: 120 },
-  description: { type: String, minlength: 20, maxlength: 5000 },
+  // portal tickets are validated to 5/20+ chars at the route; WhatsApp tickets take the customer's first message as is
+  subject: { type: String, maxlength: 120 },
+  description: { type: String, maxlength: 5000 },
+  channel: { type: String, enum: ['portal', 'whatsapp'], default: 'portal' },
   customerCategory: { type: String, enum: [...CATEGORIES, null], default: null },
   category: { type: String, enum: CATEGORIES, default: 'General' },
   priority: { type: String, enum: PRIORITIES, default: 'medium' },

@@ -35,7 +35,7 @@ restore:	## make restore [DIR=backups/<timestamp>] (default: latest)
 	scripts/restore.sh $(DIR)
 
 e2e:	## dev stack + Groq stub, then Playwright
-	COMPOSE_PROFILES=dev $(DC) -f docker-compose.yml -f docker-compose.e2e.yml up -d --force-recreate api groq-stub
+	COMPOSE_PROFILES=dev $(DC) -f docker-compose.yml -f docker-compose.e2e.yml up -d --force-recreate api groq-stub sidekiq
 	cd e2e && npx playwright test
 
 logs:	## make logs [S="api rails"]

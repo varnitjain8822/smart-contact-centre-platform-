@@ -164,6 +164,7 @@ export async function markRetry(ticket, err) {
 // ---------- customer messages ----------
 export async function addCustomerMessage(user, number, body, clientMessageId, attachmentIds = []) {
   const t = await getForUser(user._id, number);
+  if (t.channel === 'whatsapp') throw new AppError(409, 'WHATSAPP_TICKET', 'Reply to this ticket on WhatsApp');
   const existing = await Message.findOne({ ticketId: t._id, clientMessageId });
   if (existing) return { message: existing, replay: true };
   const atts = await attachments.claimable(user._id, attachmentIds, t);

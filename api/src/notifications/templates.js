@@ -36,3 +36,13 @@ export const UNSUBSCRIBED_PAGE = {
   hi: '<!doctype html><html lang="hi"><meta charset="utf-8"><title>सदस्यता छोड़ी गई</title><h1>आपकी सदस्यता छोड़ दी गई है</h1><p>SmartCC अब आपको टिकट से जुड़े ईमेल नहीं भेजेगा। आप प्रोफ़ाइल में जाकर ईमेल फिर से चालू कर सकते हैं।</p></html>',
   invalid: '<!doctype html><html lang="en"><meta charset="utf-8"><title>Invalid link</title><h1>This unsubscribe link is not valid</h1></html>',
 };
+
+// Sign-in code (OTP) email + SMS text. The code is in the subject so it shows in the inbox preview.
+export const OTP = {
+  en: (code) => ({ subject: `${code} is your SmartCC sign-in code`,
+    text: `Your SmartCC sign-in code is ${code}.\n\nIt expires in 10 minutes. Never share it with anyone, including our support team.\n\nIf you did not ask for this code, you can ignore this email.\n\nSmartCC Support\n`,
+    sms: `${code} is your SmartCC sign-in code. It expires in 10 minutes. Do not share it with anyone.` }),
+  hi: (code) => ({ subject: `${code} आपका SmartCC साइन-इन कोड है`,
+    text: `आपका SmartCC साइन-इन कोड ${code} है।\n\nयह 10 मिनट में समाप्त हो जाएगा। इसे किसी के साथ साझा न करें, हमारी सपोर्ट टीम के साथ भी नहीं।\n\nअगर आपने यह कोड नहीं माँगा था, तो इस ईमेल को अनदेखा करें।\n\nSmartCC सपोर्ट\n`,
+    sms: `${code} आपका SmartCC साइन-इन कोड है। यह 10 मिनट में समाप्त होगा। इसे किसी को न बताएँ।` }),
+};

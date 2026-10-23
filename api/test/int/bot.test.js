@@ -49,7 +49,7 @@ test('auto: outgoing reply with bot token; AI message stored with sources; await
   expect(m.createdAt.getTime()).toBeGreaterThanOrEqual(q.createdAt.getTime());   // whole-second created_at must not sort the answer above the question
   expect(m.sources.map((s) => ({ slug: s.slug, title: s.title }))).toEqual([{ slug: SLUG, title: 'Payment Pending / Subscription Not Active' }]);
   expect(cw.named('setLabels')[0][2]).toEqual(expect.arrayContaining(['billing', 'ai-auto']));
-  expect(cw.named('setCustomAttributes')[0][2]).toMatchObject({ ticket_number: t.number, ai_tier: 'auto', ai_confidence: 0.92 });
+  expect(cw.named('setCustomAttributes')[0][2]).toMatchObject({ ticket_number: t.number, ai_tier: 'auto', ai_confidence: 0.92, ai_summary: 'Customer paid, plan inactive.' });
   expect(cw.named('toggleStatus')).toHaveLength(0);
   expect(groq.last[0].role).toBe('system');
   const detail = (await a.get(`/api/tickets/${t.number}`).expect(200)).body.ticket;

@@ -37,6 +37,14 @@ const schema = z.object({
   SMTP_URL: z.string().default('smtp://mailhog:1025'),
   MAIL_FROM: z.string().default('SmartCC Support <support@smartcc.localhost>'),
   SHUTDOWN_GRACE_MS: num(10000),
+  EMBED_MODEL: z.string().default('Xenova/multilingual-e5-small'),   // 'off' → text-only KB retrieval
+  EMBED_CACHE_DIR: opt,
+  SMS_PROVIDER: z.enum(['msg91', 'twilio']).optional(),          // unset → no SMS sign-in codes
+  MSG91_AUTH_KEY: opt,
+  MSG91_TEMPLATE_ID: opt,
+  TWILIO_ACCOUNT_SID: opt,
+  TWILIO_AUTH_TOKEN: opt,
+  TWILIO_FROM: opt,
   LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error']).default('info'),
 });
 

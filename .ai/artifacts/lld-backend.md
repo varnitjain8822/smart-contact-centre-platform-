@@ -1135,3 +1135,109 @@ data: {"ticketNumber":"SC-1012","on":true,"name":"Asha"}
 | SMTP_URL | no | `smtp://mailhog:1025` | nodemailer transport URL (`smtps://user:pass@host:465` in prod) |
 | MAIL_FROM | no | `SmartCC Support <support@smartcc.localhost>` | From header |
 | SHUTDOWN_GRACE_MS | no | 10000 | max wait for in-flight requests on SIGTERM |
+
+## 10. v3 admin analytics (PLAN-v3 §4)
+
+**Module:** `api/src/admin/analytics.js` exports `adminRouter`, mounted at `/api/admin`.
+
+### 10.1 `GET /api/admin/analytics?from=YYYY-MM-DD&to=YYYY-MM-DD`
+- **Window:** tickets with `createdAt ∈ [from 00:00Z, to+1d 00:00Z)`. `to` is inclusive. When the dates are missing the window is the last 30 days ending now. A malformed date, or `from` ≥ `to`, returns 400 `VALIDATION_FAILED`.
+- **Auth:** the header `X-Chatwoot-Token` carries the Chatwoot user's `access_token`. The api calls `GET {CHATWOOT_URL}/api/v1/profile` with `api_access_token: <token>`. The caller passes only when `profile.accounts[]` has `{id: CHATWOOT_ACCOUNT_ID, role: 'administrator'}`. The verdict, good or bad, is cached per token for 60 s in an in-memory Map.
+  - No header → 401 `UNAUTHENTICATED`.
+  - Not an admin, or an invalid token (Chatwoot 401) → 403 `FORBIDDEN`.
+  - Chatwoot unreachable or 5xx → 502 `CHATWOOT_UNAVAILABLE`.
+- **CORS (this router only):**
+  - The allowed origin is `CHATWOOT_PUBLIC_ORIGIN` (default `http://localhost:${CW_PORT||3000}`). When the request's `Origin` equals it, the response carries `Access-Control-Allow-Origin` and `Allow-Headers: X-Chatwoot-Token`, with `Max-Age` 600.
+  - `OPTIONS` returns 204. `Vary: Origin` is always set.
+  - A GET is not a mutation, so `mutationGuard` lets it through.
+- **Computation:** one `Ticket.aggregate` with `$facet`, plus one `AssistantFeedback` group. `$median` needs MongoDB ≥ 7.0. Percentages have 1 decimal place and are `null` when the denominator is 0.
+
+**Response:**
+```jsonc
+{ "range": { "from": iso, "to": iso },
+  "totals": { "tickets", "aiResolved" /* resolutionType 'ai' */, "deflectionRate" /* % aiResolved/tickets */ },
+  "ticketsPerDay": [{ "date": "YYYY-MM-DD" /* UTC */, "count" }],
+  "tiers": { "auto", "draft", "human", "none" },
+  "escalationTriggers": [{ "key", "count" }],              // unwound ai.triggers, desc
+  "sla": { "responded", "firstResponseCompliance" /* firstResponseAt ≤ responseDueAt */, "resolved",
+           "resolutionCompliance" /* resolvedAt ≤ resolutionDueAt */, "breaches" /* breachedAt set */,
+           "medianFirstResponseMinutes", "medianResolutionMinutes" },
+  "csat": { "all"|"ai"|"human": { "count", "average", "distribution": [{ "rating": 1..5, "count" }] } },  // by resolutionType (null→human)
+  "topCategories": [{ "key", "count" }], "topIntents": [{ "key", "count" }],   // top 10; intents exclude unknown
+  "kbGaps": { "count", "items": [{ "number", "subject", "intent", "category", "confidence", "createdAt" }] },  // ai.confidence < AI_DRAFT_THRESHOLD, newest 20
+  "assistantFeedback": { "up", "down", "helpfulRate" } }
+```
+
+### 10.2 New env vars (api)
+| Var | Required | Default | Purpose |
+|---|---|---|---|
+| CHATWOOT_PUBLIC_ORIGIN | no | `http://localhost:${CW_PORT\|\|3000}` | browser origin of the Chatwoot dashboard, allowed by CORS on `/api/admin/*` |
+
+### 10.3 Consumer (Chatwoot fork)
+- **Page:** Reports → SmartCC Analytics, route `smartcc_analytics_reports` (`/app/accounts/:id/reports/smartcc`, administrator only). It is implemented in `SmartccAnalytics.vue`.
+- **Request:** the page reads `window.globalConfig.PORTAL_API_URL`. This is the new InstallationConfig `PORTAL_API_URL`; `scripts/chatwoot-bootstrap.rb` sets it from `PORTAL_PUBLIC_API_URL` (default `http://localhost:4000`). The page sends the current user's `access_token` as `X-Chatwoot-Token`.
+
+### 10.4 Bot attribute
+`ai/bot.js` also writes the conversation custom attribute `ai_summary` (= `ai.summary`). The Chatwoot "Portal ticket" panel shows it as **AI summary**, and `chatwoot-setup.mjs` defines the attribute.
+
+## 11. v3 vector search (PLAN-v3 §5)
+
+### 11.1 Embeddings
+- Model `Xenova/multilingual-e5-small` (ONNX q8, 384 dims, ~120 MB) through `@huggingface/transformers` 4.3 in the api process (`kb/embed.js`). It needs no key and covers Hindi. Inputs carry the e5 prefixes `query: ` / `passage: `; vectors are mean-pooled and normalised, so cosine = dot product.
+- The model is loaded lazily on first use and cached in `EMBED_CACHE_DIR`. Compose mounts the named volume `models` at `/data/models`, so the download happens once per machine. A failed load is retried after 5 min; meanwhile search is text-only.
+- `deps.embedder` = `{ model, embed(texts, kind) }`. It is `null` when `EMBED_MODEL=off`; unit tests run that way, and `test/helpers.js#fakeEmbedder` provides a bag-of-words stand-in.
+- Image: the api now uses `node:22-slim` instead of alpine, because onnxruntime-node ships glibc binaries only. The Dockerfile deletes `onnxruntime-web`, which transformers.js already bundles, and the onnxruntime binaries for other OSes and architectures. Image size went from 281 MB to 520 MB on disk (121 MB compressed). The base switch accounts for about 115 MB and the ML dependencies for about 125 MB; the model itself lives in the volume. The compose healthcheck uses `node -e fetch(…)` because slim has no wget.
+
+### 11.2 Index (`kb/vectors.js`, model `KbChunk`)
+- `KbChunk {slug, locale:'en'|'hi', hash, i, text, vector:[Number]}` has a unique index on (slug, locale, i). There is one set of chunks per English article and per Hindi translation. The chunks are `title. keywords` followed by one `title. paragraph` per paragraph.
+- `hash` = sha256(model id + chunk texts). `reindex()` re-embeds only the documents whose hash changed or that have no chunks. It runs in the background at api start (`server.js`, after the KB seed) and in `npm run seed`. All chunk vectors are held in memory (about 75 × 384 floats) and the cache is cleared after a reindex.
+
+### 11.3 Hybrid ranking (`kb/retrieve.js#searchArticles`)
+- Text candidates: `$text` over `KbArticle` and, for `hi`, also over `KbTranslation`; the best textScore per slug is kept (top 20 of each when vectors are on).
+- Vector candidates: the best cosine per slug over the `en` chunks plus the requested locale's chunks.
+- `score = 0.05 · textScore/maxTextScore + cosine`. An article without a text hit is kept only if its cosine is at least 0.82. For calibration, unrelated queries ("what is the weather", "asdf") peak at 0.81 and relevant ones have a median of 0.87. `filter` (category) applies to both sources. Results are presented in the locale as before.
+- This is used by every existing caller: the bot (`topArticles`), `/api/ai/suggest`, the assistant and Help search (`GET /api/kb/articles?q=`). The response shapes are unchanged. If the embedder fails or nothing is indexed yet, the function falls back to the v2 text-only ranking.
+- Tuning grid (TEXT_WEIGHT ∈ {0, .05, .1, .2, .3, .5}) on the eval set: 0.05 gave the best top-1 (0.955) with top-3 = 1.0.
+
+### 11.4 Eval
+`api/test/eval/kb-retrieval.json` holds 44 questions (22 en, 22 hi) mapped to their expected slug. `npm run eval` (`EVAL=1 vitest run`, only `test/eval/*.eval.js`, real model) asserts that hybrid top-3 recall is ≥ 0.9 and ≥ text-only, and prints both numbers. Last run: **text-only top-3 0.955, hybrid top-3 1.000; top-1 0.864 → 0.955**. Plain `npm test` never loads the model.
+
+### 11.5 Env (api)
+| Var | Default | Purpose |
+|---|---|---|
+| EMBED_MODEL | `Xenova/multilingual-e5-small` | `off` → text-only search |
+| EMBED_CACHE_DIR | transformers default (inside node_modules) | compose: `/data/models` (volume `models`) |
+
+## 12. v3 WhatsApp channel (PLAN-v3 §1)
+
+### 12.1 Chatwoot side (fork code read, not changed)
+- Inbox: `POST /api/v1/accounts/:id/inboxes {name, channel:{type:'whatsapp', phone_number:'+E164', provider:'whatsapp_cloud', provider_config:{api_key, phone_number_id, business_account_id}}}`. `Channel::Whatsapp#validate_provider_config` calls `GET {base}/v14.0/<waba>/message_templates` and, on create, `GET …/phone_numbers`. Bad credentials give 422 "Invalid Credentials".
+- Inbound: Meta posts to `POST /webhooks/whatsapp/:phone_number` with the Cloud payload (`object: whatsapp_business_account`, `entry[].changes[].value.{metadata.phone_number_id, contacts[].wa_id, messages[]}`). The channel is found by display number + `phone_number_id`. The `X-Hub-Signature-256` check applies only when the channel has an app secret or comes from embedded signup; a manual inbox is unsigned. Processing runs in `Webhooks::WhatsappEventsJob` (sidekiq).
+- Outbound: `SendReplyJob` → `Whatsapp::Providers::WhatsappCloudService#send_text_message` → `POST {base}/v13.0/<phone_number_id>/messages` with `{messaging_product, to, type:'text', text:{body}}` and the Bearer api_key. `{base}` = `ENV['WHATSAPP_CLOUD_BASE_URL']` (default `https://graph.facebook.com`). This is the supported mock hook, and it is read per call, in the process that makes the call.
+- Setup: `scripts/chatwoot-setup.mjs` step 4c runs only when `WHATSAPP_PHONE_NUMBER`, `WHATSAPP_PHONE_NUMBER_ID`, `WHATSAPP_BUSINESS_ACCOUNT_ID` and `WHATSAPP_API_KEY` are all set. It creates the inbox, attaches the SmartCC AI agent bot and adds every agent. It then prints the Meta callback path; the verify token is shown in the Chatwoot inbox settings.
+
+### 12.2 Portal side
+- Only the agent-bot webhook reaches the portal for this inbox (it has no inbox webhook). `ai/bot.js#handleBotEvent` routes payloads whose conversation has `channel === 'Channel::Whatsapp'` to `handleWhatsApp`:
+  - incoming `message_created` → `chatwoot/whatsapp.js#recordIncoming`. On the first message it creates a ticket with `channel:'whatsapp'`, subject = the first line (≤ 120), description = the text, `status: ai_handling`, linked to the conversation and `synced`, and locale `hi` when the text is in Devanagari. Every message is stored as a customer `Message`, deduplicated by Chatwoot message id, and sets `ai.pendingSince` while the AI handles the ticket. When the conversation is `pending` (bot), the bot runs.
+  - outgoing `message_created` (agent or bot) → `recordOutgoing` (portal thread + notification).
+  - `conversation_status_changed` / `conversation_updated` → `applyConversationState`.
+- Customer link: the earliest `User` whose `phone` equals the sender's E.164 number. If there is none, a phone-only customer is created (`User` without email or password; `email` is now sparse-unique and `passwordHash` is optional). These customers get in-app notifications only, because `sendEmail` skips users without an email.
+- AI reply: the same 3-tier logic. For WhatsApp tickets the outgoing content goes through `plainText()`: markdown is stripped (bold, italics, code, headings, links → `text (url)`, bullets → •) and the text is capped at 4096 characters.
+- Portal: `TicketSummaryDTO.channel: 'portal'|'whatsapp'` (a new key). `POST /api/tickets/:n/messages` on a WhatsApp ticket → 409 `WHATSAPP_TICKET` (the reply happens on WhatsApp), and the web shows a note instead of the composer. A WhatsApp badge shows on the card, table row and header. `Ticket.subject`/`description` lost their schema minlength; the portal route still enforces 5 and 20.
+
+### 12.3 E2E mock
+`e2e/groq-stub.mjs` also serves the Graph API: GET → empty template list / `phone_numbers` containing `1555000111`; `POST /v*/<id>/messages` is recorded; `GET /wa/sent` returns the recordings. `docker-compose.e2e.yml` sets `WHATSAPP_CLOUD_BASE_URL=http://groq-stub:8080` on **sidekiq**, and `make e2e` now also recreates sidekiq. The e2e inbox is created with `rails runner` inside sidekiq, so the credential check hits the mock; rails itself keeps the real Graph URL. To restore: `COMPOSE_PROFILES=dev docker compose up -d --force-recreate api sidekiq && docker rm -f smartcc-groq-stub-1`.
+
+## 13. v3 sign-in codes (PLAN-v3 §2)
+
+| # | Method & path | Auth | Purpose |
+|---|---|---|---|
+| E35 | GET /api/auth/otp | none | `{email:true, sms:boolean}` (web hides the phone option when false) |
+| E36 | POST /api/auth/otp/request | none; 20/h/IP, 5/h and 1/30 s per email-or-phone | send a 6-digit code |
+| E37 | POST /api/auth/otp/verify | none; 30/15 min/IP | sign in, or sign up with `name` |
+
+- **E36** req `{"email":"a@b.co"}` or `{"phone":"+919876543210"}` (exactly one), optional `locale`. 202 `{"sent":true,"expiresInS":600,"resendInS":30}`. A code is `randomInt(10^6)` zero-padded. Only `HMAC-SHA256(JWT_SECRET:otp, key|code)` is stored, in `Otp {key:'email:…'|'phone:…' unique, codeHash, attempts, expiresAt (TTL)}`, and a new request replaces the old code. Email goes through `deps.mailer` with en/hi templates (`notifications/templates.js#OTP`); the subject starts with the code. Phone needs SMS configured (else 400 `SMS_UNAVAILABLE`), and an SMS is sent only when an account has that phone; the answer is the same either way. A send failure deletes the code and returns 503 `OTP_SEND_FAILED`.
+- **E37** req `{email|phone, code:"123456", name?, locale?, remember?=true}`. The attempt counter is incremented atomically (`attempts < 5`, not expired) before comparing (timingSafeEqual). Wrong → 400 `OTP_INVALID` `details:{attemptsLeft}`; the 5th wrong try deletes the code. Missing, expired or burned → 400 `OTP_EXPIRED`. Unknown email without `name` → 404 `ACCOUNT_NOT_FOUND`; the code stays valid, so the client asks for the name and verifies again. Success deletes the code, sets the same session cookie as password login (`remember`), and returns 200 `{user:ProfileDTO, created:false}`, or 201 with `created:true` for a new account (no password; `POST /api/me/password` then accepts an empty current password).
+- SMS adapter `notifications/sms.js` (`deps.sms`): `SMS_PROVIDER=msg91` (`MSG91_AUTH_KEY`, `MSG91_TEMPLATE_ID`, DLT template with `##otp##`, POST `control.msg91.com/api/v5/flow`) or `twilio` (`TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_FROM`, POST `Messages.json`, basic auth). `configured()` is false unless every key of the chosen provider is set. Unit tests mock `fetch`.
+- New error codes: `OTP_INVALID` 400, `OTP_EXPIRED` 400, `SMS_UNAVAILABLE` 400, `ACCOUNT_NOT_FOUND` 404, `OTP_SEND_FAILED` 503, `WHATSAPP_TICKET` 409.
+- Web: Login → "Email me a code instead"; Register → "Sign up with an email code instead" (`features/auth/OtpForm.tsx`). There are two steps (where to send it, then the code), the code field uses `autocomplete="one-time-code"` and `inputMode="numeric"`, and a 30 s resend countdown runs. The phone toggle appears only when `sms` is true. Strings are in en/hi.

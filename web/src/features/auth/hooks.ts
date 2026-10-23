@@ -24,6 +24,12 @@ export function useRegister() {
   });
 }
 
+/** Sign in / sign up with a code: the response carries the full profile. */
+export function useOtpVerify() {
+  const qc = useQueryClient();
+  return useMutation({ mutationFn: api.otpVerify, onSuccess: (r) => qc.setQueryData(['me'], r.user) });
+}
+
 export const channel = typeof BroadcastChannel !== 'undefined' ? new BroadcastChannel('scc') : null;
 
 /** Clears the cache (unmounting the shell closes the EventSource) and tells other tabs. */

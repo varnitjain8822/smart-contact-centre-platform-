@@ -11,6 +11,7 @@ import { Button } from '../../ui/Button';
 import { categoryLabel } from '../../lib/format';
 import { PriorityTag } from './PriorityTag';
 import { StatusPill } from './StatusPill';
+import { ChannelBadge } from './ChannelBadge';
 import { StatusTimeline } from './StatusTimeline';
 
 const download = (url: string) => { const a = document.createElement('a'); a.href = url; a.download = ''; document.body.append(a); a.click(); a.remove(); };
@@ -43,6 +44,7 @@ export function TicketHeader({ t }: { t: TicketDetail }) {
         <StatusPill status={t.status} />
         <PriorityTag priority={t.priority} />
         <span className="text-sm text-muted">{categoryLabel(t.category)}</span>
+        <ChannelBadge channel={t.channel} />
       </div>
       <Dialog sheet open={history} title={tr('details.history')} onClose={() => setHistory(false)}>
         <div className="mt-3"><StatusTimeline events={t.statusHistory} /></div>

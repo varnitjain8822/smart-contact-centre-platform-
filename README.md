@@ -116,10 +116,20 @@ make e2e                                      # dev stack + groq-stub overlay, t
 ```
 
 `make up` / `make prod` never include the stub (`--remove-orphans` drops it).
+`make e2e` also recreates Chatwoot **sidekiq** with `WHATSAPP_CLOUD_BASE_URL=http://groq-stub:8080` (the stub doubles as a WhatsApp Graph API mock).
+Back to normal afterwards: `COMPOSE_PROFILES=dev docker compose up -d --force-recreate api sidekiq && docker rm -f smartcc-groq-stub-1`.
+
+KB retrieval eval (real embedding model, downloaded once): `cd api && npm run eval` (prints text-only vs hybrid top-3 recall).
 
 Playwright reads `WEB_PORT`, `CW_PORT`, `CW_AGENT_*`, `CHATWOOT_*` from the root `.env`. Each run registers 2–3 customers and
 registration is limited to 5/h per IP (in-memory): recreate `api` before re-running. To return to real Groq:
 `docker compose up -d --force-recreate api` (without the e2e file).
+
+### v3 options
+
+- **Vector search**: the api embeds help articles with `Xenova/multilingual-e5-small` on first start (~130 MB download into the `models` volume); until then search is text-only. `EMBED_MODEL=off` disables it.
+- **Sign-in codes**: email codes work out of the box (mailhog in dev). SMS codes need `SMS_PROVIDER=msg91|twilio` plus that provider's keys (see `.env.example`); otherwise the phone option is hidden.
+- **WhatsApp**: put `WHATSAPP_PHONE_NUMBER` (E.164), `WHATSAPP_PHONE_NUMBER_ID`, `WHATSAPP_BUSINESS_ACCOUNT_ID`, `WHATSAPP_API_KEY` into `.env`, rerun `node scripts/chatwoot-setup.mjs`, then in the Meta app set the webhook callback to `<public Chatwoot URL>/webhooks/whatsapp/<WHATSAPP_PHONE_NUMBER>` with the verify token from Chatwoot → Settings → Inboxes → WhatsApp → Configuration, and subscribe to `messages`. Chatwoot must be reachable from the internet for that.
 
 ## Troubleshooting
 

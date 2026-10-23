@@ -6,6 +6,7 @@ import * as hub from './realtime/hub.js';
 import { KbArticle } from './models/KbArticle.js';
 import { KbTranslation } from './models/KbTranslation.js';
 import { upsertArticles } from './seed/kb.js';
+import { reindex } from './kb/vectors.js';
 import * as worker from './sync/worker.js';
 
 let memory = null;
@@ -24,6 +25,8 @@ log.info({ evt: 'indexes_synced', models: Object.keys(mongoose.models).length })
 if ((await KbArticle.estimatedDocumentCount()) === 0 || (await KbTranslation.estimatedDocumentCount()) === 0) {
   log.info({ evt: 'kb_seeded', count: await upsertArticles() });
 }
+// background: first boot downloads the embedding model; until then (or if it fails) KB search is text-only
+void reindex().catch((e) => log.warn({ evt: 'kb_embed_failed', err: e.message }));
 
 const server = createApp().listen(cfg.PORT, () => log.info({ evt: 'listening', port: cfg.PORT, mongoMemory: cfg.MONGO_MEMORY }));
 worker.start();

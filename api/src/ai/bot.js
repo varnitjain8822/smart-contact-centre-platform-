@@ -8,7 +8,8 @@ import { Message } from '../models/Message.js';
 import { Ticket } from '../models/Ticket.js';
 import * as sla from '../sla/sla.js';
 import { notify } from '../notifications/service.js';
-import { SYSTEM_TEXT, emitMessage, emitTicket, findTicket, setPendingAction, upsertChatwootMessage } from '../tickets/service.js';
+import { SYSTEM_TEXT, applyConversationState, emitMessage, emitTicket, findTicket, recordOutgoing, setPendingAction, upsertChatwootMessage } from '../tickets/service.js';
+import { isWhatsApp, plainText, recordIncoming } from '../chatwoot/whatsapp.js';
 import { buildMessages } from './prompt.js';
 import { enqueue } from './queue.js';
 import { AiOutput } from './schema.js';
@@ -21,6 +22,7 @@ const pct = (n) => `${Math.round((n ?? 0) * 100)}%`;
 
 // E21: agent-bot webhook (§5.5)
 export async function handleBotEvent(p) {
+  if (isWhatsApp(p.conversation ?? p)) return handleWhatsApp(p);
   if (p.event !== 'message_created') return;
   if (p.message_type !== 'incoming' || p.private) return;
   if (p.conversation?.status !== 'pending') return;
@@ -31,6 +33,25 @@ export async function handleBotEvent(p) {
   }
   await Ticket.updateOne({ _id: t._id }, { $set: { 'ai.pendingSince': new Date() } });   // newest unanswered message time
   enqueue(String(t._id), () => run(t._id, { labels: p.conversation.labels ?? [] }));
+}
+
+// WhatsApp inbox (lld-backend §12): no inbox webhook there, so the bot webhook carries everything — customer messages (ticket on the
+// first one), agent/bot replies and status changes.
+async function handleWhatsApp(p) {
+  if (p.event === 'conversation_status_changed' || p.event === 'conversation_updated') {
+    const t = await findTicket(p);
+    if (t) await applyConversationState(t, p, 'webhook');
+    return;
+  }
+  if (p.event !== 'message_created' || p.private) return;
+  if (p.message_type === 'outgoing') {
+    const t = await findTicket(p.conversation);
+    if (t) await recordOutgoing(t, p);
+    return;
+  }
+  if (p.message_type !== 'incoming') return;
+  const t = await recordIncoming(p);
+  if (t && p.conversation.status === 'pending') enqueue(String(t._id), () => run(t._id, { labels: p.conversation.labels ?? [] }));
 }
 
 export async function run(ticketId, { labels = [] } = {}) {
@@ -90,7 +111,7 @@ export async function run(ticketId, { labels = [] } = {}) {
   try {
     const slaDue = t.sla.firstResponseAt || tier === 'auto' ? due.resolutionDueAt : due.responseDueAt;
     await c.setCustomAttributes(convId, { ticket_number: t.number, ai_tier: tier, ai_confidence: Math.round((out?.confidence ?? 0) * 100) / 100,
-      sla_due_at: slaDue.toISOString() });
+      sla_due_at: slaDue.toISOString(), ai_summary: out?.summary ?? '' });
     // always set (idempotent): conversations are created without a priority, so an unchanged 'medium' must still reach the agent (REQ-017)
     await c.togglePriority(convId, priorityToCw[priority]);
     // keep one category label (the current one) so the label→category mapping stays unambiguous
@@ -100,7 +121,8 @@ export async function run(ticketId, { labels = [] } = {}) {
     await Ticket.updateOne({ _id: ticketId }, { $set: { 'chatwoot.labels': Array.isArray(applied) ? applied : merged } });
     const titles = sources.map((s) => s.title).join('; ');
     if (tier === 'auto') {
-      cwMsg = await c.createMessage(convId, { content: `${out.answer}\n\n— AI assistant · Sources: ${titles}` }, 'bot');
+      const content = `${out.answer}\n\n— AI assistant · Sources: ${titles}`;
+      cwMsg = await c.createMessage(convId, { content: t.channel === 'whatsapp' ? plainText(content) : content }, 'bot');   // WhatsApp: no markdown, ≤ 4096
     } else {
       await c.createMessage(convId, { isPrivate: true, content: tier === 'draft'
         ? `AI draft (confidence ${pct(out.confidence)}) — review before sending:\n\n${out.answer}\n\nSources: ${titles || 'none'}`

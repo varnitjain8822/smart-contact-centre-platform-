@@ -1,9 +1,10 @@
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 import { ApiError } from '../lib/api';
 import { safeNext } from '../lib/validate';
 import { AuthForm } from '../features/auth/AuthForm';
+import { OtpForm } from '../features/auth/OtpForm';
 import { useLogin } from '../features/auth/hooks';
 import { Logo } from '../features/shell/TopBar';
 import { ThemeToggle } from '../features/shell/ThemeToggle';
@@ -70,12 +71,16 @@ export default function LoginPage() {
   const nav = useNavigate();
   const [sp] = useSearchParams();
   const next = safeNext(sp.get('next'));
+  const [code, setCode] = useState(false);
   return (
     <AuthLayout title={t('auth.signIn')} lede={t('auth.loginLede')}
       footer={<>{t('auth.newHere')} <Link className={linkClass} to={`/register${next !== '/' ? `?next=${encodeURIComponent(next)}` : ''}`}>{t('auth.createAccountLink')}</Link>
         <span aria-hidden className="mx-2 text-muted">·</span><Link className={linkClass} to="/help">{t('auth.browseHelp')}</Link></>}>
-      <AuthForm mode="login" pending={login.isPending} error={login.error as ApiError | null}
-        onSubmit={(v) => login.mutateAsync({ email: v.email.trim(), password: v.password, remember: !!v.remember }).then(() => nav(next, { replace: true }), () => {})} />
+      {code ? <OtpForm mode="login" onDone={() => nav(next, { replace: true })} /> : (
+        <AuthForm mode="login" pending={login.isPending} error={login.error as ApiError | null}
+          onSubmit={(v) => login.mutateAsync({ email: v.email.trim(), password: v.password, remember: !!v.remember }).then(() => nav(next, { replace: true }), () => {})} />
+      )}
+      <button type="button" onClick={() => setCode(!code)} className={`mt-5 block w-full text-center ${linkClass}`}>{t(code ? 'otp.withPassword' : 'otp.withCode')}</button>
     </AuthLayout>
   );
 }

@@ -69,16 +69,18 @@ services:
       WEB_ORIGIN: http://localhost:${WEB_PORT:-5173}
       PUBLIC_URL: http://localhost:${WEB_PORT:-5173}
       UPLOAD_DIR: /data/uploads
+      EMBED_CACHE_DIR: /data/models      # KB embedding model (~140 MB), downloaded on first boot
       SMTP_URL: smtp://mailhog:1025
     stop_grace_period: 15s             # api drains SSE for SHUTDOWN_GRACE_MS (10s)
     ports:
       - 127.0.0.1:4000:4000
     volumes:
       - uploads:/data/uploads
+      - models:/data/models
     depends_on:
       mongo: { condition: service_healthy }
     healthcheck:
-      test: ["CMD", "wget", "-qO", "/dev/null", "http://127.0.0.1:4000/healthz"]
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:4000/healthz').then((r) => process.exit(r.ok ? 0 : 1), () => process.exit(1))"]
       interval: 15s
       timeout: 5s
       retries: 5
@@ -162,4 +164,5 @@ services:
 volumes:
   mongo-data:
   uploads:
+  models:
   caddy-data:

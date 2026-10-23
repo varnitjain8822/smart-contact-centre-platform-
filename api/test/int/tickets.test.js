@@ -80,7 +80,7 @@ test('list scope/cursor; foreign ticket → 404', async () => {
   expect(p2.body.items).toHaveLength(1);
   expect(p2.body.nextCursor).toBeNull();
   expect(new Set([...p1.body.items, ...p2.body.items].map((t) => t.number)).size).toBe(3);
-  expect(Object.keys(p1.body.items[0]).sort()).toEqual(['aiTier', 'category', 'createdAt', 'delivery', 'lastMessageAt', 'number', 'priority', 'sla', 'status', 'subject', 'updatedAt']);
+  expect(Object.keys(p1.body.items[0]).sort()).toEqual(['aiTier', 'category', 'createdAt', 'delivery', 'lastMessageAt', 'number', 'priority', 'sla', 'status', 'subject', 'updatedAt', 'channel'].sort());
   expect((await a.get('/api/tickets?scope=resolved').expect(200)).body.items).toHaveLength(0);
   expect((await a.get('/api/tickets?scope=all').expect(200)).body.items).toHaveLength(3);
   const other = await signUp(app, 'Other Person');

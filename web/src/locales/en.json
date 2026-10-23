@@ -296,7 +296,9 @@
     "menu": "Ticket options",
     "transcript": "Download transcript",
     "print": "Print or save as PDF",
-    "history": "Status history"
+    "history": "Status history",
+    "whatsapp": "WhatsApp",
+    "whatsappReply": "This conversation is on WhatsApp. Reply there and we'll keep this ticket up to date."
   },
   "details": {
     "serviceLevel": "Service level",
@@ -535,5 +537,27 @@
     "view": "View {{name}}",
     "download": "Download",
     "close": "Close"
+  },
+  "otp": {
+    "withCode": "Email me a code instead",
+    "withPassword": "Use my password instead",
+    "registerWithCode": "Sign up with an email code instead",
+    "registerWithPassword": "Sign up with a password instead",
+    "useEmail": "Use email instead",
+    "usePhone": "Use phone number instead",
+    "phone": "Phone number",
+    "phoneHint": "International format, e.g. +91 98765 43210",
+    "send": "Send code",
+    "sentTo": "We sent a 6-digit code to {{to}}. It expires in 10 minutes.",
+    "code": "Code",
+    "codeRequired": "Enter the 6-digit code",
+    "resend": "Resend code",
+    "resendIn": "Resend code in {{s}} s",
+    "change": "Use a different email or number",
+    "wrong_one": "That code is not right. {{count}} try left.",
+    "wrong_other": "That code is not right. {{count}} tries left.",
+    "expired": "This code has expired or was entered wrongly too many times. Send a new code.",
+    "sendFailed": "We could not send the code. Try again in a minute.",
+    "noAccount": "No account uses this email yet. Add your name to create one."
   }
 }

@@ -1,5 +1,6 @@
 # e2e only (never part of `make up` / `make prod`):
 #   docker compose -f docker-compose.yml -f docker-compose.e2e.yml up -d     (add COMPOSE_PROFILES=prod for the prod profile)
+# Back to normal afterwards: COMPOSE_PROFILES=dev docker compose up -d --force-recreate api sidekiq && docker rm -f smartcc-groq-stub-1
 x-e2e-api: &e2e-api
   environment:
     GROQ_API_KEY: e2e-stub
@@ -19,6 +20,10 @@ services:
       interval: 30s
   api: *e2e-api
   api-prod: *e2e-api
+  # WhatsApp Cloud API sends (and inbox credential checks) go to the stub's Graph API mock instead of graph.facebook.com
+  sidekiq:
+    environment:
+      WHATSAPP_CLOUD_BASE_URL: http://groq-stub:8080
   # e2e asserts emails in mailhog in both profiles
   mailhog:
     profiles: !override [dev, prod]
