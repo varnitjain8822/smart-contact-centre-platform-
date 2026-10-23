@@ -1,0 +1,24 @@
+# e2e only (never part of `make up` / `make prod`):
+#   docker compose -f docker-compose.yml -f docker-compose.e2e.yml up -d     (add COMPOSE_PROFILES=prod for the prod profile)
+x-e2e-api: &e2e-api
+  environment:
+    GROQ_API_KEY: e2e-stub
+    GROQ_URL: http://groq-stub:8080/v1
+    SMTP_URL: smtp://mailhog:1025
+  depends_on:
+    - groq-stub
+
+services:
+  groq-stub:
+    image: node:22-alpine
+    command: ["node", "/stub/groq-stub.mjs"]
+    volumes:
+      - ./e2e/groq-stub.mjs:/stub/groq-stub.mjs:ro
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:8080/').then(()=>{},()=>process.exit(1))"]
+      interval: 30s
+  api: *e2e-api
+  api-prod: *e2e-api
+  # e2e asserts emails in mailhog in both profiles
+  mailhog:
+    profiles: !override [dev, prod]

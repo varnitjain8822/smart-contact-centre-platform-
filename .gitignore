@@ -1,0 +1,10 @@
+/chatwoot/
+node_modules/
+.env
+/chatwoot/.env
+dist/
+coverage/
+.DS_Store
+test-results/
+playwright-report/
+backups/

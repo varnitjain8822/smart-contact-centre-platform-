@@ -1,0 +1,78 @@
+# Merged over chatwoot/docker-compose.yaml (keeps the fork's compose file untouched).
+x-ops: &ops
+  restart: unless-stopped
+  logging:
+    driver: json-file
+    options: { max-size: 10m, max-file: "3" }
+
+services:
+  # build-only image (rails/vite images build FROM it): `docker compose build base`
+  base:
+    profiles: [build]
+  postgres:
+    <<: *ops
+    environment:
+      # upstream sets POSTGRES_PASSWORD= (empty), which the postgres image refuses without this
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    # trust auth must never be reachable from the host/LAN: drop upstream's 0.0.0.0:5432 publish (rails uses the compose network)
+    ports: !reset []
+    # upstream mounts /data/postgres, which is not PGDATA: data would live in an anonymous volume and be lost on `down`
+    volumes: !override ["postgres:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+  redis:
+    <<: *ops
+    ports: !reset []
+    volumes: !override ["redis:/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli --no-auth-warning -a \"$$REDIS_PASSWORD\" ping | grep -q PONG"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+  rails:
+    <<: *ops
+    profiles: [dev]
+    environment:
+      - VITE_RUBY_HOST=vite
+    # CW_PORT lets the stack coexist with another Chatwoot on :3000
+    ports: !override ["127.0.0.1:${CW_PORT:-3000}:3000"]
+    healthcheck:
+      test: ["CMD", "wget", "-qO", "/dev/null", "http://127.0.0.1:3000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 300s
+  sidekiq:
+    <<: *ops
+    profiles: [dev]
+    healthcheck:
+      test: ["CMD-SHELL", "pgrep -f sidekiq >/dev/null"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 120s
+  # vite_ruby reads VITE_RUBY_HOST (upstream's VITE_DEV_SERVER_HOST is ignored): without this vite binds ::1 only,
+  # rails can't reach it and falls back to an in-request vite build that OOMs (500 on /app).
+  vite:
+    <<: *ops
+    profiles: [dev]
+    environment:
+      - VITE_RUBY_HOST=0.0.0.0
+      - __VITE_ADDITIONAL_SERVER_ALLOWED_HOSTS=vite
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z 127.0.0.1 3036"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 120s
+  mailhog:
+    <<: *ops
+    profiles: [dev]
+    healthcheck:
+      test: ["CMD", "wget", "-qO", "/dev/null", "http://127.0.0.1:8025/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3

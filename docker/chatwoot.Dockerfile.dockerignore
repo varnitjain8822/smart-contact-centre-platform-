@@ -1,0 +1,22 @@
+.bundle
+.env
+.env.*
+docker-compose.*
+docker/Dockerfile
+docker/dockerfiles
+log
+storage
+public/system
+tmp
+.codeclimate.yml
+public/packs
+node_modules
+vendor/bundle
+.DS_Store
+*.swp
+*~
+# smartcc additions (BuildKit per-Dockerfile ignore; the fork stays untouched)
+core
+spec
+**/node_modules
+.pnpm-store

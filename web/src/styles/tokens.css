@@ -1,0 +1,69 @@
+/* Design tokens — lld-frontend §19. Colours are RGB triplets so Tailwind can apply alpha. */
+
+/* Devanagari subset only (Latin comes from Figtree/Bricolage); unicode-range means it downloads only when Hindi renders. */
+@font-face {
+  font-family: 'SCC Devanagari';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('@fontsource-variable/noto-sans-devanagari/files/noto-sans-devanagari-devanagari-wght-normal.woff2') format('woff2-variations');
+  unicode-range: U+0900-097F, U+1CD0-1CF9, U+200C-200D, U+20A8, U+20B9, U+25CC, U+A830-A839, U+A8E0-A8FF;
+}
+
+:root {
+  --font-display: 'Bricolage Grotesque Variable', 'SCC Devanagari', ui-sans-serif, system-ui, sans-serif;
+  --font-text: 'Figtree Variable', 'SCC Devanagari', ui-sans-serif, system-ui, sans-serif;
+  --r-sm: 8px;
+  --r-md: 14px;
+  --r-pill: 999px;
+  --dur: 180ms;
+  --ease: cubic-bezier(.2, .7, .2, 1);
+}
+
+:root, [data-theme='light'] {
+  color-scheme: light;
+  --bg: 246 244 238; /* #F6F4EE */
+  --surface: 255 255 255; /* #FFFFFF */
+  --surface-2: 237 234 225; /* #EDEAE1 */
+  --ink: 23 26 35; /* #171A23 */
+  --ink-2: 75 82 99; /* #4B5263 */
+  --muted: 94 101 118; /* #5E6576 */
+  --line: 221 216 204; /* #DDD8CC */
+  --line-strong: 140 133 120; /* #8C8578 */
+  --accent: 61 53 200; /* #3D35C8 */
+  --on-accent: 255 255 255; /* #FFFFFF */
+  --accent-soft: 231 229 251; /* #E7E5FB */
+  --ai: 109 40 217; /* #6D28D9 */
+  --ai-soft: 241 234 254; /* #F1EAFE */
+  --ok: 22 101 52; /* #166534 */
+  --warn: 146 64 14; /* #92400E */
+  --bad: 185 28 28; /* #B91C1C */
+  --info: 29 78 216; /* #1D4ED8 */
+  --focus: var(--accent);
+  --shadow: 0 1px 2px rgb(23 26 35 / .06), 0 8px 24px rgb(23 26 35 / .06);
+  --shadow-pop: 0 2px 4px rgb(23 26 35 / .06), 0 16px 40px -8px rgb(23 26 35 / .18);
+}
+
+[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: 13 15 21; /* #0D0F15 */
+  --surface: 21 24 33; /* #151821 */
+  --surface-2: 29 33 48; /* #1D2130 */
+  --ink: 236 238 244; /* #ECEEF4 */
+  --ink-2: 174 180 196; /* #AEB4C4 */
+  --muted: 140 147 166; /* #8C93A6 */
+  --line: 42 47 61; /* #2A2F3D */
+  --line-strong: 107 114 135; /* #6B7287 */
+  --accent: 169 166 255; /* #A9A6FF */
+  --on-accent: 13 15 21; /* #0D0F15 */
+  --accent-soft: 35 33 74; /* #23214A */
+  --ai: 196 181 253; /* #C4B5FD */
+  --ai-soft: 42 33 64; /* #2A2140 */
+  --ok: 74 222 128; /* #4ADE80 */
+  --warn: 251 191 36; /* #FBBF24 */
+  --bad: 248 113 113; /* #F87171 */
+  --info: 147 197 253; /* #93C5FD */
+  --focus: var(--accent);
+  --shadow: none;
+  --shadow-pop: 0 16px 40px -8px rgb(0 0 0 / .6);
+}

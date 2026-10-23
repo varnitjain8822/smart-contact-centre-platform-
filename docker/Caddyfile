@@ -1,0 +1,35 @@
+# prod profile. Local HTTPS from Caddy's internal CA (trust it: see README).
+smartcc.localhost {
+	tls internal
+	log
+
+	# api health exposed under /api for the single-origin portal
+	handle /api/healthz {
+		rewrite * /healthz
+		reverse_proxy api:4000
+	}
+	handle /api/* {
+		# SSE (/api/stream) must not be buffered; no encode here, the api compresses itself
+		reverse_proxy api:4000 {
+			flush_interval -1
+		}
+	}
+	# static SPA build baked into the image at /srv
+	handle {
+		root * /srv
+		encode zstd gzip
+		@hashed path /assets/*
+		header @hashed Cache-Control "public, max-age=31536000, immutable"
+		header ?Cache-Control "no-cache"
+		try_files {path} /index.html
+		file_server
+	}
+}
+
+agent.smartcc.localhost {
+	tls internal
+	log
+	encode zstd gzip
+	# Chatwoot rails (production); websockets on /cable are proxied as-is
+	reverse_proxy rails:3000
+}

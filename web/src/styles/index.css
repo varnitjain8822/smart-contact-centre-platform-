@@ -1,0 +1,62 @@
+@import './tokens.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    @apply bg-bg text-ink font-text antialiased;
+    font-size: 16px;
+    line-height: 1.5;
+    min-height: 100dvh;
+  }
+  h1, h2, h3 { @apply font-display text-ink; line-height: 1.15; letter-spacing: -0.01em; }
+  :focus-visible { outline: 2px solid rgb(var(--focus)); outline-offset: 2px; border-radius: 4px; }
+  [tabindex='-1']:focus { outline: none; }
+  ::selection { background: rgb(var(--accent) / .22); }
+  p, li, blockquote { overflow-wrap: anywhere; }
+  /* Devanagari: matras need taller lines; tracking hurts conjuncts. */
+  :lang(hi) body { line-height: 1.65; }
+  :lang(hi) :is(h1, h2, h3) { line-height: 1.35; letter-spacing: 0; }
+  :lang(hi) .uppercase { letter-spacing: 0; }
+  kbd { font-family: var(--font-text); }
+}
+
+@layer utilities {
+  .tnum { font-variant-numeric: tabular-nums; }
+  .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+  .arrive { animation: arrive var(--dur) var(--ease) both; }
+  .shimmer {
+    background: linear-gradient(90deg, rgb(var(--surface-2)) 0%, rgb(var(--line)) 50%, rgb(var(--surface-2)) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s linear infinite;
+  }
+}
+
+@keyframes arrive { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@keyframes shimmer { to { background-position: -200% 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Print / "Save as PDF": light paper, no chrome (nav, composer, launcher carry print:hidden), no sticky or shadows. */
+@media print {
+  :root, [data-theme='dark'] {
+    color-scheme: light;
+    --bg: 255 255 255; --surface: 255 255 255; --surface-2: 244 242 236; --ink: 0 0 0; --ink-2: 50 50 50; --muted: 80 80 80;
+    --line: 210 205 195; --accent: 61 53 200; --accent-soft: 238 237 252; --ai: 109 40 217; --ai-soft: 245 240 254;
+    --shadow: none; --shadow-pop: none;
+  }
+  @page { margin: 16mm; }
+  main { padding: 0 !important; }
+  .sticky { position: static !important; }
+  [role='status'][aria-live] { display: none; }
+  li, .rounded-md { break-inside: avoid; }
+}
