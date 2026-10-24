@@ -1,24 +1,26 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { CreditCard, FileCheck2, LifeBuoy, Store, Truck, UserRound, Wrench, type LucideIcon } from 'lucide-react';
+import { CreditCard, FileCheck2, FolderOpen, LifeBuoy, Store, Truck, UserRound, Wrench, type LucideIcon } from 'lucide-react';
 import type { Category, KbArticleSummary } from '../../lib/types';
-import { CATEGORIES } from '../../lib/types';
+import { categoryKeys } from '../../lib/company';
 import { categoryLabel } from '../../lib/format';
 
-export const CATEGORY_ICON: Record<Category, LucideIcon> = {
+const ICONS: Record<string, LucideIcon> = {
   Account: UserRound, Billing: CreditCard, Technical: Wrench, 'Commerce & Trade': Store,
-  'Compliance & GST': FileCheck2, 'Logistics & Orders': Truck, General: LifeBuoy,
+  'Compliance & GST': FileCheck2, 'Logistics & Orders': Truck, General: LifeBuoy, general: LifeBuoy,
 };
+/** Icons for SmartCC's topics; other companies' topics get a folder. */
+export const categoryIcon = (c: Category): LucideIcon => ICONS[c] ?? FolderOpen;
 
 export function CategoryGrid({ articles }: { articles: KbArticleSummary[] }) {
   const { t } = useTranslation();
   const counts = new Map<Category, number>();
   for (const a of articles) counts.set(a.category, (counts.get(a.category) ?? 0) + 1);
-  const cats = CATEGORIES.filter((c) => counts.get(c));
+  const cats = categoryKeys().filter((c) => counts.get(c));
   return (
     <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
       {cats.map((c) => {
-        const Icon = CATEGORY_ICON[c];
+        const Icon = categoryIcon(c);
         const n = counts.get(c) ?? 0;
         return (
           <li key={c}>

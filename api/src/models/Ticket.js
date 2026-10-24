@@ -1,16 +1,18 @@
 import mongoose from 'mongoose';
-import { CATEGORIES, PRIORITIES, STATUSES, TIERS, TRIGGERS } from '../constants.js';
+import { PRIORITIES, STATUSES, TIERS, TRIGGERS } from '../constants.js';
+import { defaultCompanyId } from '../lib/company.js';
 
 const { Schema } = mongoose;
 const schema = new Schema({
   number: { type: String, required: true, unique: true, match: /^SC-\d+$/ },
+  companyId: { type: Schema.Types.ObjectId, ref: 'Company', required: true },
   customerId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   // portal tickets are validated to 5/20+ chars at the route; WhatsApp tickets take the customer's first message as is
   subject: { type: String, maxlength: 120 },
   description: { type: String, maxlength: 5000 },
   channel: { type: String, enum: ['portal', 'whatsapp'], default: 'portal' },
-  customerCategory: { type: String, enum: [...CATEGORIES, null], default: null },
-  category: { type: String, enum: CATEGORIES, default: 'General' },
+  customerCategory: { type: String, maxlength: 60, default: null },   // a key of the company's categories (validated at the route)
+  category: { type: String, maxlength: 60, default: 'General' },
   priority: { type: String, enum: PRIORITIES, default: 'medium' },
   status: { type: String, enum: STATUSES, default: 'ai_handling' },
   locale: { type: String, enum: ['en', 'hi'], default: 'en' },
@@ -59,6 +61,8 @@ const schema = new Schema({
 }, { timestamps: true });
 
 schema.index({ customerId: 1, updatedAt: -1 });
+schema.index({ companyId: 1, createdAt: -1 });   // analytics company filter
+schema.pre('validate', async function setCompany() { if (!this.companyId) this.companyId = await defaultCompanyId(); });
 schema.index({ subject: 'text', description: 'text', number: 'text' }, { weights: { number: 10, subject: 5, description: 1 }, name: 'ticket_text' });
 schema.index({ 'chatwoot.conversationId': 1 }, { unique: true, partialFilterExpression: { 'chatwoot.conversationId': { $type: 'number' } } });
 schema.index({ customerId: 1, idempotencyKey: 1 }, { unique: true, partialFilterExpression: { idempotencyKey: { $type: 'string' } } });

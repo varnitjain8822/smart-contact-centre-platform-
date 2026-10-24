@@ -35,7 +35,7 @@ test('sign-up and sign-in with an email code; WhatsApp message → portal ticket
 
   // 1. register by code (mailhog)
   const started = Date.now();
-  await page.goto('/register');
+  await page.goto('/c/smartcc/register');
   await page.getByRole('button', { name: 'Sign up with an email code instead' }).click();
   await page.getByLabel('Your name').fill('OTP Customer');
   await page.getByLabel('Email').fill(email);
@@ -86,7 +86,7 @@ test('sign-up and sign-in with an email code; WhatsApp message → portal ticket
   expect(reply.text.body).not.toMatch(/\*\*|\]\(/);
 
   // 6. the linked customer sees the ticket with a WhatsApp badge; replies happen on WhatsApp
-  await page.goto('/tickets');
+  await page.goto('/c/smartcc/tickets');
   const row = page.locator('table').getByRole('link', { name: /Payment deducted but my plan is still inactive/ });
   await expect(row).toBeVisible();
   await expect(row.getByText('WhatsApp', { exact: true })).toBeVisible();
@@ -97,12 +97,12 @@ test('sign-up and sign-in with an email code; WhatsApp message → portal ticket
   // 7. sign in again with a code (after the 30 s resend window for this email)
   await context.clearCookies();
   await page.waitForTimeout(Math.max(0, 31_000 - (Date.now() - started)));
-  await page.goto('/login');
+  await page.goto('/c/smartcc/login');
   await page.getByRole('button', { name: 'Email me a code instead' }).click();
   await page.getByLabel('Email').fill(email);
   await page.getByRole('button', { name: 'Send code' }).click();
   await enterCode(page, email, 2, 'Sign in');
   await expect(page).not.toHaveURL(/\/login/);
-  await page.goto('/tickets');
+  await page.goto('/c/smartcc/tickets');
   await expect(page.locator('table').getByRole('link', { name: /Payment deducted but my plan is still inactive/ })).toBeVisible();
 });

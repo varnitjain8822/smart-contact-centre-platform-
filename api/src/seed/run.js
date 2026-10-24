@@ -6,8 +6,10 @@ import { KbTranslation } from '../models/KbTranslation.js';
 import { upsertArticles } from './kb.js';
 import { KbChunk } from '../models/KbChunk.js';
 import { reindex } from '../kb/vectors.js';
+import { migrateTenancy } from '../lib/company.js';
 
 await mongoose.connect(cfg.MONGO_URL);
+await migrateTenancy();
 await KbArticle.syncIndexes();
 await KbTranslation.syncIndexes();
 console.log(`seeded ${await upsertArticles()} articles`);

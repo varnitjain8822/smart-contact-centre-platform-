@@ -26,11 +26,14 @@ test('indexes per lld §2.2', async () => {
   expect(m.ticketId_1_clientMessageId_1.partialFilterExpression).toEqual({ clientMessageId: { $type: 'string' } });
   expect(m.syncState_1_nextAttemptAt_1.partialFilterExpression).toEqual({ syncState: 'pending' });
   expect(m.ticketId_1_createdAt_1).toBeTruthy();
-  expect((await idx(User)).email_1.unique).toBe(true);
+  // v4 tenancy: unique per company
+  expect((await idx(User)).companyId_1_email_1).toMatchObject({ unique: true, partialFilterExpression: { email: { $type: 'string' } } });
   const k = await idx(KbArticle);
-  expect(k.kb_text.weights).toEqual({ title: 10, keywords: 5, body: 1 });
-  expect(k.slug_1.unique).toBe(true);
-  expect(k.category_1_title_1).toBeTruthy();
+  expect(k.kb_text_company.weights).toEqual({ title: 10, keywords: 5, body: 1 });
+  expect(k.kb_text_company.key).toMatchObject({ companyId: 1 });
+  expect(k.companyId_1_slug_1.unique).toBe(true);
+  expect(k.companyId_1_category_1_title_1).toBeTruthy();
+  expect(t['companyId_1_createdAt_-1']).toBeTruthy();
   expect((await idx(WebhookDelivery)).receivedAt_1.expireAfterSeconds).toBe(604800);
 });
 

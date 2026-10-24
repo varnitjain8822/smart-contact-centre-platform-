@@ -1,0 +1,37 @@
+{
+  "slug": "tatasteel",
+  "name": "Tata Steel (Jamshedpur Works)",
+  "sector": "Factory / Manufacturing",
+  "tagline": "Help desk for dealers, builders and suppliers: orders, dispatch, test certificates and vendor payments",
+  "primaryColor": "#00508F",
+  "accentColor": "#F2A900",
+  "logoText": "Tata Steel",
+  "supportHours": "Mon–Sat 9:00–18:00 IST",
+  "slaOverride": { "critical": 60, "high": 240, "medium": 720, "low": 1440 },
+  "categories": [
+    { "key": "products", "label": "Products & grades", "labelHi": "उत्पाद और ग्रेड" },
+    { "key": "quality", "label": "Quality & test certificates", "labelHi": "गुणवत्ता और टेस्ट सर्टिफिकेट" },
+    { "key": "orders", "label": "Orders & online buying", "labelHi": "ऑर्डर और ऑनलाइन खरीद" },
+    { "key": "dispatch", "label": "Dispatch, e-way bill & delivery", "labelHi": "डिस्पैच, ई-वे बिल और डिलीवरी" },
+    { "key": "billing", "label": "Invoices, payments & refunds", "labelHi": "बिल, भुगतान और रिफंड" },
+    { "key": "vendors", "label": "Supplier payments & MSME", "labelHi": "सप्लायर भुगतान और एमएसएमई" },
+    { "key": "complaints", "label": "Complaints & contact", "labelHi": "शिकायत और संपर्क" }
+  ],
+  "sources": [
+    { "title": "Tata Steel – Contact us", "url": "https://www.tatasteel.com/contact-us/", "accessedAt": "2026-10-23" },
+    { "title": "Tata Steel – Customer Service Request System", "url": "https://www.tatasteel.com/contact-us/customer-service-request-system/", "accessedAt": "2026-10-23" },
+    { "title": "Tata Steel – Tata Tiscon product page", "url": "https://www.tatasteel.com/products-solutions/india/products/tata-tiscon/", "accessedAt": "2026-10-23" },
+    { "title": "Tata Tiscon – official site", "url": "https://www.tatatiscon.co.in/", "accessedAt": "2026-10-23" },
+    { "title": "Tata Steel ReadyBuild – Tata Tiscon SD 550D and CRS", "url": "https://readybuild.tatasteel.com/content/readybuild/tata-tiscon-550-sd.html", "accessedAt": "2026-10-23" },
+    { "title": "Tata Steel Aashiyana – home", "url": "https://aashiyana.tatasteel.com/", "accessedAt": "2026-10-23" },
+    { "title": "Tata Steel Aashiyana – Help & Support / FAQ", "url": "https://aashiyana.tatasteel.com/in/en/help-support.html", "accessedAt": "2026-10-23" },
+    { "title": "Tata Steel DigECA – Galvano", "url": "https://digeca.tatasteel.com/tata-galvano", "accessedAt": "2026-10-23" },
+    { "title": "Tata Steel press release (Nov 2012) – Tata Astrum hot rolled brand", "url": "https://www.tatasteel.com/newsroom/press-releases/india/2012/tata-steel-unveils-new-hot-rolled-products-brand-tata-astrum/", "accessedAt": "2026-10-23" },
+    { "title": "Tata Steel press release (Sep 2019) – Tiscon rebars seized after raid at Bhelpahari stockyard", "url": "https://www.tatasteel.com/newsroom/press-releases/india/2019/tiscon-rebars-seized-after-raid-at-bhelpahari-stockyard/", "accessedAt": "2026-10-23" },
+    { "title": "Tata nexarc – TMT bars buying guide", "url": "https://www.tatanexarc.com/steel/tmt-bars/tmt-bars-in-haryana/", "accessedAt": "2026-10-23" },
+    { "title": "InfraLens – IS 1786 quick reference", "url": "https://infralens.in/code/IS-1786", "accessedAt": "2026-10-23" },
+    { "title": "Ministry of MSME – MSME Samadhaan delayed payment portal", "url": "https://samadhaan.msme.gov.in/", "accessedAt": "2026-10-23" },
+    { "title": "ClearTax – E-way bill rules and compliance", "url": "https://cleartax.in/s/eway-bill-gst-rules-compliance", "accessedAt": "2026-10-23" },
+    { "title": "TallySolutions – E-invoice from 1 August 2023 (₹5 crore threshold)", "url": "https://tallysolutions.com/gst/e-invoice-from-august-2023/", "accessedAt": "2026-10-23" }
+  ]
+}

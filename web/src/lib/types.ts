@@ -1,7 +1,8 @@
 // DTOs — mirror lld-backend §4.2 exactly (lld-frontend §8).
 export type Status = 'ai_handling' | 'in_progress' | 'waiting_on_customer' | 'resolved';
 export type Priority = 'low' | 'medium' | 'high' | 'critical';
-export type Category = 'Account' | 'Billing' | 'Technical' | 'Commerce & Trade' | 'Compliance & GST' | 'Logistics & Orders' | 'General';
+/** A key of the current company's categories (lib/company.ts); SmartCC's are 'Account' … 'General'. */
+export type Category = string;
 export type Trigger = 'fraud' | 'security' | 'legal' | 'angry_customer' | 'payment_dispute' | 'account_takeover' | 'repeated_issue' | 'critical_incident';
 export type SlaState = 'on_track' | 'at_risk' | 'breached' | 'met';
 export type Locale = 'en' | 'hi';
@@ -21,7 +22,7 @@ export interface TicketDetail extends TicketSummary { description: string; custo
   statusHistory: StatusEvent[]; ai: { confidence: number | null; triggers: Trigger[] }; actions: TicketActions }
 export interface Source { slug: string; title: string }
 export interface Message { id: string; ticketNumber: string; author: 'customer' | 'agent' | 'ai' | 'system'; authorName: string;
-  body: string; sources: Source[]; createdAt: string; clientMessageId: string | null; deliveryState: 'sent' | 'pending'; attachments?: Attachment[] }
+  body: string; sources: Source[]; usedRecords?: boolean; createdAt: string; clientMessageId: string | null; deliveryState: 'sent' | 'pending'; attachments?: Attachment[] }
 /** View model: adds client-only failure state for optimistic sends */
 export type UiMessage = Message & { localState?: 'failed' };
 export interface KbArticleSummary { slug: string; title: string; category: Category; excerpt: string; updatedAt: string }
@@ -35,11 +36,10 @@ export interface ApiErrorBody { error: { code: ErrorCode; message: string; detai
 export type ErrorCode = 'VALIDATION_FAILED' | 'WRONG_PASSWORD' | 'UNAUTHENTICATED' | 'INVALID_CREDENTIALS' | 'FORBIDDEN_ORIGIN' | 'NOT_FOUND'
   | 'EMAIL_TAKEN' | 'INVALID_STATE' | 'ALREADY_RATED' | 'UNSUPPORTED_MEDIA_TYPE' | 'RATE_LIMITED' | 'INTERNAL'
   | 'INVALID_ATTACHMENT' | 'FILE_TOO_LARGE' | 'UNSUPPORTED_FILE_TYPE' | 'AI_UNAVAILABLE'
-  | 'OTP_INVALID' | 'OTP_EXPIRED' | 'OTP_SEND_FAILED' | 'SMS_UNAVAILABLE' | 'ACCOUNT_NOT_FOUND' | 'WHATSAPP_TICKET';
+  | 'OTP_INVALID' | 'OTP_EXPIRED' | 'OTP_SEND_FAILED' | 'SMS_UNAVAILABLE' | 'ACCOUNT_NOT_FOUND' | 'WHATSAPP_TICKET' | 'COMPANY_NOT_FOUND';
 export type LiveEvent = { type: 'message.created'; ticketNumber: string; message: Message }
   | { type: 'ticket.updated'; ticket: TicketDetail };
 
-export const CATEGORIES: Category[] = ['Account', 'Billing', 'Technical', 'Commerce & Trade', 'Compliance & GST', 'Logistics & Orders', 'General'];
 export type Scope = 'open' | 'resolved' | 'all';
 export const STATUSES: Status[] = ['ai_handling', 'in_progress', 'waiting_on_customer', 'resolved'];
 export const PRIORITIES: Priority[] = ['critical', 'high', 'medium', 'low'];

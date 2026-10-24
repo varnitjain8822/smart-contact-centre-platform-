@@ -1,0 +1,166 @@
+{
+  "customers": [
+    { "key": "rohan", "name": "Rohan Mehta", "email": "rohan.mehta@example.com", "phone": "+91-90000-41001", "password": "Demo@1234", "dob": "1991-03-14" },
+    { "key": "priya", "name": "Priya Nair", "email": "priya.nair@example.com", "phone": "+91-90000-41002", "password": "Demo@1234", "dob": "1988-11-02" },
+    { "key": "arjun", "name": "Arjun Singh Rathore", "email": "arjun.rathore@example.com", "phone": "+91-90000-41003", "password": "Demo@1234", "dob": "1979-07-25" },
+    { "key": "fatima", "name": "Fatima Sheikh", "email": "fatima.sheikh@example.com", "phone": "+91-90000-41004", "password": "Demo@1234", "dob": "1995-01-30" },
+    { "key": "sunita", "name": "Sunita Deshpande", "email": "sunita.deshpande@example.com", "phone": "+91-90000-41005", "password": "Demo@1234", "dob": "1962-09-08" }
+  ],
+  "collections": {
+    "applications": [
+      {
+        "customerKey": "rohan", "mock": true,
+        "fileNo": "DL1069210456726", "arn": "26-1000356214", "applicantName": "Rohan Mehta", "dob": "1991-03-14",
+        "type": "reissue", "reason": "Validity due to expire", "scheme": "normal", "pages": 36, "validityYears": 10,
+        "passportOffice": "RPO Delhi", "centre": "PSK Shalimar Place, Delhi", "submittedOn": "2026-10-06",
+        "policeVerificationMode": "none",
+        "status": "Dispatched — Speed Post EM482915736IN",
+        "speedPostNo": "EM482915736IN", "dispatchedOn": "2026-10-09",
+        "statusHistory": [
+          { "date": "2026-10-06", "stage": "Application received at PSK" },
+          { "date": "2026-10-07", "stage": "Passport granted (no police verification required)" },
+          { "date": "2026-10-08", "stage": "Passport printed" },
+          { "date": "2026-10-09", "stage": "Dispatched — Speed Post EM482915736IN" }
+        ]
+      },
+      {
+        "customerKey": "rohan", "mock": true,
+        "fileNo": "DL1069210457326", "arn": "26-1000356877", "applicantName": "Aanya Mehta (minor)", "dob": "2019-06-20",
+        "type": "fresh", "reason": "First passport for minor (Annexure D, both parents' passports)", "scheme": "normal", "pages": 36, "validityYears": 5,
+        "passportOffice": "RPO Delhi", "centre": "PSK Shalimar Place, Delhi", "submittedOn": "2026-10-16",
+        "policeVerificationMode": "none",
+        "status": "Passport printed",
+        "statusHistory": [
+          { "date": "2026-10-16", "stage": "Application received at PSK" },
+          { "date": "2026-10-20", "stage": "Passport granted (no police verification required)" },
+          { "date": "2026-10-22", "stage": "Passport printed" }
+        ],
+        "nextStep": "Dispatch by Speed Post to the present address in the form is expected shortly."
+      },
+      {
+        "customerKey": "priya", "mock": true,
+        "fileNo": "BN2069331884226", "arn": "26-1000371190", "applicantName": "Priya Nair", "dob": "1988-11-02",
+        "type": "fresh", "reason": "First passport", "scheme": "normal", "pages": 60, "validityYears": 10,
+        "passportOffice": "RPO Bengaluru", "centre": "PSK Koramangala, Bengaluru", "submittedOn": "2026-10-10",
+        "policeVerificationMode": "pre",
+        "status": "Police verification pending",
+        "statusHistory": [
+          { "date": "2026-10-10", "stage": "Application received at PSK" },
+          { "date": "2026-10-11", "stage": "Police verification initiated" },
+          { "date": "2026-10-11", "stage": "Police verification pending" }
+        ],
+        "nextStep": "Passport is expected to be dispatched within three working days of receipt of a Recommendatory police report."
+      },
+      {
+        "customerKey": "arjun", "mock": true,
+        "fileNo": "LK1069440921326", "arn": "26-1000388452", "applicantName": "Arjun Singh Rathore", "dob": "1979-07-25",
+        "type": "tatkaal", "reason": "Re-issue under Tatkaal: exhaustion of pages", "scheme": "tatkaal", "pages": 60, "validityYears": 10,
+        "passportOffice": "RPO Lucknow", "centre": "PSK Lucknow", "submittedOn": "2026-10-22",
+        "policeVerificationMode": "post",
+        "status": "Application received at PSK",
+        "statusHistory": [
+          { "date": "2026-10-22", "stage": "Application received at PSK" }
+        ],
+        "nextStep": "If granted, Tatkaal passport is expected to be dispatched on the third working day excluding the submission date; police verification follows issue."
+      },
+      {
+        "customerKey": "fatima", "mock": true,
+        "fileNo": "MU2069517730426", "arn": "26-1000340067", "applicantName": "Fatima Sheikh", "dob": "1995-01-30",
+        "type": "fresh", "reason": "First passport", "scheme": "normal", "pages": 36, "validityYears": 10,
+        "passportOffice": "RPO Mumbai", "centre": "POPSK Thane", "submittedOn": "2026-09-29",
+        "policeVerificationMode": "pre",
+        "status": "Application on hold — additional document required",
+        "holdReason": "Proof of present address not in order (bank statement submitted; a photo passbook or another listed address proof is required).",
+        "statusHistory": [
+          { "date": "2026-09-29", "stage": "Application received at PSK" },
+          { "date": "2026-09-30", "stage": "Application on hold — additional document required" }
+        ]
+      },
+      {
+        "customerKey": "sunita", "mock": true,
+        "fileNo": "HY1069602278526", "arn": "26-1000329981", "applicantName": "Sunita Deshpande", "dob": "1962-09-08",
+        "type": "reissue", "reason": "Lost passport (Annexure F and police report submitted)", "scheme": "normal", "pages": 36, "validityYears": 10,
+        "passportOffice": "RPO Hyderabad", "centre": "PSK Begumpet, Hyderabad", "submittedOn": "2026-09-15",
+        "policeVerificationMode": "pre",
+        "status": "Police verification report received — clear; under review at Passport Office",
+        "statusHistory": [
+          { "date": "2026-09-15", "stage": "Application received at PSK" },
+          { "date": "2026-09-16", "stage": "Police verification initiated" },
+          { "date": "2026-10-19", "stage": "Police verification report received — clear" },
+          { "date": "2026-10-20", "stage": "Under review at Passport Office" }
+        ]
+      }
+    ],
+    "appointments": [
+      {
+        "customerKey": "rohan", "mock": true,
+        "arn": "26-1000356214", "applicantName": "Rohan Mehta", "service": "Re-issue of passport (Normal)",
+        "centre": "PSK Shalimar Place, Delhi", "date": "2026-10-06", "time": "10:15", "status": "Completed — application submitted",
+        "reschedulesUsed": 0, "reschedulesAllowed": 2
+      },
+      {
+        "customerKey": "rohan", "mock": true,
+        "arn": "26-1000418827", "applicantName": "Rohan Mehta", "service": "Police Clearance Certificate (PCC)",
+        "centre": "PSK Shalimar Place, Delhi", "date": "2026-10-29", "time": "11:30", "status": "Scheduled",
+        "reschedulesUsed": 0, "reschedulesAllowed": 0,
+        "carry": ["Original passport", "Self-attested copy of first two and last two pages, incl. ECR/Non-ECR page", "Proof of present address if different from passport", "Appointment SMS"]
+      },
+      {
+        "customerKey": "priya", "mock": true,
+        "arn": "26-1000371190", "applicantName": "Priya Nair", "service": "Fresh passport (Normal)",
+        "centre": "PSK Koramangala, Bengaluru", "date": "2026-10-10", "time": "09:45", "status": "Completed — application submitted",
+        "reschedulesUsed": 1, "reschedulesAllowed": 2
+      },
+      {
+        "customerKey": "arjun", "mock": true,
+        "arn": "26-1000388452", "applicantName": "Arjun Singh Rathore", "service": "Re-issue of passport (Tatkaal)",
+        "centre": "PSK Lucknow", "date": "2026-10-22", "time": "09:30", "status": "Completed — application submitted",
+        "reschedulesUsed": 1, "reschedulesAllowed": 1
+      },
+      {
+        "customerKey": "fatima", "mock": true,
+        "arn": "26-1000340067", "applicantName": "Fatima Sheikh", "service": "Fresh passport (Normal)",
+        "centre": "POPSK Thane", "date": "2026-09-29", "time": "12:00", "status": "Completed — application on hold for documents",
+        "reschedulesUsed": 0, "reschedulesAllowed": 2
+      },
+      {
+        "customerKey": "sunita", "mock": true,
+        "arn": "26-1000329981", "applicantName": "Sunita Deshpande", "service": "Re-issue of passport — lost (Normal)",
+        "centre": "PSK Begumpet, Hyderabad", "date": "2026-09-15", "time": "14:30", "status": "Completed — application submitted",
+        "reschedulesUsed": 0, "reschedulesAllowed": 2
+      }
+    ],
+    "police_verification": [
+      {
+        "customerKey": "rohan", "mock": true,
+        "fileNo": "DL1069210456726", "mode": "none", "status": "Not required",
+        "note": "Re-issue within validity with a clear earlier police report and no adverse entry."
+      },
+      {
+        "customerKey": "rohan", "mock": true,
+        "fileNo": "DL1069210457326", "mode": "none", "status": "Not required",
+        "note": "Minor with both parents holding valid passports and Annexure D consent."
+      },
+      {
+        "customerKey": "priya", "mock": true,
+        "fileNo": "BN2069331884226", "mode": "pre", "policeStation": "Koramangala Police Station, Bengaluru",
+        "initiatedOn": "2026-10-11", "status": "Pending — field verification not yet completed", "result": null
+      },
+      {
+        "customerKey": "arjun", "mock": true,
+        "fileNo": "LK1069440921326", "mode": "post", "policeStation": "Gomti Nagar Police Station, Lucknow",
+        "initiatedOn": null, "status": "Will be initiated after passport issue (Tatkaal post-verification)", "result": null
+      },
+      {
+        "customerKey": "fatima", "mock": true,
+        "fileNo": "MU2069517730426", "mode": "pre", "policeStation": "Naupada Police Station, Thane",
+        "initiatedOn": null, "status": "Not yet initiated — application on hold for documents", "result": null
+      },
+      {
+        "customerKey": "sunita", "mock": true,
+        "fileNo": "HY1069602278526", "mode": "pre", "policeStation": "Begumpet Police Station, Hyderabad",
+        "initiatedOn": "2026-09-16", "completedOn": "2026-10-19", "status": "Completed", "result": "Clear (recommended)"
+      }
+    ]
+  }
+}

@@ -22,6 +22,10 @@ const schema = z.object({
   CHATWOOT_INBOX_SECRET: req,
   CHATWOOT_BOT_SECRET: req,
   CHATWOOT_TIMEOUT_MS: num(10000),
+  // v4: per-company Chatwoot inbox, written by scripts/chatwoot-setup.mjs: {"<slug>":{"inboxId":12,"teamId":3,"secret":"…"}}
+  CHATWOOT_COMPANY_INBOXES: z.string().default('{}').transform((s, ctx) => {
+    try { return JSON.parse(s); } catch { ctx.addIssue({ code: 'custom', message: 'must be JSON' }); return z.NEVER; }
+  }),
   CHATWOOT_INLINE_MS: num(1500),
   GROQ_API_KEY: opt,
   GROQ_URL: z.string().default('https://api.groq.com/openai/v1'),

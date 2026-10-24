@@ -1,0 +1,185 @@
+{
+  "slug": "sbi",
+  "name": "State Bank of India",
+  "sector": "Bank",
+  "tagline": "Help with your accounts, cards, payments and loans",
+  "primaryColor": "#22409A",
+  "accentColor": "#00B5EF",
+  "logoText": "SBI",
+  "supportHours": "Contact Centre 24x7 on 1800 1234 / 1800 2100; branches on working days",
+  "slaOverride": {
+    "critical": 15,
+    "high": 60,
+    "medium": 240,
+    "low": 1440
+  },
+  "categories": [
+    {
+      "key": "accounts",
+      "label": "Accounts & cheques",
+      "labelHi": "खाते और चेक"
+    },
+    {
+      "key": "cards",
+      "label": "Debit cards & ATM",
+      "labelHi": "डेबिट कार्ड और एटीएम"
+    },
+    {
+      "key": "digital",
+      "label": "UPI, transfers & net banking",
+      "labelHi": "यूपीआई, ट्रांसफर और नेट बैंकिंग"
+    },
+    {
+      "key": "kyc",
+      "label": "KYC & documents",
+      "labelHi": "केवाईसी और दस्तावेज़"
+    },
+    {
+      "key": "loans",
+      "label": "Loans & EMI",
+      "labelHi": "ऋण और ईएमआई"
+    },
+    {
+      "key": "complaints",
+      "label": "Complaints & fraud",
+      "labelHi": "शिकायत और धोखाधड़ी"
+    }
+  ],
+  "sources": [
+    {
+      "title": "SBI Contact Centre (toll-free numbers and IVR menu)",
+      "url": "https://sbi.bank.in/web/customer-care/contact-centre",
+      "accessedAt": "2026-10-23"
+    },
+    {
+      "title": "SBI FAQ: ATM Services",
+      "url": "https://sbi.bank.in/web/faq-s/faq-atm-services",
+      "accessedAt": "2026-10-23"
+    },
+    {
+      "title": "SBI FAQ: RTGS / NEFT",
+      "url": "https://sbi.bank.in/web/faq-s/faq-rtgs-neft",
+      "accessedAt": "2026-10-23"
+    },
+    {
+      "title": "SBI FAQ: Retail Internet Banking",
+      "url": "https://sbi.bank.in/web/faq-s/retail-internet-banking",
+      "accessedAt": "2026-10-23"
+    },
+    {
+      "title": "OnlineSBI Terms of Service (login lock after failed attempts)",
+      "url": "https://retail.sbi.bank.in/npersonal/terms_of_service.html",
+      "accessedAt": "2026-10-23"
+    },
+    {
+      "title": "SBI YONO Registration FAQ",
+      "url": "https://sbi.bank.in/web/customer-care/yono-registration",
+      "accessedAt": "2026-10-23"
+    },
+    {
+      "title": "SBI YONO blog: UPI transaction limits, cooling period and payment tips (27 Jun 2025)",
+      "url": "https://sbi.bank.in/web/yono/blog/understand-upi-transaction-limits-cooling-period-and-payment-tips",
+      "accessedAt": "2026-10-23"
+    },
+    {
+      "title": "SBI Customer Care: UPI FAQ",
+      "url": "https://sbi.bank.in/web/customer-care/upi",
+      "accessedAt": "2026-10-23"
+    },
+    {
+      "title": "SBI KYC Documents for Individuals",
+      "url": "https://sbi.bank.in/web/personal-banking/information-services/kyc-guidelines/kyc-documents-individuals",
+      "accessedAt": "2026-10-23"
+    },
+    {
+      "title": "SBI Savings Bank Rules (abridged)",
+      "url": "https://sbi.bank.in/web/personal-banking/accounts/saving-account/savings-bank-rulesabridged",
+      "accessedAt": "2026-10-23"
+    },
+    {
+      "title": "SBI Nomination Facility",
+      "url": "https://sbi.bank.in/web/personal-banking/nomination-facility",
+      "accessedAt": "2026-10-23"
+    },
+    {
+      "title": "SBI Service Charges updated as on 30.09.2025 (Annexure PDF)",
+      "url": "https://sbi.bank.in/documents/16012/76239/Annexure+30.09.2024.pdf/9b8f03ee-8845-de32-906b-df3dd5bb58e9?t=1731073566326",
+      "accessedAt": "2026-10-23"
+    },
+    {
+      "title": "SBI Notice: Revision in ATM/ADWM transaction service charges w.e.f. 1 December 2025",
+      "url": "https://sbi.bank.in/documents/16012/22770835/NOTICE++REVISION+IN+ATM++ADWM+TRANSACTION+SERVICE+CHARGES.pdf/7c66ae2b-74ba-67cc-dbfa-01725136c709?t=1761913196404",
+      "accessedAt": "2026-10-23"
+    },
+    {
+      "title": "SBI Revised IMPS transaction charges on or after 15-08-2025 (Retail)",
+      "url": "https://sbi.bank.in/documents/16012/22770835/Note+for+approval+for+customer+communication+-+Copy+(1).pdf/ccc27852-cd20-a536-d4af-a073d8f70243?t=1752214754534",
+      "accessedAt": "2026-10-23"
+    },
+    {
+      "title": "SBI Customer Rights, Grievance Redressal and Compensation Policy (ver-6, May 2026)",
+      "url": "https://sbi.bank.in/documents/53471/263971/12052026_Customer+Rights,Grievance+Redressal+and+Compensation+Policy.pdf/834818f3-4529-ca6b-5203-e8f1cfd6b2d5?t=1778572640602",
+      "accessedAt": "2026-10-23"
+    },
+    {
+      "title": "SBI SMS UNHAPPY service",
+      "url": "https://sbi.bank.in/webfiles/uploads/files/1339585079004_SMS_UNHAPPY.pdf",
+      "accessedAt": "2026-10-23"
+    },
+    {
+      "title": "SBI Contact Us (unauthorised electronic transaction reporting numbers)",
+      "url": "https://sbi.bank.in/web/customer-care/contact-us",
+      "accessedAt": "2026-10-23"
+    },
+    {
+      "title": "SBI Home Loan Most Important Terms and Conditions (Apr 2026)",
+      "url": "https://homeloans.sbi.bank.in/downloads/Terms-and-Conditions.pdf",
+      "accessedAt": "2026-10-23"
+    },
+    {
+      "title": "SBI Key Fact Statement for Personal Loan",
+      "url": "https://sbi.bank.in/documents/53471/58026272/Key+Fact+Statement+for+Personal+Loan-English.pdf/6b2f0a4b-da40-6c40-3ade-d5fa9e58922c?t=1776939214719",
+      "accessedAt": "2026-10-23"
+    },
+    {
+      "title": "RBI: Harmonisation of TAT and customer compensation for failed transactions (20 Sep 2019)",
+      "url": "https://www.rbi.org.in/scripts/NotificationUser.aspx?Id=11693",
+      "accessedAt": "2026-10-23"
+    },
+    {
+      "title": "RBI: Customer Protection - Limiting Liability of Customers in Unauthorised Electronic Banking Transactions (6 Jul 2017)",
+      "url": "https://www.rbi.org.in/scripts/FS_Notification.aspx?Id=11040",
+      "accessedAt": "2026-10-23"
+    },
+    {
+      "title": "RBI FAQs: Reserve Bank - Integrated Ombudsman Scheme, 2026",
+      "url": "https://www.rbi.org.in/commonman/Upload/English/FAQs/PDFs/RBIOS01072026.pdf",
+      "accessedAt": "2026-10-23"
+    },
+    {
+      "title": "RBI FAQs on Master Direction on KYC",
+      "url": "https://www.rbi.org.in/commonman/english/Scripts/FAQs.aspx?Id=3782",
+      "accessedAt": "2026-10-23"
+    },
+    {
+      "title": "Banking Laws Amendment allows up to four nominees from 1 Nov 2025 (Taxmann)",
+      "url": "https://www.taxmann.com/post/blog/banking-laws-amendment-allows-up-to-four-nominees/",
+      "accessedAt": "2026-10-23"
+    },
+    {
+      "title": "SBI Terms and Conditions for Debit Cards (blocking channels, overseas loss)",
+      "url": "https://sbi.bank.in/documents/16012/78812/17082022_Terms+and+Conditions+-+Debit+Cards.pdf",
+      "accessedAt": "2026-10-23"
+    },
+    {
+      "title": "SBI Personalised Image Debit Card 'My Card' FAQ (YONO Debit Card Hotlisting path)",
+      "url": "https://sbi.bank.in/documents/16012/78812/2602191548-FREQUENTLY+ASKED+QUESTIONS.pdf",
+      "accessedAt": "2026-10-23"
+    },
+    {
+      "title": "SBI YONO blog: Customer liability in unauthorised transactions (cyber crime helpline 1930)",
+      "url": "https://sbi.bank.in/web/yono/blog/tackling-unauthorised-transactions-together",
+      "accessedAt": "2026-10-23"
+    }
+  ]
+}

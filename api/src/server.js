@@ -8,6 +8,7 @@ import { KbTranslation } from './models/KbTranslation.js';
 import { upsertArticles } from './seed/kb.js';
 import { reindex } from './kb/vectors.js';
 import * as worker from './sync/worker.js';
+import { defaultCompanyId, migrateTenancy } from './lib/company.js';
 
 let memory = null;
 let url = cfg.MONGO_URL;
@@ -18,11 +19,14 @@ if (cfg.MONGO_MEMORY) {
 }
 // MONGO_URL may carry credentials (mongodb://user:pass@mongo:27017/smartcc?authSource=smartcc); never logged.
 await mongoose.connect(url);
+// v4 tenancy: pre-v4 documents → default company 'smartcc' (before the index sync builds the per-company unique indexes)
+await migrateTenancy();
 // startup index sync: creates new indexes and drops stale ones (needs createIndex + dropIndex on the db)
 await Promise.all(Object.values(mongoose.models).map((m) => m.syncIndexes()));
 log.info({ evt: 'indexes_synced', models: Object.keys(mongoose.models).length });
 // seed when empty or when articles predate the Hindi translations
-if ((await KbArticle.estimatedDocumentCount()) === 0 || (await KbTranslation.estimatedDocumentCount()) === 0) {
+const smartcc = { companyId: await defaultCompanyId() };
+if (!(await KbArticle.exists(smartcc)) || !(await KbTranslation.exists(smartcc))) {
   log.info({ evt: 'kb_seeded', count: await upsertArticles() });
 }
 // background: first boot downloads the embedding model; until then (or if it fails) KB search is text-only

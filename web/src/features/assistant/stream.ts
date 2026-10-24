@@ -29,7 +29,7 @@ export function sseParser(on: (e: SseEvent) => void) {
 
 export type ChatMsg = { role: 'user' | 'assistant'; content: string };
 export type StreamHandlers = {
-  onToken(t: string): void; onSources(s: Source[]): void; onDone(d: { suggestTicket: boolean }): void; onError(code: string, message: string): void;
+  onToken(t: string): void; onSources(s: Source[], usedRecords: boolean): void; onDone(d: { suggestTicket: boolean }): void; onError(code: string, message: string): void;
 };
 
 /**
@@ -53,7 +53,7 @@ export async function chatStream(messages: ChatMsg[], locale: Locale, h: StreamH
     let d: Record<string, unknown>;
     try { d = JSON.parse(data); } catch { return; }
     if (event === 'token' && typeof d.t === 'string') h.onToken(d.t);
-    else if (event === 'sources') h.onSources(Array.isArray(d.sources) ? (d.sources as Source[]) : []);
+    else if (event === 'sources') h.onSources(Array.isArray(d.sources) ? (d.sources as Source[]) : [], d.usedRecords === true);
     else if (event === 'error') h.onError(String(d.code ?? 'AI_UNAVAILABLE'), String(d.message ?? ''));
     else if (event === 'done') { done = true; h.onDone({ suggestTicket: !!d.suggestTicket }); }
   });

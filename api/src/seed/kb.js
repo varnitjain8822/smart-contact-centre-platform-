@@ -1,5 +1,6 @@
 import { KbArticle } from '../models/KbArticle.js';
 import { KbTranslation } from '../models/KbTranslation.js';
+import { defaultCompanyId } from '../lib/company.js';
 
 // Adapted from the reference prototype's seedData.js, rewritten as plain text (paragraphs separated by blank lines).
 export const ARTICLES = [
@@ -78,9 +79,18 @@ const HI = {
 
 export const ARTICLES_HI = ARTICLES.map((a) => ({ slug: a.slug, locale: 'hi', ...HI[a.slug], keywords: [...HI[a.slug].keywords, ...a.keywords] }));
 
-/** Upserts articles by slug and their Hindi translations by (slug, locale). Never touches `views`. Returns the English count. */
-export async function upsertArticles() {
-  await KbArticle.bulkWrite(ARTICLES.map((a) => ({ updateOne: { filter: { slug: a.slug }, update: { $set: { ...a, locale: 'en' } }, upsert: true } })));
-  await KbTranslation.bulkWrite(ARTICLES_HI.map((t) => ({ updateOne: { filter: { slug: t.slug, locale: t.locale }, update: { $set: t }, upsert: true } })));
-  return ARTICLES.length;
+/** Upserts one company's articles by slug and translations by (slug, locale). Never touches `views`. Returns the English count. */
+export async function upsertKb(companyId, articles, translations) {
+  if (articles.length) {
+    await KbArticle.bulkWrite(articles.map((a) => ({ updateOne: { filter: { companyId, slug: a.slug },
+      update: { $set: { ...a, companyId, locale: 'en' } }, upsert: true } })));
+  }
+  if (translations.length) {
+    await KbTranslation.bulkWrite(translations.map((t) => ({ updateOne: { filter: { companyId, slug: t.slug, locale: t.locale },
+      update: { $set: { ...t, companyId } }, upsert: true } })));
+  }
+  return articles.length;
 }
+
+/** The default company's (SmartCC) built-in help center. */
+export const upsertArticles = async () => upsertKb(await defaultCompanyId(), ARTICLES, ARTICLES_HI);

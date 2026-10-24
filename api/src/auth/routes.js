@@ -22,15 +22,15 @@ authRouter.use('/otp', otpRouter);   // v3 sign-in codes (auth/otp.js)
 
 authRouter.post('/register', limit({ windowMs: 3600_000, max: 5, key: (req) => req.ip }), async (req, res) => {
   const b = z.object({ name, email, password }).parse(req.body);
-  const user = await User.create({ name: b.name, email: b.email, passwordHash: await bcrypt.hash(b.password, 12) });
+  const user = await User.create({ companyId: req.company._id, name: b.name, email: b.email, passwordHash: await bcrypt.hash(b.password, 12) });
   setSession(res, user);
   res.status(201).json({ user: toUser(user) });
 });
 
-authRouter.post('/login', limit({ windowMs: 15 * 60_000, max: 10, failuresOnly: true, key: (req) => `${req.ip}|${String(req.body?.email ?? '').toLowerCase()}` }),
+authRouter.post('/login', limit({ windowMs: 15 * 60_000, max: 10, failuresOnly: true, key: (req) => `${req.ip}|${req.company.slug}|${String(req.body?.email ?? '').toLowerCase()}` }),
   async (req, res) => {
     const b = z.object({ email, password: z.string().min(1, 'Enter your password').max(128), remember: z.boolean().default(true) }).parse(req.body);
-    const user = await User.findOne({ email: b.email }).select('+passwordHash');
+    const user = await User.findOne({ companyId: req.company._id, email: b.email }).select('+passwordHash');
     const ok = await bcrypt.compare(b.password, user?.passwordHash ?? DUMMY_HASH);
     if (!user || !ok) throw new AppError(401, 'INVALID_CREDENTIALS', 'Email or password is incorrect');
     setSession(res, user, b.remember);   // remember=false → session cookie

@@ -1,0 +1,35 @@
+{
+  "customers": [
+    { "key": "ananya", "name": "Ananya Rao", "email": "ananya.rao@example.com", "phone": "+91 90000 51001", "password": "Demo@1234" },
+    { "key": "rohit", "name": "Rohit Kulkarni", "email": "rohit.kulkarni@example.com", "phone": "+91 90000 51002", "password": "Demo@1234" },
+    { "key": "meera", "name": "Meera Iyer", "email": "meera.iyer@example.com", "phone": "+91 90000 51003", "password": "Demo@1234" },
+    { "key": "arjun", "name": "Arjun Mehta", "email": "arjun.mehta@example.com", "phone": "+91 90000 51004", "password": "Demo@1234" },
+    { "key": "suresh", "name": "Suresh Gupta", "email": "suresh.gupta@example.com", "phone": "+91 90000 51005", "password": "Demo@1234" }
+  ],
+  "collections": {
+    "employees": [
+      { "empId": "EMP-200341", "name": "Ananya Rao", "designation": "Senior Systems Engineer", "dept": "Delivery – Financial Services", "location": "Bengaluru – Electronics City", "dateOfJoining": "2021-07-12", "manager": "Kiran Shetty", "customerKey": "ananya", "mock": true },
+      { "empId": "EMP-187215", "name": "Rohit Kulkarni", "designation": "Associate – Accounts Payable", "dept": "Finance", "location": "Bengaluru – Electronics City", "dateOfJoining": "2024-02-05", "manager": "Lakshmi Narayan", "customerKey": "rohit", "mock": true }
+    ],
+    "payslips": [
+      { "empId": "EMP-200341", "month": "2026-07", "basic": 40000, "hra": 20000, "specialAllowance": 28500, "gross": 88500, "pf": 4800, "professionalTax": 200, "tds": 5200, "deductions": 10200, "net": 78300, "paidOn": "2026-07-31", "customerKey": "ananya", "mock": true },
+      { "empId": "EMP-200341", "month": "2026-08", "basic": 40000, "hra": 20000, "specialAllowance": 28500, "gross": 88500, "pf": 4800, "professionalTax": 200, "tds": 5200, "deductions": 10200, "net": 78300, "paidOn": "2026-08-31", "customerKey": "ananya", "mock": true },
+      { "empId": "EMP-200341", "month": "2026-09", "basic": 40000, "hra": 20000, "specialAllowance": 28500, "variablePay": 12000, "gross": 100500, "pf": 4800, "professionalTax": 200, "tds": 7600, "deductions": 12600, "net": 87900, "paidOn": "2026-09-30", "customerKey": "ananya", "mock": true },
+      { "empId": "EMP-187215", "month": "2026-08", "basic": 30000, "hra": 15000, "specialAllowance": 19000, "gross": 64000, "pf": 3600, "professionalTax": 200, "tds": 1800, "deductions": 5600, "net": 58400, "paidOn": "2026-08-31", "customerKey": "rohit", "mock": true },
+      { "empId": "EMP-187215", "month": "2026-09", "basic": 30000, "hra": 15000, "specialAllowance": 19000, "gross": 64000, "pf": 3600, "professionalTax": 200, "tds": 1800, "lossOfPayDays": 1, "lossOfPay": 2133, "deductions": 7733, "net": 56267, "paidOn": "2026-09-30", "customerKey": "rohit", "mock": true }
+    ],
+    "leave": [
+      { "empId": "EMP-200341", "asOf": "2026-10-22", "earned": 14.5, "sick": 6, "casual": 3, "compOff": 1, "compOffExpires": "2026-11-30", "pendingApproval": [ { "type": "earned", "from": "2026-11-09", "to": "2026-11-11", "days": 3 } ], "customerKey": "ananya", "mock": true },
+      { "empId": "EMP-187215", "asOf": "2026-10-22", "earned": 4, "sick": 2, "casual": 0, "compOff": 0, "pendingApproval": [], "customerKey": "rohit", "mock": true }
+    ],
+    "vendor_invoices": [
+      { "invoiceNo": "SLFS/2026-27/0142", "vendorName": "Sree Lakshmi Facility Services Pvt Ltd", "poNumber": "PO-4500871234", "amount": 485600, "currency": "INR", "invoiceDate": "2026-08-05", "receivedByAP": "2026-08-07", "paymentTerms": "Net 60", "status": "paid", "paidOn": "2026-10-08", "utr": "UTR26100812345", "customerKey": "meera", "mock": true },
+      { "invoiceNo": "SLFS/2026-27/0167", "vendorName": "Sree Lakshmi Facility Services Pvt Ltd", "poNumber": "PO-4500871234", "amount": 492300, "currency": "INR", "invoiceDate": "2026-09-03", "receivedByAP": "2026-09-04", "paymentTerms": "Net 60", "status": "approved – scheduled for payment run", "expectedPaymentDate": "2026-11-05", "customerKey": "meera", "mock": true },
+      { "invoiceNo": "SLFS/2026-27/0181", "vendorName": "Sree Lakshmi Facility Services Pvt Ltd", "poNumber": "PO-4500879910", "amount": 76700, "currency": "INR", "invoiceDate": "2026-10-01", "receivedByAP": "2026-10-03", "paymentTerms": "Net 60", "status": "on hold – GSTIN on invoice does not match vendor master", "expectedPaymentDate": null, "actionNeeded": "Send a corrected invoice to the AP desk named on the PO; update GST details via APVendor_master@infosys.com if they changed.", "customerKey": "meera", "mock": true }
+    ],
+    "visitor_passes": [
+      { "passNo": "VP-ECY-260027", "visitorName": "Arjun Mehta", "host": "Kiran Shetty (Delivery – Financial Services)", "date": "2026-10-27", "timeSlot": "10:00–13:00", "gate": "Gate 1 (Hosur Road main gate)", "building": "Building 44", "status": "approved", "idToCarry": "Government photo ID matching the pass name", "customerKey": "arjun", "mock": true },
+      { "passNo": "VP-ECY-259811", "visitorName": "Arjun Mehta", "host": "Lakshmi Narayan (Finance)", "date": "2026-09-17", "timeSlot": "14:00–16:00", "gate": "Gate 3", "building": "Building 12", "status": "used", "customerKey": "arjun", "mock": true }
+    ]
+  }
+}

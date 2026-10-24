@@ -5,6 +5,7 @@ import type { UiMessage } from '../../lib/types';
 import { time } from '../../lib/format';
 import { Badge } from '../../ui/Badge';
 import { SourceChips } from './SourceChips';
+import { RecordsChip } from './RecordsChip';
 
 export function AiMessage({ m }: { m: UiMessage }) {
   const { t } = useTranslation();
@@ -18,6 +19,7 @@ export function AiMessage({ m }: { m: UiMessage }) {
         <div className="flex items-center gap-2">
           <Badge tone="ai"><Sparkles aria-hidden size={12} /> {t('ai.badge')}</Badge>
           <time dateTime={m.createdAt} className="text-xs text-muted">{time(m.createdAt)}</time>
+          {m.usedRecords && <RecordsChip />}
         </div>
         <p className="mt-2 whitespace-pre-wrap text-[15px] leading-relaxed text-ink [overflow-wrap:anywhere]">
           <span className="sr-only">{t('ai.said')} </span>{m.body}

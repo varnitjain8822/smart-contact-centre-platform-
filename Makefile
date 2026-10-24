@@ -36,7 +36,10 @@ restore:	## make restore [DIR=backups/<timestamp>] (default: latest)
 
 e2e:	## dev stack + Groq stub, then Playwright
 	COMPOSE_PROFILES=dev $(DC) -f docker-compose.yml -f docker-compose.e2e.yml up -d --force-recreate api groq-stub sidekiq
-	cd e2e && npx playwright test
+	# v4: the acme fixture company for e2e/tests/v4.spec.ts (removed again afterwards)
+	$(DC) cp api/test/fixtures/companies api:/tmp/e2e-companies
+	$(DC) exec -T -e COMPANIES_DIR=/tmp/e2e-companies api npm run seed:companies
+	cd e2e && npx playwright test; s=$$?; cd .. && $(DC) exec -T api npm run seed:companies -- --remove acme; exit $$s
 
 logs:	## make logs [S="api rails"]
 	$(DC) --profile dev --profile prod logs -f --tail=100 $(S)

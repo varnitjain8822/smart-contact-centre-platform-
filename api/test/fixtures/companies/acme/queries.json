@@ -1,0 +1,6 @@
+[
+  { "q": "What is the status of my order AC-1001?", "lang": "en", "as": "asha", "expect": { "tool": "get_order_status", "answerContains": ["Shipped"] } },
+  { "q": "How many days do I have to return an item?", "lang": "en", "expect": { "articleSlug": "return-window" } },
+  { "q": "मेरा कार्ड डिक्लाइन हो गया", "lang": "hi", "expect": { "articleSlug": "card-declined" } },
+  { "q": "Passport file BN1234567890123, DOB 1991-01-01, status?", "lang": "en", "expect": { "tool": "get_application_status" } }
+]

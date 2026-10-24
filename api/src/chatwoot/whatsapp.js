@@ -5,6 +5,7 @@ import { Ticket } from '../models/Ticket.js';
 import { User } from '../models/User.js';
 import * as sla from '../sla/sla.js';
 import { emitMessage, emitTicket, upsertChatwootMessage } from '../tickets/service.js';
+import { defaultCompanyId } from '../lib/company.js';
 
 // Conversations of Chatwoot's WhatsApp (Cloud API) inbox. They reach us only through the agent-bot webhook (lld-backend §12).
 export const isWhatsApp = (conv) => conv?.channel === 'Channel::Whatsapp';
@@ -33,10 +34,11 @@ export function plainText(s, max = WHATSAPP_MAX) {
 async function customerFor(sender) {
   const phone = e164(sender?.phone_number);
   if (!phone) return null;
-  const found = await User.findOne({ phone }).sort({ createdAt: 1 });
+  const companyId = await defaultCompanyId();   // the WhatsApp inbox belongs to the default company (v4)
+  const found = await User.findOne({ companyId, phone }).sort({ createdAt: 1 });
   if (found) return found;
   const name = String(sender.name ?? '').trim().slice(0, 80);
-  return User.create({ name: name.length >= 2 ? name : phone, phone, locale: 'en' });   // ponytail: no merge when that person later registers with an email
+  return User.create({ companyId, name: name.length >= 2 ? name : phone, phone, locale: 'en' });   // ponytail: no merge when that person later registers with an email
 }
 
 /**
@@ -54,7 +56,7 @@ export async function recordIncoming(p) {
     const now = new Date();
     const locale = hindi(text) ? 'hi' : user.locale ?? 'en';
     try {
-      t = await Ticket.create({ number: await nextTicketNumber(), customerId: user._id, channel: 'whatsapp',
+      t = await Ticket.create({ number: await nextTicketNumber(), companyId: user.companyId, customerId: user._id, channel: 'whatsapp',
         subject: text.split('\n')[0].slice(0, 120), description: text.slice(0, 5000), status: 'ai_handling', locale, lastMessageAt: now,
         sla: sla.dueDates(now, 'medium'), statusHistory: [{ status: 'ai_handling', at: now, by: 'customer' }],
         chatwoot: { conversationId: conv.id, syncState: 'synced' }, ai: { pendingSince: now } });

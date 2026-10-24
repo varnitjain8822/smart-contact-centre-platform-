@@ -1241,3 +1241,45 @@ data: {"ticketNumber":"SC-1012","on":true,"name":"Asha"}
 - SMS adapter `notifications/sms.js` (`deps.sms`): `SMS_PROVIDER=msg91` (`MSG91_AUTH_KEY`, `MSG91_TEMPLATE_ID`, DLT template with `##otp##`, POST `control.msg91.com/api/v5/flow`) or `twilio` (`TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_FROM`, POST `Messages.json`, basic auth). `configured()` is false unless every key of the chosen provider is set. Unit tests mock `fetch`.
 - New error codes: `OTP_INVALID` 400, `OTP_EXPIRED` 400, `SMS_UNAVAILABLE` 400, `ACCOUNT_NOT_FOUND` 404, `OTP_SEND_FAILED` 503, `WHATSAPP_TICKET` 409.
 - Web: Login → "Email me a code instead"; Register → "Sign up with an email code instead" (`features/auth/OtpForm.tsx`). There are two steps (where to send it, then the code), the code field uses `autocomplete="one-time-code"` and `inputMode="numeric"`, and a 30 s resend countdown runs. The phone toggle appears only when `sms` is true. Strings are in en/hi.
+
+## 14. v4 Multi-Company Tenancy, Tools & Voice Agent
+
+### 14.1 Multi-Company Tenancy
+- **Company Model (`models/Company.js`)**:
+  - Properties: `slug` (unique string index), `name`, `brandColor`, `isDemo` (boolean), `topics` (array of category strings), `tools` (array of tool definitions), `chatwootInboxId` (number).
+  - Pre-seeded companies: `sbi` (State Bank of India), `tatasteel` (Tata Steel), `delhiairport` (Delhi Airport / IGI), `passportseva` (Passport Seva Kendra), `infosys` (Infosys Enterprise Helpdesk), plus default `smartcc`.
+- **Tenant Context (`lib/company.js`)**:
+  - Derived from `X-Company` HTTP header (or path query `?company=`).
+  - Middleware resolves company, sets `req.company`. Returns 404 `COMPANY_NOT_FOUND` if unknown.
+  - Models (`Ticket`, `KbArticle`, `KbChunk`, `User`, `Notification`, `Feedback`) scope operations by `companyId`.
+- **Chatwoot Inboxes (`chatwoot/inboxes.js`)**:
+  - Each company has its own Chatwoot web inbox.
+  - Incoming tickets from customer portal route to the matching company inbox.
+  - Webhooks dispatch events (`message_created`, `conversation_status_changed`) matched by `inbox_id` to the correct company context.
+
+### 14.2 Tool Calling & Mock Records
+- **Tool Selection (`ai/tools.js`)**:
+  - Groq function calling definitions configured per company.
+  - Tool execution occurs before the answer streaming phase:
+    1. Customer query is evaluated with company tool definitions.
+    2. Model selects candidate tool and arguments (e.g. `get_vendor_payment(bill_number)`).
+    3. Backend queries `MockRecord` scoped by `companyId` and identifier.
+    4. Retrieved record is redacted and injected into the system prompt under `RECORDS`.
+    5. Final answer streams back to user with factual citations and `usedRecords: true`.
+- **Single-Pass vs Two-Round Execution**:
+  - Two-round execution: First round queries Groq with tool definitions without streaming. Second round streams the generated answer with synthesized record context.
+  - Protects against partial tool executions and maintains token determinism for client SSE consumers.
+
+### 14.3 Voice Agent Endpoint & Architecture
+- **Transcription Endpoint (`POST /api/voice/transcribe`)**:
+  - Accepts multipart audio payload (`field: file`, optional `language`).
+  - Max duration: 30 seconds. Size limit: 6 MB.
+  - Supported audio formats: `audio/webm`, `audio/wav`, `audio/mp3`, `audio/ogg`, `audio/m4a`.
+  - Rate limiting: 30 requests/minute per IP / authenticated user.
+  - Backend delegates to Groq Whisper (`whisper-large-v3-turbo`) via `ai/groq.js#transcribe`.
+  - Returns: `{ text: string }`.
+- **Browser TTS & Hands-Free Loop**:
+  - Frontend speech synthesis (`window.speechSynthesis`) speaks AI answers, picking Hindi voice for `hi` and Indian English for `en`.
+  - Markdown, code blocks, citations, and metadata tags are stripped before speaking.
+  - Hands-free mode automatically re-triggers listening when speech playback finishes (`utterance.onend`).
+  - Accessible controls: VoiceButton (idle/listening/transcribing/speaking), HandsFreeToggle, `aria-live="polite"` status announcements.

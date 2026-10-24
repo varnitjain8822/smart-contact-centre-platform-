@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { Paperclip, SendHorizontal } from 'lucide-react';
 import type { Attachment } from '../../lib/types';
 import { FileList, useFileIntake } from '../../ui/FileDrop';
+import { VoiceButton } from '../voice/VoiceButton';
+import { useVoice } from '../voice/useVoice';
 import { useUploads } from './useUploads';
 
 const MAX = 5000;
@@ -14,8 +16,17 @@ export function Composer({ ticket, disabled, onSend, placeholder }: { ticket: st
   const ref = useRef<HTMLTextAreaElement>(null);
   const files = useUploads(ticket);
   const intake = useFileIntake({ onFiles: files.add, count: files.items.length, disabled });
+
+  const voice = useVoice({
+    onTranscribed: (transcribed) => {
+      setText((prev) => (prev ? `${prev} ${transcribed}` : transcribed));
+      ref.current?.focus();
+    },
+  });
+
   const body = text.trim() || files.done.map((f) => f.name).join(', ');
   const can = !disabled && !files.busy && body.length > 0 && body.length <= MAX;
+
 
   useLayoutEffect(() => {
     const el = ref.current;
@@ -48,6 +59,12 @@ export function Composer({ ticket, disabled, onSend, placeholder }: { ticket: st
           <Paperclip aria-hidden size={19} />
         </button>
         {intake.fileInput}
+        <VoiceButton
+          state={voice.state}
+          onStart={voice.startListening}
+          onStop={voice.stopListening}
+          disabled={disabled}
+        />
         <textarea id="composer" ref={ref} rows={1} value={text} disabled={disabled} maxLength={MAX + 500}
           aria-describedby="composer-hint" placeholder={placeholder}
           onChange={(e) => setText(e.target.value)} onKeyDown={key}
@@ -60,6 +77,10 @@ export function Composer({ ticket, disabled, onSend, placeholder }: { ticket: st
       <p id="composer-hint" className="mt-1.5 flex justify-between px-1 text-xs text-muted">
         <span className="hidden md:inline">{t('composer.hint')}</span>
         {body.length > 4500 && <span className={`tnum ml-auto ${body.length > MAX ? 'font-semibold text-bad' : ''}`}>{body.length}/{MAX}</span>}
+      </p>
+      {voice.error && <p role="alert" className="mt-1 px-1 text-xs text-bad">{voice.error}</p>}
+      <p className="sr-only" role="status" aria-live="polite">
+        {voice.state === 'listening' ? t('voice.listening') : voice.state === 'transcribing' ? t('voice.transcribing') : ''}
       </p>
     </form>
   );

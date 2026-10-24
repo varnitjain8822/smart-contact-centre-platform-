@@ -10,7 +10,9 @@
     "dev": "node --watch src/server.js",
     "seed": "node src/seed/run.js",
     "test": "vitest run",
-    "eval": "EVAL=1 vitest run"
+    "eval": "EVAL=1 vitest run",
+    "seed:companies": "node src/seed/companies-cli.js",
+    "eval:companies": "EVAL=1 vitest run test/eval/companies.eval.js"
   },
   "dependencies": {
     "@huggingface/transformers": "^4.3.1",

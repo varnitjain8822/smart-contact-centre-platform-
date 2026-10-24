@@ -26,7 +26,7 @@ test('remember me: unticked → session cookie; ticked → 7-day cookie', async 
 
 test('KB vote persists across reload', async ({ page }) => {
   await login(page, u);
-  await page.goto('/help/password-reset');
+  await page.goto('/c/smartcc/help/password-reset');
   const yes = page.getByRole('button', { name: 'Yes', exact: true });
   await expect(yes).toHaveAttribute('aria-pressed', 'false');
   await yes.click();
@@ -46,7 +46,7 @@ test('profile phone + organisation saved and reflected on the Chatwoot contact',
   ticket = await raiseTicket(page, 'Cannot change my delivery address',
     'The delivery address field is greyed out on my order page and I need to change it before dispatch.');
   const phone = `+9198${String(Math.floor(Math.random() * 1e8)).padStart(8, '0')}`;   // unique: Chatwoot phone numbers are unique per account
-  await page.goto('/profile');
+  await page.goto('/c/smartcc/profile');
   await page.getByLabel(/^Phone/).fill(`${phone.slice(0, 3)} ${phone.slice(3, 8)} ${phone.slice(8)}`);
   await page.getByLabel(/^Organisation/).fill('Acme Logistics');
   await page.getByRole('button', { name: 'Save details' }).click();
@@ -65,7 +65,7 @@ test('profile phone + organisation saved and reflected on the Chatwoot contact',
 
 test('agent typing shows in the thread; private-note typing does not', async ({ page }) => {
   await login(page, u);
-  await page.goto(`/tickets/${ticket}`);
+  await page.goto(`/c/smartcc/tickets/${ticket}`);
   await expect(page.getByRole('log')).toBeVisible();
   const api = await agentApi();
   const conv = await api.conversation(ticket);
@@ -87,10 +87,10 @@ test('sign out other devices: the second browser is signed out, this one stays',
   const pa = await a.newPage(), pb = await b.newPage();
   await login(pa, u, true);
   await login(pb, u);
-  await pb.goto('/profile');
+  await pb.goto('/c/smartcc/profile');
   await expect(pb.getByRole('heading', { name: 'Profile' })).toBeVisible();
 
-  await pa.goto('/profile');
+  await pa.goto('/c/smartcc/profile');
   await pa.getByRole('button', { name: 'Sign out other devices' }).click();
   const dlg = pa.getByRole('dialog', { name: 'Sign out other devices?' });
   await dlg.getByRole('button', { name: 'Sign out other devices' }).click();

@@ -13,12 +13,16 @@ import { handleBotEvent } from './ai/bot.js';
 import { authRouter, meRouter } from './auth/routes.js';
 import { receive } from './chatwoot/signature.js';
 import { handleInboxEvent } from './chatwoot/webhook.js';
+import { inboxSecrets } from './chatwoot/inboxes.js';
+import { companiesRouter } from './companies/routes.js';
+import { companyContext } from './lib/company.js';
 import { kbRouter } from './kb/routes.js';
 import { AppError, errorMiddleware } from './lib/errors.js';
 import { mutationGuard } from './lib/guards.js';
 import { requestLogger } from './lib/log.js';
 import { streamRouter } from './realtime/routes.js';
 import { ticketsRouter } from './tickets/routes.js';
+import { voiceRouter } from './voice/routes.js';
 
 let chatwootHealth = { at: 0, value: 'unknown' };   // cached 30 s
 
@@ -41,6 +45,8 @@ export function createApp(overrides = {}) {
   // Webhooks: raw body BEFORE any JSON parser so the HMAC sees the exact bytes
   const raw = express.raw({ type: '*/*', limit: '1mb' });
   app.post('/webhooks/chatwoot', raw, receive(cfg.CHATWOOT_INBOX_SECRET, 'inbox', handleInboxEvent));
+  // v4: one API inbox per company, each signing with its own secret (CHATWOOT_COMPANY_INBOXES)
+  for (const [slug, secret] of inboxSecrets()) app.post(`/webhooks/chatwoot/${slug}`, raw, receive(secret, 'inbox', handleInboxEvent));
   app.post('/bot/chatwoot', raw, receive(cfg.CHATWOOT_BOT_SECRET, 'bot', handleBotEvent));
 
   app.get('/healthz', async (req, res) => {
@@ -55,6 +61,8 @@ export function createApp(overrides = {}) {
   app.use(express.json({ limit: '100kb' }));
   app.use(cookieParser());
   app.use('/api', mutationGuard);
+  app.use('/api', companyContext);
+  app.use('/api/companies', companiesRouter);
   app.use('/api/auth', authRouter);
   app.use('/api/me', meRouter);
   app.use('/api/tickets', ticketsRouter);
@@ -64,6 +72,7 @@ export function createApp(overrides = {}) {
   app.use('/api/attachments', attachmentsRouter);
   app.use('/api/notifications', notificationsRouter);
   app.use('/api/assistant', assistantRouter);
+  app.use('/api/voice', voiceRouter);
   app.use('/api/admin', adminRouter);
 
   app.use((req, res, next) => next(new AppError(404, 'NOT_FOUND', 'Not found')));

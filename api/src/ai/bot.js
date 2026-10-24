@@ -1,5 +1,4 @@
 import { cfg } from '../config.js';
-import { CATEGORY_LABEL } from '../constants.js';
 import { priorityToCw } from '../chatwoot/statusMap.js';
 import { deps } from '../deps.js';
 import { topArticles } from '../kb/retrieve.js';
@@ -12,11 +11,13 @@ import { SYSTEM_TEXT, applyConversationState, emitMessage, emitTicket, findTicke
 import { isWhatsApp, plainText, recordIncoming } from '../chatwoot/whatsapp.js';
 import { buildMessages } from './prompt.js';
 import { enqueue } from './queue.js';
-import { AiOutput } from './schema.js';
+import { aiOutputFor } from './schema.js';
+import { lookup } from './tools.js';
+import { User } from '../models/User.js';
+import { categoryKeys, companyOf, cwLabel, fallbackCategory } from '../lib/company.js';
 import { decideTier } from './tier.js';
 import { maxPriority, priorityFloor, scanKeywords } from './triggers.js';
 
-const CATEGORY_LABELS = new Set(Object.values(CATEGORY_LABEL));
 const uniq = (a) => [...new Set(a)];
 const pct = (n) => `${Math.round((n ?? 0) * 100)}%`;
 
@@ -66,10 +67,15 @@ export async function run(ticketId, { labels = [] } = {}) {
 
   const history = (await Message.find({ ticketId }).sort({ createdAt: 1 }).limit(500)).filter((m) => m.author !== 'system').slice(-10);
   const customerText = history.filter((m) => m.author === 'customer').map((m) => m.body);
-  const articles = await topArticles(`${t.subject} ${customerText.at(-1) ?? ''}`, 3, t.locale ?? 'en');
+  const company = await companyOf(t);
+  const keys = categoryKeys(company);
+  const articles = await topArticles(`${t.subject} ${customerText.at(-1) ?? ''}`, 3, t.locale ?? 'en', company._id);
+  // v4: record lookups (company tools.json) for the signed-in customer, at most 3 calls; none for companies without tools
+  const records = await lookup(company, await User.findById(t.customerId).lean(),
+    history.map((m, i) => ({ role: m.author === 'customer' ? 'user' : 'assistant', content: i === 0 ? `${t.subject}\n${m.body}` : m.body })));
   let out = null, errCode = null;
   try {
-    out = AiOutput.parse(await deps.groq.complete(buildMessages('ticket', t, articles, history)));
+    out = aiOutputFor(keys, fallbackCategory(company)).parse(await deps.groq.complete(buildMessages('ticket', t, articles, history, company, records.text)));
   } catch (e) {
     errCode = String(e.code ?? e.name ?? e.message).slice(0, 100);
   }
@@ -80,10 +86,10 @@ export async function run(ticketId, { labels = [] } = {}) {
   const allowed = new Set(articles.map((a) => a.slug));
   const validSources = uniq((out?.sources ?? []).filter((s) => allowed.has(s)));
   let { tier, reason } = decideTier({ failed, triggers, priority, autoCount: t.ai.autoCount, confidence: out?.confidence ?? 0,
-    validSources, answer: out?.answer ?? '' }, cfg);
-  const category = out?.category && out.category !== 'General' ? out.category : t.category;
+    validSources, answer: out?.answer ?? '', usedRecords: records.usedRecords }, cfg);
+  const category = out?.category && out.category !== fallbackCategory(company) ? out.category : t.category;
   const sources = validSources.map((s) => ({ slug: s, title: articles.find((a) => a.slug === s).title }));
-  const due = sla.dueDates(t.createdAt, priority);
+  const due = sla.dueDates(t.createdAt, priority, company.slaOverride);
   const convId = t.chatwoot.conversationId;
   const now = new Date();
   const emitted = [];
@@ -111,17 +117,18 @@ export async function run(ticketId, { labels = [] } = {}) {
   try {
     const slaDue = t.sla.firstResponseAt || tier === 'auto' ? due.resolutionDueAt : due.responseDueAt;
     await c.setCustomAttributes(convId, { ticket_number: t.number, ai_tier: tier, ai_confidence: Math.round((out?.confidence ?? 0) * 100) / 100,
-      sla_due_at: slaDue.toISOString(), ai_summary: out?.summary ?? '' });
+      sla_due_at: slaDue.toISOString(), ai_summary: out?.summary ?? '', company: company.name });
     // always set (idempotent): conversations are created without a priority, so an unchanged 'medium' must still reach the agent (REQ-017)
     await c.togglePriority(convId, priorityToCw[priority]);
     // keep one category label (the current one) so the label→category mapping stays unambiguous
-    const merged = uniq([...labels, ...t.chatwoot.labels, CATEGORY_LABEL[category], `ai-${tier}`])
-      .filter((l) => !CATEGORY_LABELS.has(l) || l === CATEGORY_LABEL[category]);
+    const catLabels = new Set(keys.map(cwLabel));
+    const merged = uniq([...labels, ...t.chatwoot.labels, cwLabel(category), `ai-${tier}`])
+      .filter((l) => !catLabels.has(l) || l === cwLabel(category));
     const applied = await c.setLabels(convId, merged);
     await Ticket.updateOne({ _id: ticketId }, { $set: { 'chatwoot.labels': Array.isArray(applied) ? applied : merged } });
     const titles = sources.map((s) => s.title).join('; ');
     if (tier === 'auto') {
-      const content = `${out.answer}\n\n— AI assistant · Sources: ${titles}`;
+      const content = `${out.answer}\n\n— AI assistant · ${records.usedRecords ? 'Checked your records' : ''}${records.usedRecords && titles ? ' · ' : ''}${titles ? `Sources: ${titles}` : ''}`;
       cwMsg = await c.createMessage(convId, { content: t.channel === 'whatsapp' ? plainText(content) : content }, 'bot');   // WhatsApp: no markdown, ≤ 4096
     } else {
       await c.createMessage(convId, { isPrivate: true, content: tier === 'draft'
@@ -147,7 +154,7 @@ export async function run(ticketId, { labels = [] } = {}) {
   if (tier === 'auto') {
     await upsertChatwootMessage(t, cwMsg, { author: 'ai', authorName: 'AI assistant' });
     emitted.push(await Message.findOneAndUpdate({ chatwootMessageId: cwMsg.id },
-      { $set: { body: out.answer, sources, author: 'ai', authorName: 'AI assistant' } }, { new: true }));
+      { $set: { body: out.answer, sources, usedRecords: records.usedRecords, author: 'ai', authorName: 'AI assistant' } }, { new: true }));
     await clearPending();
     const awaiting = await Ticket.updateOne({ _id: ticketId, status: 'ai_handling' }, { $set: { 'ai.awaitingAcceptance': true, lastMessageAt: now }, $inc: { 'ai.autoCount': 1 } });
     await Ticket.updateOne({ _id: ticketId, 'sla.firstResponseAt': null }, { $set: { 'sla.firstResponseAt': now } });
@@ -155,6 +162,7 @@ export async function run(ticketId, { labels = [] } = {}) {
   }
   for (const m of emitted) emitMessage(t, m);
   await emitTicket(ticketId);
-  log.info({ evt: 'ai_decision', ticket: t.number, tier, reason, confidence: out?.confidence ?? null, triggers, latencyMs: Date.now() - started });
-  return { tier, reason };
+  log.info({ evt: 'ai_decision', ticket: t.number, tier, reason, confidence: out?.confidence ?? null, triggers, toolCalls: records.calls.length,
+    usedRecords: records.usedRecords, latencyMs: Date.now() - started });
+  return { tier, reason, usedRecords: records.usedRecords };
 }

@@ -4,6 +4,7 @@ const { Schema } = mongoose;
 export const NOTIFICATION_TYPES = ['agent_reply', 'status', 'sla_breach', 'ai_answer'];
 const schema = new Schema({
   userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  companyId: { type: Schema.Types.ObjectId, ref: 'Company' },
   type: { type: String, enum: NOTIFICATION_TYPES, required: true },
   ticketNumber: { type: String, required: true },
   title: { type: String, required: true, maxlength: 200 },

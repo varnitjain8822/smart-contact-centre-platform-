@@ -2,7 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { register } from './helpers';
 
 async function raiseHi(page: Page, subject: string, description: string) {
-  await page.goto('/tickets/new');
+  await page.goto('/c/smartcc/tickets/new');
   await page.getByLabel('विषय').fill(subject);
   await page.getByLabel('क्या हो रहा है?').fill(description);
   await page.getByRole('button', { name: 'टिकट भेजें' }).click();
@@ -20,7 +20,7 @@ test('Hindi: switch language → UI, KB, AI answer, hand-off text and assistant 
   expect(me.user.locale).toBe('hi');                                         // saved to the account, not just the browser
 
   // KB in Hindi
-  await page.goto('/help/refund-status');
+  await page.goto('/c/smartcc/help/refund-status');
   await expect(page.getByRole('heading', { level: 1, name: /रिफ़ंड/ })).toBeVisible();
 
   // auto-tier AI answer in Hindi
@@ -34,7 +34,7 @@ test('Hindi: switch language → UI, KB, AI answer, hand-off text and assistant 
   await expect(page.getByText('हमने आपका मामला हमारी सपोर्ट टीम को भेज दिया है।', { exact: false })).toBeVisible();
 
   // assistant streams in Hindi
-  await page.goto('/assistant');
+  await page.goto('/c/smartcc/assistant');
   const input = page.getByLabel('आपका सवाल');
   await input.fill('मेरा पेमेंट कट गया लेकिन प्लान चालू नहीं हुआ');
   await input.press('Enter');

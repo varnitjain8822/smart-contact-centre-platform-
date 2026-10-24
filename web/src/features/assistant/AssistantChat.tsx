@@ -1,11 +1,15 @@
 import { useEffect, useRef, useState, type FormEvent, type KeyboardEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ArrowUp, CircleAlert, Clock, RotateCcw, Sparkles, Square, ThumbsDown, ThumbsUp, TicketPlus } from 'lucide-react';
+import { ArrowUp, CircleAlert, Clock, RotateCcw, Sparkles, Square, ThumbsDown, ThumbsUp, TicketPlus, Volume2 } from 'lucide-react';
 import { useMe } from '../auth/hooks';
 import { SourceChips } from '../tickets/SourceChips';
 import { Badge } from '../../ui/Badge';
 import { Button, buttonClass } from '../../ui/Button';
+import { RecordsChip } from '../tickets/RecordsChip';
+import { HandsFreeToggle } from '../voice/HandsFreeToggle';
+import { VoiceButton } from '../voice/VoiceButton';
+import { useVoice } from '../voice/useVoice';
 import { toTicket, useAssistant, type Turn } from './useAssistant';
 
 const PROMPTS = ['assistant.prompt1', 'assistant.prompt2', 'assistant.prompt3'];
@@ -22,9 +26,37 @@ export function AssistantChat({ compact, onNavigate }: { compact?: boolean; onNa
   const end = useRef<HTMLDivElement>(null);
   const last = a.turns[a.turns.length - 1];
 
+  const voice = useVoice({
+    onTranscribed: (transcribed) => {
+      if (voice.handsFree) {
+        void a.send(transcribed);
+      } else {
+        setText((prev) => (prev ? `${prev} ${transcribed}` : transcribed));
+        input.current?.focus();
+      }
+    },
+  });
+
   useEffect(() => { end.current?.scrollIntoView?.({ block: 'end' }); }, [a.turns.length, last?.content.length]);
   // Screen readers get each finished answer once, not every streamed token.
   useEffect(() => { if (last?.role === 'assistant' && !last.streaming && last.content) setSaid(last.content); }, [last?.streaming, last?.role, last?.content]);
+
+  // Read aloud automatically and listen again when in hands-free mode
+  const spokenTurnRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (last?.role === 'assistant' && !last.streaming && last.content && last.id !== spokenTurnRef.current) {
+      spokenTurnRef.current = last.id;
+      if (voice.handsFree) {
+        voice.speak(last.content, {
+          onEnd: () => {
+            if (voice.handsFree) {
+              void voice.startListening();
+            }
+          },
+        });
+      }
+    }
+  }, [last?.id, last?.role, last?.streaming, last?.content, voice]);
 
   const convert = () => { onNavigate?.(); nav('/tickets/new', { state: toTicket(a.turns) }); };
   const submit = (e?: FormEvent) => { e?.preventDefault(); if (!text.trim() || a.streaming) return; void a.send(text); setText(''); };
@@ -33,16 +65,30 @@ export function AssistantChat({ compact, onNavigate }: { compact?: boolean; onNa
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
-      {hasChat && (
-        <div className="flex flex-wrap items-center justify-end gap-1 border-b border-line px-3 py-1.5">
-          <button type="button" onClick={a.clear} className="inline-flex min-h-11 items-center gap-1.5 rounded-pill px-3 text-sm font-semibold text-ink-2 hover:bg-surface-2 hover:text-ink">
-            <RotateCcw aria-hidden size={15} /> {t('assistant.newChat')}
-          </button>
-          <button type="button" onClick={convert} className="inline-flex min-h-11 items-center gap-1.5 rounded-pill px-3 text-sm font-semibold text-accent hover:bg-accent-soft">
-            <TicketPlus aria-hidden size={16} /> {t('assistant.convert')}
-          </button>
-        </div>
-      )}
+      <div className="flex flex-wrap items-center justify-between gap-1 border-b border-line px-3 py-1.5">
+        <HandsFreeToggle
+          enabled={voice.handsFree}
+          onToggle={(enabled) => {
+            voice.setHandsFree(enabled);
+            if (enabled && voice.state === 'idle' && !a.streaming) {
+              void voice.startListening();
+            } else if (!enabled) {
+              voice.stopAll();
+            }
+          }}
+          disabled={a.streaming}
+        />
+        {hasChat && (
+          <div className="flex items-center gap-1">
+            <button type="button" onClick={() => { voice.stopAll(); a.clear(); }} className="inline-flex min-h-11 items-center gap-1.5 rounded-pill px-3 text-sm font-semibold text-ink-2 hover:bg-surface-2 hover:text-ink">
+              <RotateCcw aria-hidden size={15} /> {t('assistant.newChat')}
+            </button>
+            <button type="button" onClick={convert} className="inline-flex min-h-11 items-center gap-1.5 rounded-pill px-3 text-sm font-semibold text-accent hover:bg-accent-soft">
+              <TicketPlus aria-hidden size={16} /> {t('assistant.convert')}
+            </button>
+          </div>
+        )}
+      </div>
 
       <div className="min-h-0 flex-1 overflow-y-auto px-4 py-5" aria-label={t('assistant.log')} role="region" tabIndex={0}>
         {!hasChat && (
@@ -71,13 +117,34 @@ export function AssistantChat({ compact, onNavigate }: { compact?: boolean; onNa
         )}
         <ol className="flex flex-col gap-4">
           {a.turns.map((x) => (
-            <li key={x.id}>{x.role === 'user' ? <UserBubble turn={x} /> : <AnswerBubble turn={x} onRate={(v) => a.rate(x.id, v)} onConvert={convert} />}</li>
+            <li key={x.id}>
+              {x.role === 'user' ? (
+                <UserBubble turn={x} />
+              ) : (
+                <AnswerBubble
+                  turn={x}
+                  onRate={(v) => a.rate(x.id, v)}
+                  onConvert={convert}
+                  onSpeak={(c) => voice.speak(c)}
+                />
+              )}
+            </li>
           ))}
         </ol>
         {a.banner && <BannerCard banner={a.banner} onConvert={hasChat ? convert : undefined} onNavigate={onNavigate} />}
         <div ref={end} />
       </div>
-      <p className="sr-only" role="status" aria-live="polite">{a.streaming ? t('assistant.thinking') : said}</p>
+      <p className="sr-only" role="status" aria-live="polite">
+        {voice.state === 'listening'
+          ? t('voice.listening')
+          : voice.state === 'transcribing'
+          ? t('voice.transcribing')
+          : voice.state === 'speaking'
+          ? t('voice.speaking')
+          : a.streaming
+          ? t('assistant.thinking')
+          : said}
+      </p>
 
       <form onSubmit={submit} className="border-t border-line bg-surface/80 p-3">
         <label htmlFor="assistant-input" className="sr-only">{t('assistant.inputLabel')}</label>
@@ -85,14 +152,21 @@ export function AssistantChat({ compact, onNavigate }: { compact?: boolean; onNa
           <textarea id="assistant-input" ref={input} rows={1} value={text} maxLength={4000} onChange={(e) => setText(e.target.value)} onKeyDown={key}
             placeholder={t('assistant.placeholder')} autoFocus={compact}
             className="max-h-36 min-h-11 flex-1 resize-none bg-transparent py-2.5 text-base leading-6 text-ink placeholder:text-muted focus:outline-none focus-visible:outline-none [field-sizing:content]" />
+          <VoiceButton
+            state={voice.state}
+            onStart={voice.startListening}
+            onStop={voice.stopAll}
+            disabled={a.streaming}
+          />
           {a.streaming ? (
-            <button type="button" onClick={a.stop} aria-label={t('assistant.stop')}
+            <button type="button" onClick={() => { voice.stopAll(); a.stop(); }} aria-label={t('assistant.stop')}
               className="grid size-11 shrink-0 place-items-center rounded-pill bg-ink text-bg"><Square aria-hidden size={15} fill="currentColor" /></button>
           ) : (
             <button type="submit" disabled={!text.trim()} aria-label={t('assistant.send')}
               className="grid size-11 shrink-0 place-items-center rounded-pill bg-ai text-on-accent transition-opacity disabled:opacity-35"><ArrowUp aria-hidden size={19} /></button>
           )}
         </div>
+        {voice.error && <p role="alert" className="mt-1 px-1 text-xs text-bad">{voice.error}</p>}
         <p className="mt-1.5 px-1 text-xs text-muted">{t('assistant.disclaimer')}</p>
       </form>
     </div>
@@ -109,7 +183,7 @@ function UserBubble({ turn }: { turn: Turn }) {
   );
 }
 
-function AnswerBubble({ turn, onRate, onConvert }: { turn: Turn; onRate(v: 'up' | 'down'): void; onConvert(): void }) {
+function AnswerBubble({ turn, onRate, onConvert, onSpeak }: { turn: Turn; onRate(v: 'up' | 'down'): void; onConvert(): void; onSpeak(content: string): void }) {
   const { t } = useTranslation();
   const thinking = turn.streaming && !turn.content;
   return (
@@ -132,6 +206,7 @@ function AnswerBubble({ turn, onRate, onConvert }: { turn: Turn; onRate(v: 'up' 
         {turn.interrupted && (
           <p className="mt-2 flex items-center gap-1.5 text-sm font-medium text-bad"><CircleAlert aria-hidden size={15} /> {t('assistant.interrupted')}</p>
         )}
+        {turn.usedRecords && <p className="mt-2"><RecordsChip /></p>}
         {!!turn.sources?.length && (
           <div className="mt-3 border-t border-ai/15 pt-3">
             <p className="mb-2 text-xs font-semibold uppercase tracking-[0.08em] text-muted">{t('suggest.basedOn')}</p>
@@ -141,6 +216,10 @@ function AnswerBubble({ turn, onRate, onConvert }: { turn: Turn; onRate(v: 'up' 
       </div>
       {!turn.streaming && turn.content && (
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 pl-1">
+          <button type="button" onClick={() => onSpeak(turn.content)} aria-label={t('voice.speaking')} title={t('voice.speaking')}
+            className="grid size-11 place-items-center rounded-pill text-muted hover:bg-surface-2 hover:text-ink transition-colors">
+            <Volume2 aria-hidden size={17} />
+          </button>
           <span className="text-sm text-muted">{t('assistant.helpful')}</span>
           {(['up', 'down'] as const).map((v) => {
             const Icon = v === 'up' ? ThumbsUp : ThumbsDown;

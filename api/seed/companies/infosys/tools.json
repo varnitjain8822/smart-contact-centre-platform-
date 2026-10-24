@@ -1,0 +1,55 @@
+[
+  {
+    "name": "get_payslip",
+    "description": "Get the signed-in employee's payslip for one month: gross, each deduction (PF, professional tax, TDS, loss of pay) and net pay.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "month": { "type": "string", "pattern": "^\\d{4}-\\d{2}$", "description": "Payslip month as YYYY-MM, e.g. 2026-09 for September 2026" }
+      },
+      "required": ["month"],
+      "additionalProperties": false
+    },
+    "collection": "payslips",
+    "match": { "month": "$month" },
+    "scope": "owner"
+  },
+  {
+    "name": "get_leave_balance",
+    "description": "Get the signed-in employee's current leave balance by type (earned, sick, casual, comp off) and any leave pending approval.",
+    "parameters": { "type": "object", "properties": {}, "additionalProperties": false },
+    "collection": "leave",
+    "match": {},
+    "scope": "owner"
+  },
+  {
+    "name": "get_vendor_invoice_status",
+    "description": "Get the status of one of the signed-in supplier's invoices: PO number, amount, status, expected payment date or paid date, and any action needed.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "invoiceNo": { "type": "string", "description": "Supplier invoice number exactly as printed, e.g. SLFS/2026-27/0167" }
+      },
+      "required": ["invoiceNo"],
+      "additionalProperties": false
+    },
+    "collection": "vendor_invoices",
+    "match": { "invoiceNo": "$invoiceNo" },
+    "scope": "owner"
+  },
+  {
+    "name": "get_visitor_pass",
+    "description": "Get the signed-in visitor's campus visitor pass: date, time slot, host, gate, building and status.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "passNo": { "type": "string", "description": "Visitor pass number, e.g. VP-ECY-260027" }
+      },
+      "required": ["passNo"],
+      "additionalProperties": false
+    },
+    "collection": "visitor_passes",
+    "match": { "passNo": "$passNo" },
+    "scope": "owner"
+  }
+]

@@ -1,7 +1,9 @@
 import mongoose from 'mongoose';
 import { cfg } from '../config.js';
 import * as attachments from '../attachments/service.js';
-import { CATEGORIES, CATEGORY_LABEL, PRIORITIES } from '../constants.js';
+import { PRIORITIES } from '../constants.js';
+import { categoryKeys, companyOf, cwLabel, fallbackCategory } from '../lib/company.js';
+import { inboxFor } from '../chatwoot/inboxes.js';
 import { notify } from '../notifications/service.js';
 import { mapStatus, priorityFromCw } from '../chatwoot/statusMap.js';
 import { deps } from '../deps.js';
@@ -108,10 +110,11 @@ export async function create(user, input, idemKey) {
   }
   const atts = await attachments.claimable(user._id, input.attachmentIds ?? [], null);
   const now = new Date();
+  const company = await companyOf(user);
   const ticket = new Ticket({
-    number: await nextTicketNumber(), customerId: user._id, subject: input.subject, description: input.description,
-    customerCategory: input.category ?? null, category: input.category ?? 'General', priority: 'medium', status: 'ai_handling',
-    idempotencyKey: idemKey || undefined, lastMessageAt: now, locale: user.locale ?? 'en', sla: sla.dueDates(now, 'medium'),
+    number: await nextTicketNumber(), companyId: company._id, customerId: user._id, subject: input.subject, description: input.description,
+    customerCategory: input.category ?? null, category: input.category ?? fallbackCategory(company), priority: 'medium', status: 'ai_handling',
+    idempotencyKey: idemKey || undefined, lastMessageAt: now, locale: user.locale ?? 'en', sla: sla.dueDates(now, 'medium', company.slaOverride),
     statusHistory: [{ status: 'ai_handling', at: now, by: 'customer' }],
     chatwoot: { syncState: 'pending', nextAttemptAt: afterInline(now) },
     ai: { pendingSince: now },   // first message awaits a bot decision; recovery sweep covers a lost bot webhook
@@ -133,13 +136,15 @@ export async function create(user, input, idemKey) {
 
 export async function syncTicket(ticket) {
   const user = await User.findById(ticket.customerId);
+  const company = await companyOf(ticket);
+  const { inboxId, teamId } = inboxFor(company.slug);   // v4: the company's own inbox + team
   let ref = user.chatwoot?.sourceId ? user.chatwoot : null;
   if (!ref) {
     try {
-      ref = await cw().createContact({ name: user.name, email: user.email, identifier: String(user._id) });
+      ref = await cw().createContact({ name: user.name, email: user.email, identifier: String(user._id), inboxId });
     } catch (e) {
       if (e.status !== 422) throw e;
-      ref = await cw().findContactByIdentifier(String(user._id));
+      ref = await cw().findContactByIdentifier(String(user._id), inboxId, user.email);
       if (!ref) throw e;
     }
     await User.updateOne({ _id: user._id }, { $set: { chatwoot: { contactId: ref.contactId, sourceId: ref.sourceId } } });
@@ -147,7 +152,7 @@ export async function syncTicket(ticket) {
   }
   // a failed earlier attempt may still have created it (timeout after Chatwoot committed): never create twice (REQ-046)
   const conv = (ticket.chatwoot.attempts && await cw().findConversationByTicket(ref.contactId, ticket.number)) || await cw().createConversation({ sourceId: ref.sourceId, contactId: ref.contactId, ticketNumber: ticket.number,
-    slaDueAt: sla.activeDue(ticket).toISOString(), content: `${ticket.subject}\n\n${ticket.description}` });
+    slaDueAt: sla.activeDue(ticket).toISOString(), content: `${ticket.subject}\n\n${ticket.description}`, inboxId, teamId, company: company.name });
   const r = await Ticket.updateOne({ _id: ticket._id, 'chatwoot.conversationId': null },
     { $set: { 'chatwoot.conversationId': conv.id, 'chatwoot.syncState': 'synced', 'chatwoot.lastError': null } });
   if (!r.matchedCount) log.warn({ evt: 'possible_duplicate_conversation', ticket: ticket.number, conversationId: conv.id });
@@ -321,13 +326,14 @@ export async function applyConversationState(ticket, conv, source) {
       }
       if (newStatus !== 'ai_handling') { set['ai.awaitingAcceptance'] = false; set['ai.pendingSince'] = null; }
     }
+    const company = await companyOf(ticket);
     const newPriority = priorityFromCw[conv.priority];
     if (newPriority && newPriority !== ticket.priority) {
-      const due = sla.dueDates(ticket.createdAt, newPriority);
+      const due = sla.dueDates(ticket.createdAt, newPriority, company.slaOverride);
       Object.assign(set, { priority: newPriority, 'sla.responseDueAt': due.responseDueAt, 'sla.resolutionDueAt': due.resolutionDueAt, 'sla.breachedAt': null });
     }
     const labels = conv.labels ?? [];
-    const cat = CATEGORIES.find((c) => labels.includes(CATEGORY_LABEL[c]));
+    const cat = categoryKeys(company).find((c) => labels.includes(cwLabel(c)));
     if (cat && cat !== ticket.category) set.category = cat;
     set['chatwoot.labels'] = labels;
     set['chatwoot.lastEventAt'] = eventAt;

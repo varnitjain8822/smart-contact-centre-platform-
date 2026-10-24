@@ -5,7 +5,7 @@ const cw = `http://localhost:${e.CW_PORT ?? '3000'}`;
 
 export async function register(page: Page, name = 'E2E Customer') {
   const email = `e2e+${Date.now()}${Math.floor(Math.random() * 1e4)}@example.com`;
-  await page.goto('/register');
+  await page.goto('/c/smartcc/register');
   await page.getByLabel('Your name').fill(name);
   await page.getByLabel('Email').fill(email);
   await page.getByLabel('Password', { exact: true }).fill('correct-horse-9');
@@ -15,7 +15,7 @@ export async function register(page: Page, name = 'E2E Customer') {
 }
 
 export async function raiseTicket(page: Page, subject: string, description: string) {
-  await page.goto('/tickets/new');
+  await page.goto('/c/smartcc/tickets/new');
   await page.getByLabel('Subject').fill(subject);
   await page.getByLabel("What's happening?").fill(description);
   await page.getByRole('button', { name: 'Submit ticket' }).click();
@@ -112,7 +112,7 @@ export async function registerViaApi(name = 'E2E Gaps') {
 }
 
 export async function login(page: Page, u: { email: string; password: string }, remember = false) {
-  await page.goto('/login');
+  await page.goto('/c/smartcc/login');
   await page.getByLabel('Email').fill(u.email);
   await page.getByLabel('Password', { exact: true }).fill(u.password);
   if (remember) await page.getByRole('checkbox', { name: 'Remember me' }).check();

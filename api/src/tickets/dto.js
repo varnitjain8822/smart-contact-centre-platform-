@@ -37,7 +37,7 @@ export function toTicketDetail(t, now = new Date()) {
 
 export const toMessage = (m, ticketNumber) => ({
   id: String(m._id), ticketNumber, author: m.author, authorName: m.authorName ?? '', body: m.body,
-  sources: (m.sources ?? []).map((s) => ({ slug: s.slug, title: s.title })), createdAt: iso(m.createdAt),
+  sources: (m.sources ?? []).map((s) => ({ slug: s.slug, title: s.title })), usedRecords: !!m.usedRecords, createdAt: iso(m.createdAt),
   clientMessageId: m.clientMessageId ?? null, deliveryState: m.syncState === 'pending' ? 'pending' : 'sent',
   attachments: (m.attachments ?? []).map(toAttachment),
 });

@@ -1,0 +1,314 @@
+[
+  {
+    "slug": "block-lost-debit-card",
+    "category": "cards",
+    "title": "How to block a lost or stolen SBI debit card",
+    "body": "If your SBI debit card is lost, stolen or you suspect someone has its details, block it straight away. The sooner you block it, the lower your risk.\n\nWays to block the card (as of October 2026):\n1. Phone: call the 24x7 Contact Centre on 1800 1234 or 1800 2100. In the IVR, press 0 for blocking services and then 1 to block your ATM/debit card. The toll-free lines 1800 11 2211 and 1800 425 3800 also reach the Contact Centre. Note down the ticket number you are given.\n   SMS blocking and the SBI Quick app are also listed by SBI as blocking channels.\n2. Internet banking: log in to OnlineSBI and use the debit card hotlisting/blocking option.\n3. YONO: after login, go to Services and choose Debit Card Hotlisting. A Card Blocking option is also available on the pre-login screen.\n4. Branch: give a written request at any SBI branch.\n5. Abroad: you may use the steps above or call your card network's global emergency helpline (network charges apply).\n\nAfter blocking: an EMV chip card that you blocked yourself can be unblocked by submitting a request at an SBI branch if you find it again. Older magstripe and Maestro cards cannot be unblocked once blocked. To get a new card, request a replacement through the branch, internet banking, YONO or the Contact Centre. The replacement charge is Rs 300 + GST for most cards (Nari Shakti Platinum Rs 499 + GST, Pragati Platinum Rs 399 + GST), as per SBI's service charges updated 30 September 2025.\n\nIf you also see transactions you did not make, report them separately as unauthorised transactions on 1800 11 1109 so the dispute process starts.",
+    "keywords": [
+      "block card",
+      "lost card",
+      "stolen card",
+      "hotlist",
+      "debit card",
+      "ATM card",
+      "card blocking",
+      "replacement card"
+    ]
+  },
+  {
+    "slug": "atm-cash-not-dispensed",
+    "category": "cards",
+    "title": "ATM debited my account but did not give cash",
+    "body": "Sometimes an ATM debits your account but no cash comes out, for example because of a communication failure, the machine running out of cash or a session time-out. This is a failed transaction and the money should come back to you automatically.\n\nWhat the rules say (as of October 2026): under the RBI circular of 20 September 2019 on harmonised turnaround time (TAT), a failed ATM withdrawal must be reversed to your account within T+5 days, where T is the calendar date of the transaction. If the bank misses that deadline, it must pay you compensation of Rs 100 for every day of delay beyond T+5. The compensation is to be credited on the bank's own initiative; you do not have to claim it. SBI's Customer Rights, Grievance Redressal and Compensation Policy (May 2026) applies the same rule, including at micro ATMs and for card-present POS transactions where no charge slip was generated. This applies even if you used another bank's ATM, because your card-issuing bank is responsible.\n\nWhat you should do:\n1. Keep the ATM slip or note the date, time, ATM location and amount.\n2. Check your account after a few days; most failures reverse on their own.\n3. If the money has not come back, lodge a complaint with SBI through the Contact Centre (1800 1234 / 1800 2100), the online complaint form at crcf.sbi.bank.in, or your branch, and keep the complaint number.\n4. If SBI does not resolve it, you can escalate as described in the complaint escalation article.\n\nSBI does not charge for failed ATM transactions, except a Rs 20 + GST charge when the decline is due to insufficient balance.",
+    "keywords": [
+      "ATM",
+      "cash not dispensed",
+      "failed transaction",
+      "amount debited",
+      "reversal",
+      "T+5",
+      "compensation",
+      "Rs 100 per day"
+    ]
+  },
+  {
+    "slug": "atm-and-debit-card-charges",
+    "category": "cards",
+    "title": "ATM free transactions and debit card charges",
+    "body": "Using other banks' ATMs (as of October 2026, effective 1 December 2025): regular SBI savings account holders get 5 free transactions per month at other banks' ATMs at all centres. This count includes both cash withdrawals and non-financial transactions such as balance enquiry. After the free limit, each cash withdrawal costs Rs 23 + GST and each non-financial transaction costs Rs 11 + GST. Salary package savings accounts get 10 free transactions per month at other banks' ATMs, with the same charges after that. Current accounts pay Rs 23 + GST per cash withdrawal and Rs 11 + GST per non-financial transaction at other banks' ATMs. Kisan Credit Card accounts continue to have unlimited free transactions at other banks' ATMs. Cardless cash withdrawals remain free. Non-financial transactions at SBI ATMs are free for SBI customers.\n\nDeclines: no charge is levied for failed transactions such as a wrong PIN. A transaction declined for insufficient balance costs Rs 20 + GST.\n\nDebit card fees (as per SBI service charges updated 30 September 2025):\n- Issuance: Classic, Silver, Global and Contactless cards are free; Gold Rs 100 + GST; Platinum Rs 300 + GST.\n- Annual maintenance (from the second year): Classic/Silver/Global/Contactless Rs 200 + GST; Yuva/Gold/Combo Rs 250 + GST; Platinum Rs 325 + GST.\n- Replacement card: Rs 300 + GST.\n- Duplicate PIN or PIN regeneration through the branch: Rs 50 + GST.\n- Abroad: ATM cash withdrawal Rs 100 minimum plus 3.5% of the amount + GST; POS/online purchases 3% of the amount + GST; ATM balance enquiry Rs 25 + GST.\n\nCharges are revised from time to time, so check the latest SBI service charges before you transact.",
+    "keywords": [
+      "ATM charges",
+      "free ATM transactions",
+      "other bank ATM",
+      "debit card annual charges",
+      "AMC",
+      "card replacement fee",
+      "international usage"
+    ]
+  },
+  {
+    "slug": "unauthorised-transaction-liability",
+    "category": "complaints",
+    "title": "Reporting an unauthorised or fraudulent transaction",
+    "body": "If you see a debit you did not make on your card, net banking, YONO or UPI, report it immediately. Under RBI's rules on limiting customer liability, how quickly you report decides how much of the loss you may have to bear.\n\nHow to report to SBI (as of October 2026):\n- Call the dedicated toll-free number 1800 11 1109.\n- Use the Report Unauthorised Transaction option on the SBI website, or contact your home branch during working hours.\n- SBI's policy requires a copy of a police complaint/FIR or a report on the National Cyber Crime Reporting Portal (cybercrime.gov.in) for every such case, whatever the amount. The national cyber crime helpline is 1930.\nSBI will block the affected digital channel immediately to stop further loss and send you an acknowledgement with a complaint number.\n\nYour liability (RBI circular of 6 July 2017, as adopted in SBI's May 2026 policy), counted from when you receive the bank's alert about the transaction:\n- Zero liability if the fraud happened due to the bank's fault, whether or not you report it.\n- Zero liability if the fault lies elsewhere in the system (neither you nor the bank) and you report within 3 working days.\n- If you report within 4 to 7 working days, your liability is capped at the transaction value or Rs 5,000 for Basic Savings Bank Deposit accounts, Rs 10,000 for other savings accounts (and smaller individual or MSME current accounts), and Rs 25,000 for other current accounts, whichever is lower.\n- Beyond 7 working days, SBI's policy says the customer bears the full liability.\n- If the loss happened because you shared your PIN, OTP or password, you bear the loss until you report it.\n\nOnce you report, the bank must give a shadow credit of the disputed amount within 10 working days and resolve the complaint within 90 days. Never share your OTP, PIN or passwords with anyone; SBI never asks for them.",
+    "keywords": [
+      "fraud",
+      "unauthorised transaction",
+      "unauthorized debit",
+      "zero liability",
+      "1800 11 1109",
+      "cyber crime",
+      "1930",
+      "money stolen"
+    ]
+  },
+  {
+    "slug": "upi-limits",
+    "category": "digital",
+    "title": "UPI transaction limits on YONO and BHIM SBI Pay",
+    "body": "SBI publishes the following UPI limits for BHIM SBI Pay and UPI on YONO SBI (as of October 2026, per SBI's UPI limits page dated June 2025). Limits can change under NPCI guidelines or at the bank's discretion.\n\nStandard limits:\n- Up to Rs 1,00,000 per transaction.\n- Up to Rs 1,00,000 per day in total, for person-to-person and merchant payments combined.\n- Person-to-person (P2P) transfers: up to 20 transactions in 24 hours.\n- Merchant payments (P2M): no count limit, only the daily value limit applies.\n\nCooling period after you set or reset your UPI PIN:\n- Android: Rs 5,000 per transaction and Rs 5,000 in total for the first 24 hours.\n- iPhone (iOS): Rs 5,000 per day for the first 5 days.\n\nHigher limits for some verified merchant categories:\n- Insurance and capital markets: up to Rs 2,00,000.\n- IPO (ASBA), RBI Retail Direct, tax payments, hospitals and educational institutions: up to Rs 5,00,000.\n\nUPI Lite: small payments up to Rs 1,000 without a UPI PIN, with a maximum UPI Lite balance of Rs 5,000.\n\nSBI does not currently charge customers for UPI transfers. A UPI payment cannot be stopped once you have initiated it, so check the payee name and amount before entering your PIN. If you need to block UPI urgently (for example if your phone is lost), call 1800 1234 or 1800 2100 and choose option 0 and then 3 (UPI block) in the IVR.",
+    "keywords": [
+      "UPI limit",
+      "daily limit",
+      "1 lakh",
+      "BHIM SBI Pay",
+      "YONO UPI",
+      "cooling period",
+      "UPI Lite",
+      "UPI PIN"
+    ]
+  },
+  {
+    "slug": "upi-failed-transaction",
+    "category": "digital",
+    "title": "UPI money debited but not received by the payee",
+    "body": "If your UPI payment shows as debited but the person or merchant did not receive it, the amount is normally reversed automatically.\n\nTimelines (RBI harmonised TAT circular, 20 September 2019, as applied in SBI's May 2026 compensation policy, as of October 2026):\n- Fund transfer to a person, debited but not credited to the beneficiary: the beneficiary bank must reverse it by T+1 day (T is the transaction date). If not, Rs 100 per day of delay beyond T+1 is payable to you.\n- Payment to a merchant, debited but the merchant did not get confirmation: auto-reversal within T+5 days, otherwise Rs 100 per day of delay beyond T+5.\n- IMPS transfers debited but not credited follow the same T+1 rule with Rs 100 per day compensation.\nCompensation is credited without you having to claim it.\n\nWhat to do:\n1. Wait for the timeline above; technical declines are usually reversed in real time.\n2. If the amount is not reversed, raise a dispute inside the app you paid from. In YONO Lite/BHIM SBI Pay go to UPI Transfer, then UPI Payment History, select the transaction and choose raise dispute. Track it under Dispute Status.\n3. Keep the UPI transaction reference number (UTR/RRN), date and amount ready.\n4. You can also lodge a complaint through the Contact Centre (1800 1234 / 1800 2100) or crcf.sbi.bank.in.\n\nIf you did not make the payment at all, treat it as fraud: call 1800 11 1109 at once and follow the unauthorised transaction steps.",
+    "keywords": [
+      "UPI failed",
+      "money debited not received",
+      "UPI dispute",
+      "UPI refund",
+      "T+1",
+      "merchant payment failed",
+      "UTR"
+    ]
+  },
+  {
+    "slug": "neft-rtgs-imps",
+    "category": "digital",
+    "title": "NEFT, RTGS and IMPS: timings, limits and charges",
+    "body": "SBI supports three main ways to send money to any bank account in India (as of October 2026).\n\nNEFT\n- Available 24x7, all days of the year, settled in half-hourly batches.\n- Minimum Re 1, no maximum limit.\n- The beneficiary should get the credit within two hours of the batch settling. If it cannot be credited, the money is returned within two hours of the batch (B+2).\n- Charges: free through internet banking and mobile banking, including YONO. At a branch: Rs 2 up to Rs 10,000, Rs 4 above Rs 10,000 up to Rs 1 lakh, Rs 12 above Rs 1 lakh up to Rs 2 lakh, Rs 20 above Rs 2 lakh (plus GST).\n\nRTGS\n- Available 24x7, processed in real time.\n- Minimum Rs 2 lakh, no maximum limit.\n- The beneficiary bank should credit within 30 minutes of receiving the message; failed credits are returned within one hour or before the end of the RTGS day, whichever is earlier.\n- Charges: free online. At a branch: Rs 20 for Rs 2 lakh to Rs 5 lakh and Rs 40 above Rs 5 lakh (plus GST).\n\nIMPS\n- Instant, 24x7, up to Rs 5 lakh per transaction.\n- Retail charges from 15 August 2025: online transfers are free up to Rs 25,000; Rs 2 + GST above Rs 25,000 up to Rs 1 lakh; Rs 6 + GST above Rs 1 lakh up to Rs 2 lakh; Rs 10 + GST above Rs 2 lakh up to Rs 5 lakh. Online IMPS is waived for many salary package accounts.\n\nNew beneficiary: on internet banking, transfers to a newly added beneficiary are limited to Rs 5,00,000 in total during the first four days (cooling period).\n\nFor a transfer that has not reached the beneficiary, contact your branch or call 1800 1234 / 1800 2100 with the UTR number.",
+    "keywords": [
+      "NEFT",
+      "RTGS",
+      "IMPS",
+      "fund transfer",
+      "timings",
+      "charges",
+      "minimum amount",
+      "beneficiary",
+      "UTR"
+    ]
+  },
+  {
+    "slug": "internet-banking-locked",
+    "category": "digital",
+    "title": "OnlineSBI login locked or forgot password",
+    "body": "Login locked: according to the OnlineSBI terms (as of October 2026), your internet banking user ID is locked after 3 incorrect password attempts. Access is restored automatically on the next day. If you need access urgently, reset your login password online with the Forgot Login Password link, or ask your branch to help.\n\nResetting your login password:\n1. On the OnlineSBI login page, click Forgot Username / Login Password and choose Forgot My Login Password.\n2. Enter your username, account number, country, registered mobile number and date of birth, and the captcha.\n3. Enter the OTP sent to your registered mobile.\n4. Choose one of three ways to complete the reset: using your ATM/debit card details, using your profile password, or with branch assistance.\n\nPassword rules: the login password must be 8 to 20 characters, alphanumeric, with at least one special character. User ID and password are case-sensitive. The username cannot be changed by you or the branch; to get a new one you must register again through the branch.\n\nForgot profile password: go to My Accounts & Profile, then Profile, then Forgot Profile Password. You can reset it using your hint question answer, your ATM/debit card, or at the branch.\n\nIf you think your credentials are compromised, lock your access using the Lock User Access link on OnlineSBI, or call 1800 1234 / 1800 2100 and choose option 0 and then 2 to block internet banking. SBI never asks for your password, PIN or OTP by phone, SMS or email.",
+    "keywords": [
+      "net banking locked",
+      "internet banking",
+      "OnlineSBI",
+      "forgot password",
+      "login password",
+      "profile password",
+      "3 attempts",
+      "lock user access"
+    ]
+  },
+  {
+    "slug": "yono-registration-login",
+    "category": "digital",
+    "title": "Registering and logging in to YONO SBI",
+    "body": "YONO SBI is the bank's mobile banking app. How to register (as of October 2026):\n- If you already have internet banking (OnlineSBI) credentials, register directly in the app with them.\n- If you do not have internet banking, create credentials in the app using your active ATM/debit card details.\n- If you have no active debit card, use Register with account details in the app to generate a reference number, then visit your branch to complete activation.\n\nDevice and SIM binding: YONO is bound to one phone and to the SIM whose number is registered with your account. The binding uses the SIM, the device ID and your user ID/MPIN. You can register with an e-SIM. If you get a duplicate or ported SIM, or a new phone, you must register again; your old device is de-registered automatically. Your phone must have a screen lock (PIN, pattern or biometric); if you remove the screen lock, the app stops working.\n\nLogging in: you can always log in with your internet banking username and password. Optionally you can set a 6-digit MPIN for quicker login and switch between MPIN and username login at any time. From the Manage Passwords section of the app you can set, change or remove the MPIN and reset your profile or internet banking password.\n\nNRI customers can use YONO only if their registered mobile number is an Indian number.\n\nFor YONO help, call the dedicated toll-free number 1800 1111 01, or 1800 1234 / 1800 2100 (IVR option 3 for YONO and internet banking).",
+    "keywords": [
+      "YONO",
+      "register YONO",
+      "MPIN",
+      "mobile banking",
+      "SIM binding",
+      "new phone",
+      "YONO login"
+    ]
+  },
+  {
+    "slug": "kyc-documents-account-opening",
+    "category": "kyc",
+    "title": "Documents needed to open a savings account (KYC)",
+    "body": "To open an SBI savings account as an individual you need to complete KYC (Know Your Customer). As of October 2026, SBI's KYC page lists these Officially Valid Documents (OVDs); any one of them can serve as proof of identity and address:\n- Passport\n- Voter ID card\n- Driving licence\n- Aadhaar letter or card\n- NREGA job card\n- Letter from the National Population Register with name and address\n\nYou also need to give your PAN or, if you do not have a PAN, Form 60 along with a certified OVD.\n\nSmall accounts: if you cannot produce an OVD, a small account can be opened with a self-attested photograph and your signature or thumb impression before a bank officer. Limits apply: total credits up to Rs 1 lakh in a financial year, withdrawals and transfers up to Rs 10,000 a month, and a balance of no more than Rs 50,000 at any time. It is allowed for 12 months, extendable by another 12 months if you show you have applied for an OVD.\n\nMinors: for a child below 10, the KYC of the guardian who operates the account is required. A minor who can operate the account independently completes normal KYC.\n\nNRIs: copies of passport and residence visa, attested by an overseas office, notary, Indian embassy or a verifiable correspondent bank officer.\n\nOther points from SBI's savings bank rules: interest is calculated on the daily balance and credited quarterly; regular savings accounts have no minimum balance charge (see the minimum balance article).",
+    "keywords": [
+      "open account",
+      "KYC documents",
+      "OVD",
+      "Aadhaar",
+      "PAN",
+      "Form 60",
+      "savings account",
+      "small account",
+      "minor account"
+    ]
+  },
+  {
+    "slug": "re-kyc-periodic-update",
+    "category": "kyc",
+    "title": "Updating your KYC (re-KYC)",
+    "body": "Banks must update their customers' KYC records from time to time. RBI's FAQs on the KYC Master Direction (as of October 2026) say this must be done at least once every 2 years for high-risk customers, every 8 years for medium-risk customers and every 10 years for low-risk customers, counted from account opening or the last update. Banks may ask more often under their own policy. You will get advance notice and reminders when your re-KYC is due.\n\nIf nothing has changed: give a self-declaration that your KYC details are unchanged. RBI allows this through registered email, registered mobile, ATM, digital channels or a letter, and you do not have to visit your own branch. SBI provides a self-declaration form (Annexure A) and lets you update KYC through YONO, ATM, internet banking or any branch, including non-home branches.\n\nIf only your address has changed: give a self-declaration of the new address (SBI Annexure C) with a document showing it. The bank will verify the new address within two months.\n\nIf other details have changed: submit the documents required for opening an account (see the KYC documents article). Aadhaar OTP-based e-KYC and video KYC (V-CIP) are also allowed.\n\nThe bank must acknowledge your submission and inform you once records are updated. A rejection cannot be fully automated; an authorised official has to review it. If KYC is not updated despite notices, RBI's FAQ says the bank will close the account after due notice, and SBI treats such accounts as KYC non-compliant.\n\nAny change in your KYC details should be informed to the bank within 30 days.",
+    "keywords": [
+      "re-KYC",
+      "KYC update",
+      "periodic updation",
+      "self declaration",
+      "address change",
+      "video KYC",
+      "account frozen KYC"
+    ]
+  },
+  {
+    "slug": "nomination",
+    "category": "accounts",
+    "title": "Adding or changing a nominee",
+    "body": "A nominee is the person the bank pays your deposit to after your death, which makes the claim faster and simpler for your family.\n\nWhat can have a nominee: all deposit accounts held in an individual capacity, sole proprietorship deposits, safe deposit lockers and safe custody articles. Nomination is not allowed for HUF accounts. Pension accounts need a separate bank nomination; a nomination under the pension rules does not cover the account.\n\nNumber of nominees (as of October 2026): the Banking Laws (Amendment) Act, 2025 provisions on nomination came into force on 1 November 2025, together with the Banking Companies (Nomination) Rules, 2025. You can now name up to four nominees.\n- Simultaneous nomination (deposit accounts only): you state each nominee's percentage share, totalling 100%. If a nominee dies before payment, that share is treated as having no nomination.\n- Successive nomination (deposits, lockers and safe custody): nominees take effect one after another in the order you set; the next one applies only if the earlier nominee has died. Lockers and safe custody articles allow only successive nomination.\n\nHow to nominate: download SBI's revised nomination form from the nomination facility page, fill it in and submit it to your home branch. Where available, you can also register, view or cancel a nominee online through OnlineSBI (Requests and Enquiries, Online Nomination), or within YONO for digital savings accounts. To change an online nominee you may need to cancel the existing one first and register the new one. Requests sent by email are not accepted.\n\nTo check your current nomination, call 1800 1234 / 1800 2100 and choose option 1 and then 5 in the IVR.",
+    "keywords": [
+      "nominee",
+      "nomination",
+      "add nominee",
+      "change nominee",
+      "four nominees",
+      "successive",
+      "simultaneous",
+      "locker nomination"
+    ]
+  },
+  {
+    "slug": "cheque-book-and-stop-payment",
+    "category": "accounts",
+    "title": "Cheque book requests and stopping a cheque",
+    "body": "Requesting a cheque book (as of October 2026):\n- Internet banking: OnlineSBI, under the Requests menu.\n- Phone: call 1800 1234 / 1800 2100, press 2 and then 4 for a new cheque book request; option 2 then 5 gives the dispatch status.\n- Branch: give a request letter at your home branch.\nThe cheque book is delivered to your registered address.\n\nCharges for savings accounts (SBI service charges updated 30 September 2025):\n- The first 10 cheque leaves in a financial year are free.\n- After that, a 10-leaf book costs Rs 40 + GST and a 25-leaf book Rs 75 + GST.\n- Emergency cheque book: Rs 50 + GST for 10 leaves or part.\n- Free for senior citizens and for salary package accounts (except bulk requests of more than 25 leaves at once or in a month, charged at Rs 75 + GST per 25 leaves).\n- Basic Savings Bank Deposit accounts get a cheque book only if the holder is a senior citizen or differently abled. Insta Savings accounts have no cheque book.\n\nStopping a cheque: if a cheque is lost or you need to stop payment, give a stop payment instruction through internet banking, the Contact Centre IVR (option 2 then 7) or your branch. The charge is Rs 100 + GST per instrument, up to Rs 500 + GST per instance.\n\nOther cheque charges: if a cheque you deposited is returned unpaid, the charge is Rs 150 + GST up to Rs 1 lakh and Rs 250 + GST above Rs 1 lakh. Local cheques dropped before the cut-off time are cleared in T+1 working days, and in T+2 if dropped after the cut-off.",
+    "keywords": [
+      "cheque book",
+      "request cheque book",
+      "stop payment",
+      "lost cheque",
+      "cheque charges",
+      "cheque leaves",
+      "cheque clearing"
+    ]
+  },
+  {
+    "slug": "account-closure",
+    "category": "accounts",
+    "title": "Closing your savings account",
+    "body": "To close an SBI savings account, give a written closure request at your home branch stating the reason for closing. For a joint account, all joint holders must sign the request. Insta Savings accounts can be closed only by a written request at the home branch after KYC has been completed.\n\nClosure charges for savings accounts (SBI service charges updated 30 September 2025, as of October 2026):\n- Closed within 14 days of opening: free.\n- Closed after 14 days and up to 1 year from opening: Rs 500 + GST.\n- Closed after 1 year: free.\n- Closure on settlement of a deceased depositor's account: free.\n- Basic Savings Bank Deposit, PMJDY and small accounts are excluded from these charges.\n\nFor current accounts closed after 14 days and within one year, the charge is Rs 300 + GST (rural) or Rs 500 + GST (other centres) for individuals, and Rs 400 + GST or Rs 600 + GST for non-individuals.\n\nTransferring instead of closing: if you have moved city, you do not need to close the account. A fully KYC-compliant account can be transferred to another branch, including online through internet banking if you have transaction rights.\n\nDeceased customer's account: SBI's policy is to settle a claim on a deceased customer's deposit account within 15 calendar days of receiving all required documents.",
+    "keywords": [
+      "close account",
+      "account closure",
+      "closure charges",
+      "transfer account",
+      "deceased claim",
+      "joint account closure"
+    ]
+  },
+  {
+    "slug": "minimum-balance-inoperative-account",
+    "category": "accounts",
+    "title": "Minimum balance and inoperative accounts",
+    "body": "Minimum balance: SBI does not charge for non-maintenance of average monthly balance on regular savings bank accounts. This charge has been nil since 13 March 2020 and remains nil in SBI's service charges updated 30 September 2025 (as of October 2026). The waiver also covers salary package, BSBD, PMJDY, minors', pensioners' and students' accounts. Current accounts are different: they carry a monthly average balance requirement, and a charge applies if it is not met (for example Rs 500 + GST for a regular current account).\n\nOther savings account rules: there is no upper limit on the balance, except for minors' accounts and small accounts. Cash deposits below Rs 10 are not accepted, and withdrawals must be at least Rs 50. Interest is calculated on the daily balance and credited quarterly, if it is at least Re 1.\n\nInoperative accounts: an account that has not been operated for 24 months since its last operation is classified as inoperative. To use it again it must be reactivated; contact your branch, which will take you through SBI's reactivation process, and update your KYC if it is due. SBI does not charge for activating an inoperative account.\n\nTo avoid this, operate your account from time to time and keep your mobile number and KYC up to date so you get alerts.",
+    "keywords": [
+      "minimum balance",
+      "average monthly balance",
+      "AMB charges",
+      "inoperative account",
+      "dormant account",
+      "reactivate account",
+      "interest credit"
+    ]
+  },
+  {
+    "slug": "complaint-escalation",
+    "category": "complaints",
+    "title": "How to lodge a complaint with SBI and escalate it",
+    "body": "Ways to lodge a complaint (SBI Customer Rights, Grievance Redressal and Compensation Policy, May 2026, as of October 2026):\n- Contact Centre: call 1800 1234 or 1800 2100, press 4 and then 4 to lodge a complaint, or 4 then 3 to check its status.\n- Online: the Customer Request and Complaint Form at crcf.sbi.bank.in/ccf, or the Do You Want to Lodge a Complaint link on the SBI website or the OnlineSBI/YONO Lite pre-login page.\n- SMS: send UNHAPPY to 8008202020; a team will call you back.\n- Email: customercare@sbi.bank.in or contactcentre@sbi.bank.in.\n- Branch: write in the complaint book; the branch enters it in the complaint system by the next working day.\nYou receive a unique complaint number by SMS or email, which you use to track the complaint. For UPI apps you can also raise a dispute inside the app.\n\nTimelines: SBI aims to resolve a complaint within 20 calendar days and give a final decision within 30 calendar days. If a complaint is partly or fully rejected, it is reviewed by SBI's Internal Ombudsman within that 30-day period. Some digital complaints have their own shorter timelines.\n\nEscalation within SBI: if you are not satisfied with the branch or channel reply, approach the Assistant General Manager of the Regional Business Office or the General Manager (Network) at the Local Head Office that controls your branch; contact details are on the SBI website and with the branch. You can also write to the Principal Nodal Officer, the General Manager (Customer Experience) at SBI Corporate Centre, Mumbai, quoting your complaint number.\n\nIf you get no reply within 30 days, or are unhappy with the final reply, you can go to the RBI Ombudsman (see the RBI Ombudsman article).",
+    "keywords": [
+      "complaint",
+      "lodge complaint",
+      "escalate",
+      "complaint status",
+      "grievance",
+      "UNHAPPY",
+      "principal nodal officer",
+      "crcf"
+    ]
+  },
+  {
+    "slug": "rbi-ombudsman",
+    "category": "complaints",
+    "title": "Taking your complaint to the RBI Ombudsman",
+    "body": "The RBI Ombudsman is a free, independent way to resolve complaints about deficient banking service. From 1 July 2026 the Reserve Bank - Integrated Ombudsman Scheme, 2026 replaced the 2021 scheme (as of October 2026). Complaints received before 1 July 2026 are still handled under the 2021 scheme.\n\nWhen you can approach the Ombudsman:\n- You must first complain to SBI and keep proof of that complaint.\n- You can go to the Ombudsman if SBI has not replied within 30 days (or any longer timeline set by RBI, NPCI or card network rules), or if you are not satisfied with SBI's reply.\n- File within 90 days from the date that timeline expires or from SBI's last communication, whichever is later.\n- The matter must not already be before a court, tribunal or arbitrator, or already decided by the Ombudsman.\n\nHow to file:\n- Online at cms.rbi.org.in.\n- By email to crpc@rbi.org.in.\n- By post to the Centralised Receipt and Processing Centre, Reserve Bank of India, Central Vista, Sector 17, Chandigarh 160017.\nInclude your details, SBI's complaint number and date, account or transaction details, SBI's reply if any, the facts and the relief you want. You can track the complaint on the CMS portal with your complaint number and mobile number.\n\nHelp: RBI's toll-free number 14448 has a 24x7 IVR; agents are available 8 am to 10 pm, Monday to Saturday except national holidays, in English, Hindi and ten regional languages. Complaints cannot be filed by phone.\n\nCompensation: there is no limit on the disputed amount. For consequential loss the Ombudsman can award up to Rs 30 lakh, plus up to Rs 3 lakh for loss of time, expenses and harassment. You can appeal an award to the Appellate Authority within 30 days.",
+    "keywords": [
+      "RBI ombudsman",
+      "banking ombudsman",
+      "cms.rbi.org.in",
+      "14448",
+      "escalate to RBI",
+      "integrated ombudsman scheme",
+      "complaint not resolved"
+    ]
+  },
+  {
+    "slug": "home-loan-emi-prepayment",
+    "category": "loans",
+    "title": "Home loan EMI, interest and prepayment",
+    "body": "Key points from SBI's Home Loan Most Important Terms and Conditions (April 2026, as of October 2026):\n\nInterest: SBI floating-rate home loans are linked to the External Benchmark Lending Rate (EBLR), which follows the RBI repo rate. Interest is calculated on a daily reducing balance at monthly rests, so every EMI or prepayment immediately lowers the interest you pay. When the repo rate changes, the rate is reset and SBI may change your EMI, your tenure or both. You are informed through SMS/email, the statement and public notices.\n\nEMI: the loan is repaid in equated monthly instalments starting from the date in your sanction letter. Repayment is through a standing instruction or NACH mandate, which may be set at up to 120% of the EMI to allow for rate increases, but only the actual EMI is debited.\n\nTenure: up to 30 years or until you turn 70, whichever is earlier (75 for certain schemes).\n\nPrepayment: no prepayment or pre-closure penalty is charged on floating-rate home loans, whatever the period or source of funds.\n\nMissed EMIs: penal charges are 2.40% a year on the overdue portion for up to 60 days, and 5% a year if it stays overdue beyond 60 days. A bounced cheque, NACH or SI costs Rs 250 + GST each time.\n\nAfter closure: collect your original title deeds within 30 days of full repayment from your home loan centre. If the bank delays returning documents beyond 30 days after full repayment for reasons attributable to it, SBI's compensation policy provides Rs 5,000 per day of delay.\n\nInterest certificates for tax can be requested through the Contact Centre (1800 1234, IVR option 3 then 4). The dedicated home loan helpline is 1800 11 2018.",
+    "keywords": [
+      "home loan",
+      "EMI",
+      "prepayment",
+      "foreclosure",
+      "EBLR",
+      "repo rate",
+      "interest certificate",
+      "title deeds",
+      "penal charges"
+    ]
+  },
+  {
+    "slug": "personal-loan-prepayment",
+    "category": "loans",
+    "title": "Personal loan: late payment and prepayment charges",
+    "body": "SBI's Key Fact Statement for personal loans (as of October 2026) sets out these charges.\n\nLate or missed EMIs: if an instalment is unpaid or the account is irregular, penal charges apply on the overdue portion only: 2.40% a year for irregularity of up to 60 days, and 5% a year if it continues beyond 60 days. Payments you make are adjusted first to charges, then overdue interest, then interest, and then principal.\n\nPrepayment and closure:\n- Paying an EMI in advance, part-prepaying or closing the loan before the end of the term attracts a prepayment charge of 2% of the prepaid amount.\n- No prepayment charge applies if the loan is closed after completing 3 years of the tenure.\n- Defence salary package customers: full waiver if closed after 6 months from sanction.\n- Government and corporate salary package customers: full waiver if closed after 6 months from sanction using a new loan under the same scheme with SBI.\n- Platinum and Rhodium corporate salary package customers: no prepayment charge after 6 months from sanction.\n- If another bank takes over the loan, 2% of the prepaid amount (part prepayment) or 2% of the outstanding amount (full closure) applies regardless of tenure.\n\nTo know your outstanding amount and next EMI date, check the loan account in YONO or OnlineSBI, ask your branch, or call 1800 1234 / 1800 2100.",
+    "keywords": [
+      "personal loan",
+      "prepayment charges",
+      "foreclosure",
+      "2 percent",
+      "late EMI",
+      "penal charges",
+      "loan closure"
+    ]
+  },
+  {
+    "slug": "contact-centre-numbers",
+    "category": "complaints",
+    "title": "SBI helpline numbers and what each is for",
+    "body": "SBI's Contact Centre works round the clock in several languages (as of October 2026).\n\nGeneral toll-free numbers: 1800 1234, 1800 2100, 1800 11 2211 and 1800 425 3800. From outside India, call +91 80 2659 9990 (charges apply); SBI also lists toll-free numbers for about 20 countries on its contact centre page.\n\nMain IVR options on 1800 1234 / 1800 2100:\n- 0: block your ATM card (1), internet banking (2) or UPI (3).\n- 1: account balance, last 5 transactions, account statement, CIF information, nomination details.\n- 2: PIN generation, debit card dispatch status, card re-issue, new cheque book, cheque book dispatch status, card switch on/off and limits, stop cheque.\n- 3: YONO, YONO Business, TDS and deposit interest certificate, home loan and education loan interest certificates, internet banking.\n- 4: interest rates, loan and deposit products, complaint status, lodge a complaint.\n\nDedicated numbers:\n- Unauthorised transactions: 1800 11 1109\n- YONO: 1800 1111 01\n- Home loans: 1800 11 2018\n- Pensioners: 1800 11 0009\n- PMJDY: 1800 11 0001\n- FASTag: 1800 11 0018\n- Doorstep banking: 1800 1111 03\n- Senior citizens and differently abled customers: 1800 8888\n- Wealth and Platinum customers: 1800 8900\n\nOther channels: SMS UNHAPPY to 8008202020 to register dissatisfaction, and WhatsApp banking on 90226 90226 for balance and similar services. SBI will never ask for your PIN, password or OTP on any call.",
+    "keywords": [
+      "customer care number",
+      "toll free",
+      "helpline",
+      "1800 1234",
+      "IVR",
+      "contact SBI",
+      "WhatsApp banking"
+    ]
+  }
+]

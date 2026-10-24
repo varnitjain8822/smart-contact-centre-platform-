@@ -11,6 +11,7 @@ RUN ONNXRUNTIME_NODE_INSTALL_CUDA=skip npm ci --omit=dev \
   && find node_modules/onnxruntime-node/bin/napi-v*/linux -mindepth 1 -maxdepth 1 ! -name "$arch" -exec rm -rf {} + \
   && npm cache clean --force
 COPY src ./src
+COPY seed ./seed
 ENV NODE_ENV=production
 EXPOSE 4000
 CMD ["node", "src/server.js"]

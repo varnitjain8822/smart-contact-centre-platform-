@@ -5,7 +5,7 @@ import type { Source } from '../../lib/types';
 import { chatStream, type ChatMsg } from './stream';
 
 export type Turn = {
-  id: string; role: 'user' | 'assistant'; content: string; sources?: Source[]; suggestTicket?: boolean;
+  id: string; role: 'user' | 'assistant'; content: string; sources?: Source[]; usedRecords?: boolean; suggestTicket?: boolean;
   interrupted?: boolean; streaming?: boolean; helpful?: 'up' | 'down';
 };
 export type Banner = { kind: 'unavailable' } | { kind: 'rate'; retryAfterS?: number } | null;
@@ -55,7 +55,7 @@ export function useAssistant(userId: string) {
     try {
       await chatStream(msgs, i18n.language === 'hi' ? 'hi' : 'en', {
         onToken: (t) => patchLast((x) => ({ ...x, content: x.content + t })),
-        onSources: (sources) => patchLast((x) => ({ ...x, sources })),
+        onSources: (sources, usedRecords) => patchLast((x) => ({ ...x, sources, usedRecords })),
         onError: () => patchLast((x) => ({ ...x, interrupted: true })),
         onDone: ({ suggestTicket }) => patchLast((x) => ({ ...x, suggestTicket, streaming: false })),
       }, c.signal);

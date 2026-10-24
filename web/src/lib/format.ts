@@ -49,8 +49,8 @@ export function slaView(sla: Sla, now: number, start: string): SlaView {
 export const statusLabel = (s: Status) => t(`status.${s}`);
 export const priorityLabel = (p: Priority) => t(`priority.${p}`);
 export const actorLabel = (a: StatusEvent['by']) => t(`actor.${a}`);
-/** Category names are server enums; translated for display only. */
-export const categoryLabel = (c: string) => t(`category.${c}`, { defaultValue: c });
+/** Category keys are per company (v4); labels come from the company, SmartCC's from i18n. */
+export { categoryLabel } from './company';
 
 const fmt = (o: Intl.DateTimeFormatOptions) => new Intl.DateTimeFormat(intlLocale(), o);
 export const time = (iso: string) => fmt({ hour: 'numeric', minute: '2-digit' }).format(new Date(iso));

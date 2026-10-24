@@ -3,7 +3,8 @@ import { z } from 'zod';
 import { requireUser } from '../auth/session.js';
 import { uploadFile } from '../attachments/routes.js';
 import * as attachments from '../attachments/service.js';
-import { CATEGORIES, PRIORITIES, STATUSES } from '../constants.js';
+import { PRIORITIES, STATUSES } from '../constants.js';
+import { categoryKeys, companyOf } from '../lib/company.js';
 import { limit } from '../lib/limit.js';
 import { log } from '../lib/log.js';
 import { toAttachment, toMessage, toTicketDetail, toTicketSummary } from './dto.js';
@@ -18,7 +19,7 @@ const listQuery = z.object({
   before: z.string().max(100).optional(),   // opaque nextCursor from the previous page (same sort)
   q: z.string().trim().max(100).optional().transform((v) => v || undefined),
   status: many(STATUSES),
-  category: many(CATEGORIES),
+  category: many(null),   // the company's category keys (unknown keys simply match nothing)
   priority: many(PRIORITIES),
   from: day(false),
   to: day(true),
@@ -27,7 +28,7 @@ const listQuery = z.object({
 // ?status=a&status=b, ?status[]=a or ?status=a,b
 function many(values) {
   return z.preprocess((v) => (v == null || v === '' ? undefined : [].concat(v).flatMap((s) => String(s).split(',')).map((s) => s.trim()).filter(Boolean)),
-    z.array(z.enum(values)).max(20).optional());
+    z.array(values ? z.enum(values) : z.string().max(60)).max(20).optional());
 }
 // ISO date or datetime; a date-only `to` includes that whole day (upper bound is exclusive)
 function day(isEnd) {
@@ -39,10 +40,10 @@ function day(isEnd) {
   });
 }
 const attachmentIds = z.array(z.string().regex(/^[a-f0-9]{24}$/, 'Invalid attachment id')).max(attachments.MAX_PER_MESSAGE, `At most ${attachments.MAX_PER_MESSAGE} attachments`).default([]);
-const createBody = z.object({
+const createBody = (company) => z.object({
   subject: z.string().trim().min(5, 'Subject must be at least 5 characters').max(120, 'Subject must be at most 120 characters'),
   description: z.string().trim().min(20, 'Description must be at least 20 characters').max(5000, 'Description must be at most 5000 characters'),
-  category: z.enum(CATEGORIES).nullable().optional(),
+  category: z.enum(categoryKeys(company)).nullable().optional(),
   attachmentIds,
 });
 const idemKey = z.string().regex(/^[A-Za-z0-9-]{8,64}$/, 'Idempotency-Key must be 8–64 characters [A-Za-z0-9-]').optional();
@@ -63,7 +64,7 @@ ticketsRouter.get('/', async (req, res) => {
 
 ticketsRouter.post('/', async (req, res) => {
   const key = idemKey.parse(req.get('idempotency-key') || undefined);
-  const b = createBody.parse(req.body);
+  const b = createBody(await companyOf(req.user)).parse(req.body);
   const r = await svc.create(req.user, b, key);
   res.status(r.replay ? 200 : 201).json({ ticket: toTicketDetail(r.ticket), messages: r.messages.map((m) => toMessage(m, r.ticket.number)) });
 });

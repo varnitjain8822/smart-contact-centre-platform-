@@ -13,23 +13,27 @@ async function cw(path, { method = 'GET', body, as = 'admin' } = {}) {
   return text ? JSON.parse(text) : null;
 }
 
-export const createContact = async ({ name, email, identifier }) => {
-  const r = await cw('/contacts', { method: 'POST', body: { inbox_id: cfg.CHATWOOT_INBOX_ID, name, email, identifier } });
+// inboxId: the company's API inbox (chatwoot/inboxes.js); default CHATWOOT_INBOX_ID
+export const createContact = async ({ name, email, identifier, inboxId = cfg.CHATWOOT_INBOX_ID }) => {
+  const r = await cw('/contacts', { method: 'POST', body: { inbox_id: inboxId, name, email, identifier } });
   return { contactId: r.payload.contact.id, sourceId: r.payload.contact_inbox.source_id };
 };
-export const findContactByIdentifier = async (identifier) => {          // fallback on 422
-  const r = await cw(`/contacts/search?q=${encodeURIComponent(identifier)}&include_contact_inboxes=true`);
-  const c = r.payload.find((x) => x.identifier === identifier); if (!c) return null;
-  const ci = c.contact_inboxes?.find((x) => x.inbox?.id === Number(cfg.CHATWOOT_INBOX_ID));
+export const findContactByIdentifier = async (identifier, inboxId = cfg.CHATWOOT_INBOX_ID, email = null) => {          // fallback on 422
+  const q = email || identifier;
+  const r = await cw(`/contacts/search?q=${encodeURIComponent(q)}&include_contact_inboxes=true`);
+  const c = r.payload?.find?.((x) => (identifier && x.identifier === identifier) || (email && x.email?.toLowerCase() === email.toLowerCase()));
+  if (!c) return null;
+  const ci = c.contact_inboxes?.find((x) => x.inbox?.id === Number(inboxId));
   if (ci) return { contactId: c.id, sourceId: ci.source_id };
-  const created = await cw(`/contacts/${c.id}/contact_inboxes`, { method: 'POST', body: { inbox_id: cfg.CHATWOOT_INBOX_ID } });
+  const created = await cw(`/contacts/${c.id}/contact_inboxes`, { method: 'POST', body: { inbox_id: inboxId } });
   return { contactId: c.id, sourceId: created.source_id };
 };
 // PUT merges additional_attributes server-side (ContactsController#contact_additional_attributes)
 export const updateContact = (contactId, body) => cw(`/contacts/${contactId}`, { method: 'PUT', body });
-export const createConversation = ({ sourceId, contactId, ticketNumber, slaDueAt, content }) =>
-  cw('/conversations', { method: 'POST', body: { source_id: sourceId, inbox_id: cfg.CHATWOOT_INBOX_ID, contact_id: contactId,
-    custom_attributes: { ticket_number: ticketNumber, sla_due_at: slaDueAt },
+// company → custom attribute `company` (Portal ticket panel); teamId → the company's team (ConversationBuilder reads team_id)
+export const createConversation = ({ sourceId, contactId, ticketNumber, slaDueAt, content, inboxId = cfg.CHATWOOT_INBOX_ID, teamId, company }) =>
+  cw('/conversations', { method: 'POST', body: { source_id: sourceId, inbox_id: inboxId, contact_id: contactId, ...(teamId && { team_id: teamId }),
+    custom_attributes: { ticket_number: ticketNumber, sla_due_at: slaDueAt, ...(company && { company }) },
     message: { content, message_type: 'incoming' } } });            // → {id, status:'pending', …}
 export const findConversationByTicket = (contactId, ticketNumber) =>   // retry dedupe for createConversation
   cw(`/contacts/${contactId}/conversations`).then((r) => r.payload.find((c) => c.custom_attributes?.ticket_number === ticketNumber) ?? null);

@@ -19,8 +19,10 @@ export const bumpSessionVersion = (user) => { user.passwordChangedAt = new Date(
 async function sessionUser(req) {
   try {
     const p = jwt.verify(req.cookies?.[COOKIE] ?? '', cfg.JWT_SECRET, { algorithms: ['HS256'] });
-    const user = await User.findById(p.sub, 'name email passwordChangedAt chatwoot createdAt locale notify phone organization');
+    const user = await User.findById(p.sub, 'companyId name email passwordChangedAt chatwoot createdAt locale notify phone organization');
     if (!user || pv(user) !== p.pv) return null;
+    // v4 tenancy: a session belongs to one company; on another company's portal the visitor is signed out (cookie kept)
+    if (req.companyGiven && req.company && String(user.companyId) !== String(req.company._id)) { req.otherCompany = true; return null; }
     req.user = user;
     req.remember = p.rm !== 0;   // tokens issued before rm existed were 7-day cookies
     return user;
@@ -29,7 +31,7 @@ async function sessionUser(req) {
 
 export async function requireUser(req, res, next) {
   if (!(await sessionUser(req))) {
-    clearSession(res);
+    if (!req.otherCompany) clearSession(res);   // a valid session of another company stays (back on its own portal it works)
     throw new AppError(401, 'UNAUTHENTICATED', 'Please sign in');
   }
   next();

@@ -10,7 +10,8 @@ import { SlaChip } from '../features/tickets/SlaChip';
 import { ago, categoryLabel, priorityLabel, statusLabel } from '../lib/format';
 import { useDebounced } from '../lib/useDebounced';
 import { useNow } from '../lib/useNow';
-import { CATEGORIES, PRIORITIES, STATUSES, type TicketFilters, type TicketSort, type TicketSummary } from '../lib/types';
+import { categoryKeys } from '../lib/company';
+import { PRIORITIES, STATUSES, type TicketFilters, type TicketSort, type TicketSummary } from '../lib/types';
 import { Button, buttonClass } from '../ui/Button';
 import { DataTable, type Column } from '../ui/DataTable';
 import { ChannelBadge } from '../features/tickets/ChannelBadge';
@@ -26,7 +27,7 @@ const isDate = (v: string | null) => (v && /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : u
 /** URL ⇄ filters. Unknown values are dropped, so a hand-edited link never breaks the page. */
 export function parseFilters(sp: URLSearchParams): TicketFilters {
   const sort = SORTS.find((s) => s === sp.get('sort'));
-  return { q: sp.get('q')?.slice(0, 100) || undefined, status: list(sp.get('status'), STATUSES), category: list(sp.get('category'), CATEGORIES),
+  return { q: sp.get('q')?.slice(0, 100) || undefined, status: list(sp.get('status'), STATUSES), category: list(sp.get('category'), categoryKeys()),
     priority: list(sp.get('priority'), PRIORITIES), from: isDate(sp.get('from')), to: isDate(sp.get('to')), sort: sort === 'updated' ? undefined : sort };
 }
 export function toSearch(f: TicketFilters) {
@@ -83,7 +84,7 @@ export default function TicketsPage() {
               </button>
             )}>
             <div className="flex max-h-[70vh] flex-col gap-5 overflow-y-auto p-4">
-              <CheckGroup legend={t('details.topic')} options={CATEGORIES.map((c) => ({ v: c, label: categoryLabel(c) }))} value={f.category ?? []}
+              <CheckGroup legend={t('details.topic')} options={categoryKeys().map((c) => ({ v: c, label: categoryLabel(c) }))} value={f.category ?? []}
                 onToggle={(v) => set({ category: toggle(f.category, v) })} />
               <CheckGroup legend={t('details.priority')} options={PRIORITIES.map((p) => ({ v: p, label: priorityLabel(p) }))} value={f.priority ?? []}
                 onToggle={(v) => set({ priority: toggle(f.priority, v) })} />

@@ -8,6 +8,7 @@ import { User } from '../models/User.js';
 import * as hub from '../realtime/hub.js';
 import { toNotification } from '../tickets/dto.js';
 import { TEXT, email } from './templates.js';
+import { companyOf } from '../lib/company.js';
 
 export const EMAIL_THROTTLE_MS = 5 * 60_000;
 const PREF = { agent_reply: 'reply', ai_answer: 'reply', status: 'status', sla_breach: 'sla' };
@@ -35,7 +36,7 @@ export async function notify(ticket, type, extra = {}) {
     const locale = user.locale ?? 'en';
     const text = TEXT[locale][type]({ number: ticket.number, ...extra, preview: (extra.preview ?? '').slice(0, 200) });
     if (user.notify?.inApp !== false) {
-      const n = await Notification.create({ userId: user._id, type, ticketNumber: ticket.number, title: text.title, body: text.body ?? '' });
+      const n = await Notification.create({ userId: user._id, companyId: ticket.companyId, type, ticketNumber: ticket.number, title: text.title, body: text.body ?? '' });
       hub.emit(user._id, 'notification.created', { notification: toNotification(n), unreadCount: await unreadCount(user._id) });
     }
     return { email: sendEmail(ticket, user, type, text) };
@@ -53,7 +54,8 @@ async function sendEmail(ticket, user, type, { title, body = '' }) {
       { $set: { notifyEmailAt: new Date() } }, { timestamps: false });
     if (!claim.modifiedCount) return log.info({ evt: 'notification_email_throttled', ticket: ticket.number, type });
     const unsubUrl = `${cfg.WEB_ORIGIN}/api/notifications/unsubscribe?token=${unsubscribeToken(user._id)}`;
-    const mail = email(locale, { name: user.name, title, body, ticketUrl: `${cfg.WEB_ORIGIN}/tickets/${ticket.number}`, unsubUrl });
+    const portal = `${cfg.WEB_ORIGIN}/c/${(await companyOf(ticket)).slug}`;   // v4: the company's portal
+    const mail = email(locale, { name: user.name, title, body, ticketUrl: `${portal}/tickets/${ticket.number}`, unsubUrl });
     await deps.mailer.send({ to: user.email, ...mail, headers: { 'List-Unsubscribe': `<${unsubUrl}>` } });
     log.info({ evt: 'notification_email_sent', ticket: ticket.number, type });
   } catch (e) {

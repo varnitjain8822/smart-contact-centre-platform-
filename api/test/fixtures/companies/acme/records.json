@@ -1,0 +1,21 @@
+{
+  "customers": [
+    { "key": "asha", "name": "Asha Rao", "email": "asha@acme.test", "phone": "+91 98765 43210", "password": "Demo@1234" },
+    { "key": "ben", "name": "Ben Thomas", "email": "ben@acme.test", "password": "Demo@1234" },
+    { "key": "kbonly", "name": "Kavya Only", "email": "kavya@acme.test", "password": "Demo@1234" }
+  ],
+  "collections": {
+    "orders": [
+      { "customerKey": "asha", "mock": true, "orderNo": "AC-1001", "status": "Shipped", "date": "2026-10-20", "cardNumber": "4111 1111 1111 1234", "total": 2499 },
+      { "customerKey": "asha", "mock": true, "orderNo": "AC-1002", "status": "Delivered", "date": "2026-10-01", "cardNumber": "4111111111115678", "total": 999 },
+      { "customerKey": "ben", "mock": true, "orderNo": "AC-2001", "status": "Processing", "date": "2026-10-22", "cardNumber": "5500000000009999", "total": 15000 }
+    ],
+    "applications": [
+      { "customerKey": "asha", "mock": true, "fileNo": "BN1234567890123", "dob": "1990-05-14", "status": "Passport dispatched", "accountNumber": "123456789012" }
+    ],
+    "lost_found": [
+      { "customerKey": "ben", "mock": true, "item": "black backpack", "date": "2026-10-21", "location": "Store 4 counter", "claimantName": "Ben Thomas", "phone": "+919999999999" },
+      { "customerKey": null, "mock": true, "item": "umbrella", "date": "2026-10-19", "location": "Store 1" }
+    ]
+  }
+}

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Plus, Search } from 'lucide-react';
 import { buttonClass } from '../../ui/Button';
 import type { User } from '../../lib/types';
+import { company } from '../../lib/company';
 import { NAV } from './SideNav';
 import { ThemeToggle } from './ThemeToggle';
 import { LanguageSwitch } from './LanguageSwitch';
@@ -18,7 +19,7 @@ export function Logo() {
         <circle cx="10" cy="10" r="7.5" fill="none" stroke="currentColor" strokeOpacity=".22" strokeWidth="3" />
         <circle cx="10" cy="10" r="7.5" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeDasharray="33 60" transform="rotate(-90 10 10)" />
       </svg>
-      SmartCC
+      {company().logoText}
     </span>
   );
 }

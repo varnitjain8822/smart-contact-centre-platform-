@@ -32,7 +32,7 @@ test('streams token events, then sources (only prompt articles), then done; META
   const ev = events(r.text);
   expect(tokens(ev)).toBe('1. Wait 30 minutes.\n2. Refresh Billing.\n');
   expect(ev.slice(-2)).toEqual([
-    { event: 'sources', data: { sources: [{ slug: SLUG, title: 'Payment Pending / Subscription Not Active' }] } },
+    { event: 'sources', data: { sources: [{ slug: SLUG, title: 'Payment Pending / Subscription Not Active' }], usedRecords: false } },
     { event: 'done', data: { suggestTicket: false } },
   ]);
   expect(groq.last[0].content).toContain(`[slug: ${SLUG}]`);

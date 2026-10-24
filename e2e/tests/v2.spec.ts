@@ -17,7 +17,7 @@ test.beforeAll(async ({ browser }) => {
 test.afterAll(() => page.context().close());
 
 test('attachments: customer screenshot → agent sees it in Chatwoot → agent file → customer downloads', async () => {
-  await page.goto('/tickets/new');
+  await page.goto('/c/smartcc/tickets/new');
   await page.getByLabel('Subject').fill('Refund not received');
   await page.getByLabel("What's happening?").fill('I cancelled my plan last week and was promised a refund but it has not reached my bank yet.');
   await page.locator('input[type=file]').setInputFiles({ name: 'screenshot.png', mimeType: 'image/png', buffer: PNG });
@@ -60,7 +60,7 @@ test('notifications: agent reply → bell (unread) + email in mailhog', async ()
 });
 
 test('dashboard: stat cards match /api/me/overview and the real tickets; launcher never covers content', async () => {
-  await page.goto('/');
+  await page.goto('/c/smartcc/');
   const ov = await (await page.request.get('/api/me/overview')).json();
   const all = (await (await page.request.get('/api/tickets?scope=all')).json()).items as { status: string }[];
   expect(ov.counts.open).toBe(all.filter((t) => t.status !== 'resolved').length);
@@ -77,7 +77,7 @@ test('dashboard: stat cards match /api/me/overview and the real tickets; launche
 });
 
 test('/tickets: search, URL-synced filters, sort', async () => {
-  await page.goto('/tickets');
+  await page.goto('/c/smartcc/tickets');
   const rows = page.locator('table tbody tr');
   await expect(rows).toHaveCount(3);
 
@@ -124,7 +124,7 @@ test('/tickets: search, URL-synced filters, sort', async () => {
 });
 
 test('transcript download from the ticket menu', async () => {
-  await page.goto(`/tickets/${T.refund}`);
+  await page.goto(`/c/smartcc/tickets/${T.refund}`);
   await page.getByRole('button', { name: 'Ticket options' }).click();
   const [dl] = await Promise.all([page.waitForEvent('download'), page.getByRole('menuitem', { name: 'Download transcript' }).click()]);
   expect(dl.suggestedFilename()).toBe(`${T.refund}-transcript.txt`);
@@ -135,7 +135,7 @@ test('transcript download from the ticket menu', async () => {
 });
 
 test('assistant: streamed answer with source → unsure answer → Convert to ticket', async () => {
-  await page.goto('/assistant');
+  await page.goto('/c/smartcc/assistant');
   const input = page.getByLabel('Your question');
   await input.fill('My payment was deducted but the plan is still inactive');
   await input.press('Enter');

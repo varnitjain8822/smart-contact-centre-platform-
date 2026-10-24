@@ -4,6 +4,7 @@ import { cfg } from '../config.js';
 import { AppError } from '../lib/errors.js';
 import { AssistantFeedback } from '../models/Feedback.js';
 import { Ticket } from '../models/Ticket.js';
+import { Company } from '../models/Company.js';
 
 // Admin analytics for the Chatwoot "SmartCC Analytics" report page. The caller is a Chatwoot user: auth is their
 // Chatwoot access_token (X-Chatwoot-Token), checked against Chatwoot /api/v1/profile and required to be an administrator.
@@ -49,16 +50,20 @@ adminRouter.get('/analytics', async (req, res) => {
   const to = q.to ? new Date(`${q.to}T00:00:00Z`).getTime() + DAY : Date.now();   // `to` is inclusive
   const from = q.from ? new Date(`${q.from}T00:00:00Z`).getTime() : to - 30 * DAY;
   if (!(from < to)) throw new AppError(400, 'VALIDATION_FAILED', 'from must be before to');
-  res.json(await analytics(new Date(from), new Date(to)));
+  // v4: ?company=<slug> (resolved by companyContext) narrows to one company; `companies` feeds the filter dropdown
+  const companyId = req.companyGiven ? req.company._id : null;
+  const companies = (await Company.find({}, 'slug name').sort({ demo: 1, name: 1 }).lean()).map((c) => ({ slug: c.slug, name: c.name }));
+  res.json({ ...(await analytics(new Date(from), new Date(to), companyId)), company: req.companyGiven ? req.company.slug : null, companies });
 });
 
 const pct = (n, d) => (d ? Math.round((n / d) * 1000) / 10 : null);
 const minutes = (ms) => (ms == null ? null : Math.round(ms / 6000) / 10);
 const counts = (rows) => rows.map((r) => ({ key: r._id, count: r.count }));
 
-export async function analytics(from, to) {
+export async function analytics(from, to, companyId = null) {
+  const scope = companyId ? { companyId } : {};
   const [f] = await Ticket.aggregate([
-    { $match: { createdAt: { $gte: from, $lt: to } } },
+    { $match: { ...scope, createdAt: { $gte: from, $lt: to } } },
     { $facet: {
       total: [{ $count: 'n' }],
       perDay: [{ $group: { _id: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } }, count: { $sum: 1 } } }, { $sort: { _id: 1 } }],
@@ -89,7 +94,7 @@ export async function analytics(from, to) {
         { $project: { count: 1, items: { $slice: ['$items', 20] } } }],
     } },
   ]);
-  const fb = await AssistantFeedback.aggregate([{ $match: { createdAt: { $gte: from, $lt: to } } },
+  const fb = await AssistantFeedback.aggregate([{ $match: { ...scope, createdAt: { $gte: from, $lt: to } } },
     { $group: { _id: '$helpful', count: { $sum: 1 } } }]);
 
   const total = f.total[0]?.n ?? 0;

@@ -2,7 +2,7 @@
 // then writes CHATWOOT_* ids/tokens/secrets into root .env. Tokens are printed only as fingerprints.
 // Usage (stack running): node scripts/chatwoot-setup.mjs   [CHATWOOT_PUBLIC_URL=http://localhost:3000]
 import { execFileSync } from 'node:child_process';
-import { readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
@@ -80,6 +80,7 @@ const attrs = [
   { attribute_key: 'ai_confidence', attribute_display_name: 'AI confidence', attribute_display_type: 'number' },
   { attribute_key: 'csat', attribute_display_name: 'CSAT', attribute_display_type: 'number' },
   { attribute_key: 'ai_summary', attribute_display_name: 'AI summary', attribute_display_type: 'text' },
+  { attribute_key: 'company', attribute_display_name: 'Company', attribute_display_type: 'text' },   // v4
 ];
 const haveAttrs = new Set(list(await cw('/custom_attribute_definitions?attribute_model=0')).map((a) => a.attribute_key));
 for (const a of attrs.filter((x) => !haveAttrs.has(x.attribute_key))) {
@@ -97,14 +98,46 @@ for (const [title, color] of Object.entries(labels).filter(([t]) => !haveLabels.
   console.log(`label ${title} created`);
 }
 
+// 6b. v4 companies (api/seed/companies/<slug>/company.json): per company one API inbox "<name> Portal" (webhook
+//     /webhooks/chatwoot/<slug>, signed with that inbox's own secret), the AI bot, all agents, a team with all agents, and
+//     one label per category key. The api learns inbox/team/secret from CHATWOOT_COMPANY_INBOXES (JSON, written below).
+const companiesDir = `${root}api/seed/companies`;
+const companyInboxes = {};
+const agentIds = list(await cw('/agents')).map((a) => a.id);
+for (const slug of existsSync(companiesDir) ? readdirSync(companiesDir).sort() : []) {
+  let c;
+  try { c = JSON.parse(readFileSync(`${companiesDir}/${slug}/company.json`, 'utf8')); } catch { console.log(`company ${slug}: no valid company.json, skipped`); continue; }
+  if (c.slug !== slug) { console.log(`company ${slug}: slug mismatch, skipped`); continue; }
+  const name = `${c.name} Portal`.slice(0, 60), url = `${portal}/webhooks/chatwoot/${slug}`;
+  let ci = list(await cw('/inboxes')).find((i) => i.name === name);
+  if (!ci) { ci = await cw('/inboxes', 'POST', { name, channel: { type: 'api', webhook_url: url } }); console.log(`inbox "${name}" created`); }
+  else if (ci.webhook_url !== url) ci = await cw(`/inboxes/${ci.id}`, 'PATCH', { channel: { webhook_url: url } });
+  await cw(`/inboxes/${ci.id}/set_agent_bot`, 'POST', { agent_bot: bot.id });
+  await cw('/inbox_members', 'POST', { inbox_id: ci.id, user_ids: agentIds });
+  const teamName = c.name.toLowerCase().slice(0, 60);
+  let team = list(await cw('/teams')).find((x) => x.name === teamName);
+  if (!team) { team = await cw('/teams', 'POST', { name: teamName, description: `${c.sector} — SmartCC demo portal /c/${slug}`, allow_auto_assign: true }); console.log(`team "${teamName}" created`); }
+  const members = new Set(list(await cw(`/teams/${team.id}/team_members`)).map((m) => m.id));
+  const add = agentIds.filter((id) => !members.has(id));
+  if (add.length) await cw(`/teams/${team.id}/team_members`, 'POST', { user_ids: add });
+  const have = new Set(list(await cw('/labels')).map((l) => l.title));
+  for (const { key } of c.categories ?? []) {
+    if (!have.has(key)) await cw('/labels', 'POST', { label: { title: key, color: c.primaryColor ?? '#6B7280', show_on_sidebar: true } });
+  }
+  if (!ci.secret) { console.error(`inbox "${name}" returned no secret (admin token required)`); process.exit(1); }
+  companyInboxes[slug] = { inboxId: ci.id, teamId: team.id, secret: ci.secret };
+  console.log(`company ${slug}: inbox ${ci.id}, team ${team.id}, ${c.categories?.length ?? 0} labels, inbox secret ${fp(ci.secret)}`);
+}
+
 // 7. write .env
 const values = { CHATWOOT_ACCOUNT_ID: accountId, CHATWOOT_INBOX_ID: inbox.id, CHATWOOT_ADMIN_TOKEN: adminToken,
-  CHATWOOT_BOT_TOKEN: botToken, CHATWOOT_INBOX_SECRET: inbox.secret, CHATWOOT_BOT_SECRET: bot.secret };
-const missing = Object.entries(values).filter(([, v]) => !v).map(([k]) => k);
+  CHATWOOT_BOT_TOKEN: botToken, CHATWOOT_INBOX_SECRET: inbox.secret, CHATWOOT_BOT_SECRET: bot.secret,
+  CHATWOOT_COMPANY_INBOXES: `'${JSON.stringify(companyInboxes)}'` };   // single-quoted: compose env_file keeps the JSON as is
+const missing = Object.entries(values).filter(([, v]) => !v).map(([k]) => k);   // (company map may be '{}')
 if (missing.length) { console.error(`Chatwoot did not return: ${missing.join(', ')}`); process.exit(1); }
 for (const [k, v] of Object.entries(values)) {
   const rx = new RegExp(`^#?\\s*${k}=.*$`, 'm');
-  envText = rx.test(envText) ? envText.replace(rx, `${k}=${v}`) : `${envText.replace(/\n?$/, '\n')}${k}=${v}\n`;
+  envText = rx.test(envText) ? envText.replace(rx, () => `${k}=${v}`) : `${envText.replace(/\n?$/, '\n')}${k}=${v}\n`;
 }
 writeFileSync(envPath, envText, { mode: 0o600 });
 console.log(`.env updated: account ${accountId}, inbox ${inbox.id}, admin token ${fp(adminToken)}, bot token ${fp(botToken)}, ` +

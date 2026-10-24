@@ -1,0 +1,337 @@
+[
+  {
+    "slug": "fresh-vs-reissue",
+    "category": "apply",
+    "title": "Fresh passport or re-issue: which one should I apply for?",
+    "body": "Choose Fresh Passport only if you have never held an ordinary passport before. If you held an ordinary passport at any time, even one that expired long ago or was lost, you apply under Re-issue. Holding an official or diplomatic passport does not count: if you never had an ordinary passport, you still apply as fresh for an ordinary one.\n\nRe-issue covers these situations:\n- your passport has expired, or will expire within the next 10 years;\n- your passport expired more than 3 years ago (fresh police verification will be started in this case);\n- the pages are used up (extra pages are never added to an old booklet);\n- the passport is damaged or lost;\n- you want to change personal details such as name, address, photo, signature, date or place of birth, spouse or parent name, or remove ECR status.\n\nA re-issued passport is a new booklet with a new passport number and fresh validity. The portal does not issue a 'duplicate' with the old number.\n\nIf you applied earlier but the passport was never issued and you have never held one, apply as fresh again. On the Previous Passport page, give the old file number.\n\nRe-issue within 3 years after expiry normally needs no fresh police verification, provided the earlier police report was clear and the system shows no adverse entry.",
+    "keywords": [
+      "fresh passport",
+      "reissue",
+      "re-issue",
+      "renewal",
+      "expired passport",
+      "first passport",
+      "new passport",
+      "exhaustion of pages"
+    ]
+  },
+  {
+    "slug": "passport-validity-and-booklet",
+    "category": "apply",
+    "title": "Passport validity, 36-page and 60-page booklets",
+    "body": "An ordinary Indian passport comes as a 36-page or a 60-page booklet. The 60-page booklet costs more and suits frequent travellers. Minors are issued only the 36-page booklet.\n\nValidity:\n- Adults: generally 10 years from the date of issue.\n- Minors under 15: 5 years, or until they turn 18, whichever comes first. Leave the 'Validity Required' column blank in the form.\n- Minors aged 15 to 18: choose either a passport valid until age 18 or a full 10-year passport. The fees differ. A 10-year passport for this age group needs Non-ECR proof, or ECR will be printed.\n- Short Validity Passport: issued in special cases, for example when the court has allowed travel while a criminal case is pending (normally one year). Its renewal validity is decided case by case.\n\nWhen to renew: you can apply for re-issue up to 10 years before expiry. Many foreign embassies want at least six months to one year of remaining validity before they issue a visa, so check your destination's rule before you book travel.\n\nFor current fees, see the article 'Passport fees'.",
+    "keywords": [
+      "validity",
+      "36 pages",
+      "60 pages",
+      "jumbo booklet",
+      "10 years",
+      "minor validity",
+      "short validity passport",
+      "expiry"
+    ]
+  },
+  {
+    "slug": "how-to-apply-online",
+    "category": "apply",
+    "title": "How to apply online and get your ARN",
+    "body": "All passport and PCC applications are made online on www.passportindia.gov.in or through the official Passport Seva mobile app for Android and iOS.\n\nSteps:\n1. Register on the portal and confirm your email ID, then log in. The portal asks you to reset your password every 3 months.\n2. Select the Regional Passport Office (RPO). You may apply at any PSK or RPO in India, whatever your place of residence. To use a different RPO from the one linked to your login, create a new login ID; you can reuse the same email ID.\n3. Open 'Apply for Fresh Passport/Re-issue of Passport' and fill in each step: passport type, applicant details, family details, address, emergency contact, previous passport, other details, then preview.\n4. Submit. The portal generates a unique Application Reference Number (ARN). Check every detail first: once submitted, the form cannot be edited, and printed particulars come from what you typed.\n5. Click 'Pay and Schedule Appointment', pay online and pick a slot. You will get an SMS with the appointment details.\n\nIf you do not visit a PSK within 90 days of submitting the form online, you must submit the application again.\n\nFound a mistake after submitting? Ask the Citizen Service Executive at Counter A in the PSK to correct it during your visit.\n\nUse only the official website and app. The Ministry has warned about look-alike websites that collect data and charge extra for filling forms or booking appointments.",
+    "keywords": [
+      "apply online",
+      "ARN",
+      "application reference number",
+      "register",
+      "login",
+      "mobile app",
+      "Passport Seva app",
+      "mPassport Seva",
+      "RPO selection"
+    ]
+  },
+  {
+    "slug": "passport-fees",
+    "category": "appointments",
+    "title": "Passport fees (36 pages, 60 pages, Tatkaal, minors, PCC)",
+    "body": "As of October 2026, passport fees follow the Passports (Amendment) Rules, 2026, which took effect on 1 July 2026. The official fee list in the application instruction booklet shows:\n\n- Fresh or re-issue, 36 pages, 10-year validity: Rs 2,500.\n- Fresh or re-issue, 60 pages, 10-year validity: Rs 3,500.\n- Minor under 18, 36 pages, 5 years or until 18: Rs 1,750.\n- Minors aged 15 to 18 who choose a 10-year passport pay the adult fee.\n- Replacement of a lost, damaged or stolen passport: Rs 4,250 (36 pages, 5-year validity), Rs 5,000 (36 pages, 10-year validity), Rs 6,000 (60 pages).\n- Change of particulars or ECR deletion: same as fresh (Rs 2,500 for 36 pages, Rs 3,500 for 60 pages, Rs 1,750 for minors).\n- Police Clearance Certificate: Rs 750.\n\nTatkaal: add Rs 2,500 to the application fee. For example, a 36-page Tatkaal passport costs Rs 5,000 and a 60-page one Rs 6,000. Pay the whole Tatkaal amount online when you book.\n\nRebate: fresh applications get 10% off the basic fee for minors aged 8 or below and for senior citizens. The FAQ defines senior citizens as 60 and above.\n\nDiplomatic and official passports carry no fee. Use the Fee Calculator on the portal to confirm the exact amount for your case before you pay.",
+    "keywords": [
+      "fee",
+      "fees",
+      "cost",
+      "price",
+      "how much",
+      "2500",
+      "3500",
+      "tatkaal fee",
+      "minor fee",
+      "PCC fee",
+      "fee calculator",
+      "rebate",
+      "senior citizen discount"
+    ]
+  },
+  {
+    "slug": "online-payment-issues",
+    "category": "appointments",
+    "title": "Online payment: methods, validity, failed or pending payments",
+    "body": "You must pay online before you can book an appointment at any PSK or POPSK. Payment goes through the SBI gateway. Accepted methods are credit and debit cards (Visa, MasterCard, RuPay), net banking (SBI and other banks), UPI, SBI wallet and SBI bank challan. You do not need an SBI account. SBI net banking carries no extra charge, while card payments may carry a bank charge that is shown on the payment screen.\n\nKey rules:\n- A fee paid against one ARN cannot be moved to another ARN.\n- A payment stays valid for one year from the payment date. Once an appointment is booked, the year counts from the first appointment date.\n- If you paid twice, the RPO concerned refunds the extra amount.\n- If you paid but have no appointment yet, use 'Schedule Appointment'. You can confirm your payment with 'Track Payment Status'.\n\nMoney debited but status shows 'Pending': check again on the next working day with 'Track Payment Status' on the Applicant Home screen, then book your appointment.\n\nMoney debited but status shows 'Failed': SBI refunds the amount to your bank within seven working days. After that, follow up with your own bank. If the refund still does not arrive, contact the SBI helpdesk at customercare.00691@sbi.co.in or 011-41561114 (10 AM to 5 PM). Give your ARN, transaction ID, amount and transaction date.",
+    "keywords": [
+      "payment failed",
+      "payment pending",
+      "refund",
+      "UPI",
+      "net banking",
+      "SBI",
+      "fee validity",
+      "transfer fee",
+      "double payment",
+      "challan"
+    ]
+  },
+  {
+    "slug": "appointment-booking-and-reschedule",
+    "category": "appointments",
+    "title": "Booking, rescheduling and cancelling a PSK/POPSK appointment",
+    "body": "To get an appointment, pay the fee online and choose a slot at a Passport Seva Kendra (PSK) or Post Office Passport Seva Kendra (POPSK). Tatkaal applicants pick an appointment quota. If no early Tatkaal slot is free they may book under the Normal quota instead, but they still pay the Tatkaal fee and get Tatkaal processing.\n\nRescheduling limits:\n- Normal appointments: the FAQ allows rescheduling or cancelling only two times within a year of the first appointment date.\n- Tatkaal appointments: only one reschedule, effective 1 April 2023.\n- PCC: only one appointment is allowed within a year of the first appointment date.\n\nFreed slots: slots released by cancellations or reschedules return to the pool every day at the Tatkaal appointment opening time for each Passport Office. Applicants can then book or bring forward an appointment. The portal lists the opening time for each office.\n\nPOPSK jurisdiction: if your present address is outside the jurisdiction of the RPO you selected, you cannot book or be processed at a POPSK. Book at a PSK instead.\n\nWalk-ins: only emergency or medical cases and pre-approved categories may visit without an appointment, at the discretion of the PSK in-charge or Passport Officer.\n\nYou do not need a printed appointment receipt. The SMS with your appointment details is accepted as proof.",
+    "keywords": [
+      "appointment",
+      "book appointment",
+      "reschedule",
+      "cancel appointment",
+      "slot",
+      "PSK",
+      "POPSK",
+      "appointment opening time",
+      "quota",
+      "prepone"
+    ]
+  },
+  {
+    "slug": "visiting-the-psk",
+    "category": "appointments",
+    "title": "Visiting the Passport Seva Kendra: what to carry and expect",
+    "body": "Every applicant must attend in person, including infants. Biometrics and a photograph are taken at the PSK or POPSK. No agent, relative or office staff can submit the application for you.\n\nWhat to carry:\n- Original documents plus one set of self-attested photocopies. The originals are checked and returned.\n- For children under 4 years: one recent passport-size photo (4.5 x 3.5 cm, white background). Everyone else is photographed at the centre.\n- Tatkaal applicants: the signed 'Undertaking for Tatkaal Scheme'.\n- A printed application receipt is not needed; the appointment SMS is enough.\n\nPSK working hours: Monday to Friday, 9:30 AM to 4:30 PM. Tokens are issued from 9:30 AM to 4:00 PM, and lunch is 1:30 PM to 2:00 PM.\n\nInside the centre: an electronic queue system serves applicants first-in, first-out. You can check your details at Counter A and ask for corrections there. Senior citizens get assistance and a special token for faster processing.\n\nProhibited items: laptops, iPads, cameras, sharp objects, sticks or lathis, arms, and corrosive or explosive substances.\n\nIf you are refused a token because a document is missing, you may come back to the same PSK with the complete set, subject to the centre's rules.\n\nAvoid touts. The Government has not authorised any agent to promise urgent appointments or faster delivery. Report such offers to your Regional Passport Office.",
+    "keywords": [
+      "PSK visit",
+      "documents to carry",
+      "photo",
+      "biometrics",
+      "timings",
+      "working hours",
+      "counter A",
+      "physical presence",
+      "prohibited items",
+      "touts"
+    ]
+  },
+  {
+    "slug": "tatkaal-scheme",
+    "category": "tatkaal",
+    "title": "Tatkaal passport: documents, fee and timelines",
+    "body": "Tatkaal is the faster route for eligible applicants. You do not need proof of urgency or a gazetted officer's verification certificate. Police verification takes place after the passport is issued.\n\nDocuments: bring the usual proof of address, proof of date of birth and Non-ECR proof (if applicable). In addition:\n- Applicants aged 18 or above: any three documents from the list of acceptable documents.\n- Applicants under 18: any two from items 1 to 6 of the list.\nThe list includes Aadhaar (PVC card, full letter or digitally signed e-Aadhaar), PAN card, student photo ID, birth certificate, ration card, previous passport (re-issue only), voter ID, driving licence, bank, Kisan or post office passbook with photo, SC/ST/OBC certificate, arms licence, pension documents, and service photo ID from government, PSU, local body or public limited company.\n\nYou also need the signed 'Undertaking for Tatkaal Scheme' (Hindi or English).\n\nFee: Rs 2,500 on top of the normal application fee, as of October 2026. Pay the full amount online.\n\nTimeline: once the application is granted, the passport is expected to be dispatched on the third working day, not counting the day of submission, without waiting for the police report. The FAQ describes dispatch within 1 to 3 days of the PSK visit.\n\nIf required documents are missing, the application is put on hold and is not processed as Tatkaal. Files left on hold beyond 90 days despite a reminder are closed automatically. A Normal application usually cannot be converted to Tatkaal later; you may approach the Passport Office with proof of urgency.",
+    "keywords": [
+      "tatkaal",
+      "tatkal",
+      "urgent passport",
+      "fast passport",
+      "three documents",
+      "undertaking",
+      "tatkaal fee",
+      "how fast"
+    ]
+  },
+  {
+    "slug": "tatkaal-ineligible-categories",
+    "category": "tatkaal",
+    "title": "Who cannot apply under Tatkaal",
+    "body": "The Passport Office has the final say on every Tatkaal application. The following categories are not eligible:\n\n- Any change in name.\n- Applicants whose present address is outside the RPO's jurisdiction.\n- Minors applying with Annexure C (for example, when the parents are divorced or separated).\n- People repatriated from abroad at Government cost, deported to India, or who travelled on an Emergency Certificate.\n- People of Naga origin (including minors), including those living outside Nagaland.\n- People of Jammu and Kashmir origin, including minors.\n- Applicants covered by section 6(2)(e) or 6(2)(f) of the Passports Act (criminal court cases).\n- Applicants with an adverse police report, on a watch list, habitual passport losers, or anyone who earlier travelled on a forged passport.\n\nFresh applications not eligible: citizens by registration or naturalisation, adopted children, a child born out of wedlock with a single parent, children born through surrogacy, and minors with a single parent.\n\nRe-issue applications not eligible: lost or stolen passports; re-issue of a Short Validity Passport; passports damaged beyond recognition; change of sex, appearance or signature; change of date or place of birth; and change of father, mother or spouse name.\n\nA damaged passport can still go through Tatkaal if the passport number and name are readable and the photo is intact. If the parents have an adverse record, a minor may still get a Tatkaal passport with approval of the competent authority.",
+    "keywords": [
+      "tatkaal not allowed",
+      "ineligible",
+      "cannot apply tatkaal",
+      "lost passport tatkaal",
+      "name change tatkaal",
+      "Nagaland",
+      "J&K"
+    ]
+  },
+  {
+    "slug": "proof-of-address",
+    "category": "documents",
+    "title": "Accepted proof of present address",
+    "body": "You need proof of your present address only. It does not matter how long you have lived there. You must still list in the form every address where you stayed during the previous year.\n\nAccepted documents (any one):\n- water, electricity, gas, or telephone bill (landline or postpaid mobile);\n- Income Tax assessment order;\n- Election Commission photo ID (voter ID);\n- certificate on letterhead from an employer that is a reputed public limited company, with seal (computer printouts are not accepted);\n- spouse's passport copy (first and last page, naming you as spouse), if your address matches the address in it;\n- for minors, a parent's passport copy (first and last page);\n- Aadhaar letter, card or e-Aadhaar, subject to successful validation with UIDAI;\n- rent agreement;\n- photo passbook of a running account with a scheduled public sector bank, a scheduled private Indian bank or a regional rural bank.\n\nBank statements are not accepted; only a photo passbook is. Any other document on the Tatkaal acceptable-documents list may also serve, if it shows the same present address as your form.\n\nThe official guidance says that furnishing Aadhaar speeds up processing. For re-issue, address proof is needed only if your address differs from the old passport. For minors, address proof in a parent's name can be used.\n\nOnly the present address is printed in the passport, never the permanent one.",
+    "keywords": [
+      "address proof",
+      "proof of address",
+      "POA",
+      "Aadhaar",
+      "rent agreement",
+      "electricity bill",
+      "bank passbook",
+      "bank statement",
+      "present address"
+    ]
+  },
+  {
+    "slug": "proof-of-date-of-birth",
+    "category": "documents",
+    "title": "Accepted proof of date of birth",
+    "body": "Any one of the following is accepted as proof of date of birth:\n\n1. A birth certificate issued under the Registration of Births and Deaths Act, 1969 by the Registrar of Births and Deaths, municipal corporation or other empowered authority. It should show the child's name, parents' names, date and place of birth, sex, and registration number and date. If the child's name is missing, attach a plain-paper declaration signed by the parents giving the name.\n2. A transfer, school-leaving or matriculation certificate from the school last attended or a recognised board.\n3. A policy bond from a public life insurance corporation or company showing the holder's date of birth.\n4. An extract of the service record (government servants) or the pension payment order (retired government servants), attested by the administration officer of the department.\n5. A driving licence issued by the state transport department.\n6. A voter ID (EPIC).\n7. A PAN card.\n8. A declaration from the head of an orphanage or child care home on official letterhead.\n\nItems 4 to 8 count only if they show the complete date of birth. A birth certificate is not compulsory for people born on or after 26 January 1989; any document on the list will do.\n\nTo change the date of birth on an existing passport, you must apply for re-issue. The request is examined case by case, more documents may be asked for, and it may be refused.",
+    "keywords": [
+      "date of birth proof",
+      "DOB proof",
+      "birth certificate",
+      "matriculation certificate",
+      "PAN",
+      "school leaving certificate",
+      "DOB"
+    ]
+  },
+  {
+    "slug": "minor-passport",
+    "category": "documents",
+    "title": "Passport for a child (minor)",
+    "body": "Anyone under 18 is a minor for passport purposes. A child needs their own passport, because a child's name can no longer be endorsed in a parent's passport.\n\nConsent and annexures:\n- Ideally both parents sign Annexure D. Both parents should attend, or one parent may attend with both parents' passports. The PSK in-charge may still ask for the other parent.\n- If one parent lives abroad, the parent in India signs the form and gets the other parent's consent on Annexure D.\n- If a parent's consent is not available, the applying parent gives a declaration on Annexure C. Annexure C cases cannot use Tatkaal.\n\nOther rules:\n- Validity is 5 years or until 18, whichever comes first. Children aged 15 to 18 may choose a 10-year passport.\n- Only the 36-page booklet is issued to minors.\n- Children under 4 must bring one passport-size photo (4.5 x 3.5 cm, white background).\n- Address proof can be in a parent's name, and parents can attest the documents.\n- Police verification is generally not needed when either or both parents hold a valid passport with the spouse name endorsed and Annexure D consent is given. The Passport Office decides the final mode.\n- Minors are Non-ECR until 18.\n- Fee as of October 2026: Rs 1,750, with a 10% rebate on fresh applications for children aged 8 or below.",
+    "keywords": [
+      "minor",
+      "child passport",
+      "baby passport",
+      "Annexure D",
+      "Annexure C",
+      "parent consent",
+      "kid",
+      "infant"
+    ]
+  },
+  {
+    "slug": "police-verification",
+    "category": "police_verification",
+    "title": "Police verification: pre, post or none, and how it affects dispatch",
+    "body": "Police verification (PV) checks the details you gave in your application. The Passport Office decides which mode applies:\n\n- Pre-PV: verification happens before the passport is issued. This is the usual mode for most fresh applications. Dispatch is expected within three working days after a 'Recommendatory' police report reaches the Passport Office.\n- Post-PV: the passport is issued first and police verify afterwards. This applies to all Tatkaal cases and to government employees who submit an NOC (Annexure G). Dispatch is expected on the third working day after submission, without waiting for the police report.\n- No PV: for example, a government employee with an Identity Certificate (Annexure A), or many minors whose parents hold valid passports. For a Normal application, dispatch is expected on the third working day.\n\nFor most re-issues, either no PV or only post-PV is needed, depending on records. The exceptions are a lost passport, a complete change of name, and a passport that expired more than 3 years ago. Complex cases, such as adoption, single-parent minors, major name changes, or doubtful documents, take about 30 days.\n\nPolice verify at the address in your form, even if you applied at a PSK under another office. Give all your addresses from the past year.\n\nIf your file shows an 'adverse' report, contact the Passport Office to learn why. Ask for re-verification if needed; the passport is processed once a clear report arrives. If PV has been pending a long time and no passport has come, visit the Passport Office concerned.",
+    "keywords": [
+      "police verification",
+      "PV",
+      "pre police verification",
+      "post police verification",
+      "adverse report",
+      "police pending",
+      "PVR",
+      "verification status"
+    ]
+  },
+  {
+    "slug": "government-employees-annexures",
+    "category": "documents",
+    "title": "Government employees and annexures A, G, H, F",
+    "body": "Employees of central or state government, PSUs and statutory bodies submit one extra document. This document decides the police verification mode:\n\n- Annexure A, Identity Certificate in original: the passport is issued without police verification.\n- Annexure G, No Objection Certificate: the passport is issued on post-police-verification basis.\n- Annexure H, Prior Intimation letter: the passport is issued on pre-police-verification basis.\n\nPrivate-sector employees, including private bank staff, do not need an Identity Certificate.\n\nDependent family members can also skip police verification if they submit their own Annexure A. A minor dependent's passport is then valid only until age 18. Without it, they follow pre-PV, or post-PV if they apply under Tatkaal with the required documents.\n\nA government employee changing name submits the gazette notification of the change issued in their department and a fresh ID certificate in the new name.\n\nRetired government officials cannot skip police verification. Under Tatkaal, with the required documents, they can get the passport on post-PV basis.\n\nOther common annexures: Annexure C (declaration for a minor when one parent's consent is unavailable), Annexure D (parents' declaration for a minor), Annexure F (affidavit for a passport lost or damaged), and Annexure J (joint declaration in lieu of marriage certificate). Married applicants no longer need a marriage certificate or joint affidavit for a fresh passport. All specimens are on the portal's Annexures page.",
+    "keywords": [
+      "Annexure A",
+      "Annexure G",
+      "Annexure H",
+      "Annexure F",
+      "identity certificate",
+      "NOC",
+      "prior intimation",
+      "government employee",
+      "PSU employee"
+    ]
+  },
+  {
+    "slug": "ecr-ecnr",
+    "category": "documents",
+    "title": "ECR and Non-ECR (ECNR) status explained",
+    "body": "ECR means Emigration Check Required. ECR passport holders need clearance from the Protector of Emigrants before they leave India to take up a job in any of these 18 countries: UAE, Saudi Arabia, Qatar, Oman, Kuwait, Bahrain, Malaysia, Libya, Jordan, Yemen, Sudan, South Sudan, Afghanistan, Indonesia, Syria, Lebanon, Thailand and Iraq. Without clearance they are stopped at the port of exit. The booklet's version of the list names Brunei in place of South Sudan.\n\nTravel for other purposes, such as tourism, does not need emigration clearance. ECR holders who already hold an employment visa and are going back after a short visit to India do not need clearance either.\n\nWhere to look: ECR status is printed at the top of the last page. If nothing is printed there, the passport is Non-ECR. Stamps are no longer used.\n\nYou qualify for Non-ECR, with proof, if you are:\n- a matriculate (10th pass) or more qualified;\n- above 50;\n- a gazetted government servant or their family;\n- an income-tax payer or their family (NIL returns do not count);\n- a professional degree holder;\n- a holder of a recognised diploma or nursing qualification;\n- someone who has lived abroad more than 3 years, or their spouse;\n- a minor taking a short-validity passport;\n- among certain other listed categories.\n\nTo remove ECR, apply for re-issue with reason 'Deletion of ECR'. Bring your old passport and Non-ECR proof, for example your matriculation certificate. A provisional certificate is accepted if you have the mark sheets for all years.",
+    "keywords": [
+      "ECR",
+      "ECNR",
+      "non-ECR",
+      "emigration check required",
+      "emigration clearance",
+      "Gulf job",
+      "delete ECR",
+      "Protector of Emigrants"
+    ]
+  },
+  {
+    "slug": "lost-or-damaged-passport",
+    "category": "changes",
+    "title": "Lost, stolen or damaged passport",
+    "body": "If your passport is lost or stolen, report it straight away to the nearest police station. Also inform the Passport Office, or the Indian Mission if you are abroad. You cannot report a loss through the call centre.\n\nTo replace it, apply for re-issue with the reason 'Lost' or 'Damaged'. You will not get a duplicate with the same number. The new passport has a new number and fresh validity.\n\nDocuments for a lost passport usually include:\n- proof of present address;\n- proof of date of birth;\n- an Annexure F affidavit saying how and where it was lost or damaged;\n- the original police report;\n- a self-attested copy of the first two and last two pages of the old passport, if you have one.\nA photocopy is not compulsory, but you must give the old passport number, issue and expiry dates and place of issue. If you do not have them, visit your nearest Passport Office, or the Indian Mission if abroad. Re-issue after a loss needs police verification.\n\nDamage comes in two kinds. 'Damaged' means the passport number and name are readable and the photo is intact; it can be re-issued under Tatkaal. 'Damaged beyond recognition' cannot use Tatkaal. Lost or stolen passports are also excluded from Tatkaal.\n\nFee as of October 2026: Rs 5,000 (36 pages) or Rs 6,000 (60 pages), plus Rs 2,500 if Tatkaal applies.\n\nIf you lose your passport abroad and must return urgently, the Indian Mission can generally issue an Emergency Certificate after verifying your nationality.",
+    "keywords": [
+      "lost passport",
+      "stolen passport",
+      "damaged passport",
+      "duplicate passport",
+      "Annexure F",
+      "police report",
+      "emergency certificate",
+      "torn passport"
+    ]
+  },
+  {
+    "slug": "change-of-name-address-details",
+    "category": "changes",
+    "title": "Changing name, address, spouse name or other details",
+    "body": "Details printed in a passport cannot be edited. To change any of them, apply for Re-issue, choose 'Change in existing personal particulars' and tick what is changing. This covers:\n- name (given name or surname);\n- address;\n- photo or appearance;\n- signature;\n- spouse name (add, change or delete);\n- date or place of birth;\n- gender;\n- father's or mother's name;\n- ECR status.\n\nUseful rules:\n- Surname change after marriage or divorce (women applicants): no extra document is required beyond the standard list.\n- Address change: bring your old passport and a self-attested copy of its first two and last two pages, plus proof of the new present address.\n- Any name change, as well as changes to date or place of birth, gender, appearance, signature, or parent or spouse names, cannot use Tatkaal.\n- Date or place of birth, gender and parent-name changes are examined case by case. More documents may be sought, and the request may be refused.\n- Do not travel under a previous name.\n- Address change during processing: the passport is dispatched to the present address in the form, so contact the Passport Office concerned.\n\nPrinting errors: if the printed passport does not match what you submitted, return it to the Regional Passport Office for rectification. If approved, a new booklet with a new number is issued; any fee depends on the case. Check your details carefully at Counter A, because errors in data you entered yourself are your responsibility.",
+    "keywords": [
+      "change name",
+      "change address",
+      "surname after marriage",
+      "spouse name",
+      "correction",
+      "spelling mistake",
+      "change date of birth",
+      "update passport"
+    ]
+  },
+  {
+    "slug": "track-application-and-delivery",
+    "category": "tracking",
+    "title": "Tracking your application and Speed Post delivery",
+    "body": "Track your application on the portal with 'Track Application Status', or in the Passport Seva app. You can also call the National Call Centre on 1800-258-1800, where you speak to an executive or enter your file number in the IVRS.\n\nTo check status you need your 15-character File Number, issued at the PSK, and your date of birth. Both must match the application. Track Status also accepts your ARN or passport number along with your date of birth.\n\nTypical stages: application received at PSK, police verification initiated or pending, police report received, passport granted, printed, then dispatched.\n\nDelivery:\n- India Post delivers passports by Speed Post to the present address in your form. You cannot collect it from the Regional Passport Office.\n- The applicant should receive it in person. If you are out, the postman may hand it to a family member after checking ID, or return it to the RPO.\n- If the status says 'Dispatched' or 'Delivered' but you have nothing, track the Speed Post article number on India Post's tracking service. Then contact the Speed Post centre, and the Passport Office if the article is lost or returned.\n- If the passport is returned undelivered, apply to the RPO for re-dispatch with proof of present address. More proof may be asked for, depending on the postal reason.\n- If you receive someone else's passport, surrender it at your Passport Office straight away.",
+    "keywords": [
+      "track status",
+      "file number",
+      "application status",
+      "speed post",
+      "dispatched",
+      "not received",
+      "delivery",
+      "where is my passport",
+      "tracking number"
+    ]
+  },
+  {
+    "slug": "police-clearance-certificate",
+    "category": "police_verification",
+    "title": "Police Clearance Certificate (PCC)",
+    "body": "A Police Clearance Certificate (PCC) is often required by foreign governments for immigration, work, residence or family visas. You apply for it online through the Passport Seva portal or app, like a passport.\n\nWhat to bring: your passport in original, with a self-attested copy of the first two and last two pages. Include the ECR/Non-ECR page, any observation page, and the validity extension page for a short-validity passport. If your address differs from the passport, bring proof of present address.\n\nParticulars must match: your given name, parents' names, gender, date and place of birth must be the same in the PCC form and the passport. If any of these has changed, first re-issue your passport with the new details. A change of address, or adding a spouse name after marriage, is allowed with supporting documents.\n\nOther rules:\n- One application covers one country only.\n- There is no age limit. Minors can get a PCC if a foreign government asks for one.\n- The fee is Rs 750, as of October 2026.\n- Only one PCC appointment is allowed within a year of the first appointment date, with no reschedules.\n- PCC applications are not accepted at Passport Seva Camps or District Passport Cells.\n- Once a clear police report is received, the PCC is dispatched automatically to your address.\n- No validity is printed on a PCC. Countries generally treat it as valid for six months.",
+    "keywords": [
+      "PCC",
+      "police clearance certificate",
+      "police clearance",
+      "certificate for visa",
+      "immigration",
+      "work permit",
+      "PCC appointment"
+    ]
+  },
+  {
+    "slug": "grievance-and-helpline",
+    "category": "grievance",
+    "title": "Helpline, grievances and escalation (CPGRAMS)",
+    "body": "National Call Centre: 1800-258-1800 (toll free). Executives answer from 8 AM to 10 PM, and the automated IVRS runs 24 hours. The call centre can give your application status (keep your File Number and date of birth ready), locate your nearest PSK or POPSK, and register a grievance. It cannot apply for a passport on your behalf, take a lost-passport report, or accept a reply to a show cause notice. A reply to a show cause notice must be sent in writing by post, or given in person to the officer concerned. If the toll-free line has connectivity problems in J&K or the North-East, the portal lists paid alternative numbers.\n\nRegistering a grievance online:\n1. Open Feedback and Grievances, then Grievance and Feedback, on www.passportindia.gov.in.\n2. Register a new grievance. Quote your file number or passport number, your name and your date of birth.\n3. Submit. You get a unique Service Request Number on screen and by email from the helpdesk.\n\nTracking a grievance: use 'Track Grievance Status' with your date of birth plus the service request number, ARN, file number or passport number. You can also track it in the app or through the call centre. Updates are also sent by email. You can also give feedback at the helpdesk in any PSK.\n\nEscalation: you can also file on CPGRAMS, the Centralised Public Grievance Redress and Monitoring System. If MEA or the Passport Office has not resolved the grievance within a reasonable time, you may approach the Directorate of Public Grievances, Cabinet Secretariat, at dpg.gov.in.\n\nFraud alert: use only www.passportindia.gov.in and the official Passport Seva app. Do not pay look-alike websites or touts.",
+    "keywords": [
+      "helpline",
+      "call centre",
+      "1800-258-1800",
+      "toll free",
+      "grievance",
+      "complaint",
+      "CPGRAMS",
+      "service request number",
+      "escalate",
+      "fake website",
+      "feedback"
+    ]
+  }
+]

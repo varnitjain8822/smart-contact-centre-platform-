@@ -18,7 +18,8 @@ beforeAll(async () => {
   hub.add(me.id, { write: (f) => frames.push(f) });
 });
 afterAll(stopDb);
-beforeEach(async () => { frames = []; mailer.sent.length = 0; mailer.fail = null; cw.reset(); await Notification.deleteMany({}); });
+// background emails of the previous test (bot answer) settle first
+beforeEach(async () => { await new Promise((r) => setTimeout(r, 150)); frames = []; mailer.sent.length = 0; mailer.fail = null; cw.reset(); await Notification.deleteMany({}); });
 
 const ticket = async (agent = a) => Ticket.findOne({ number: (await newTicket(agent).expect(201)).body.ticket.number });
 let msgId = 9000;
@@ -42,7 +43,7 @@ test('agent public reply → in-app notification + SSE notification.created + em
   expect(mail.to).toBe(me.email);
   expect(mail.subject).toBe(`SmartCC: New reply on ${t.number}`);
   expect(mail.text).toContain(`Hi Priya Shah,`);
-  expect(mail.text).toContain(`http://localhost:5173/tickets/${t.number}`);
+  expect(mail.text).toContain(`http://localhost:5173/c/smartcc/tickets/${t.number}`);
   const unsub = mail.text.match(/Unsubscribe: (\S+)/)[1];
   expect(unsub).toBe(`http://localhost:5173/api/notifications/unsubscribe?token=${unsubscribeToken(me.id)}`);
   expect(mail.headers['List-Unsubscribe']).toBe(`<${unsub}>`);

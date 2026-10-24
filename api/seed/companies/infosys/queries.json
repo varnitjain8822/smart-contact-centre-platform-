@@ -1,0 +1,157 @@
+[
+  {
+    "q": "Can you show me my payslip for September 2026? Why is the net higher than August?",
+    "lang": "en",
+    "expect": {
+      "tool": "get_payslip",
+      "answerContains": [
+        "87,900"
+      ]
+    },
+    "as": "ananya"
+  },
+  {
+    "q": "How many earned leaves do I have left?",
+    "lang": "en",
+    "expect": {
+      "tool": "get_leave_balance",
+      "answerContains": [
+        "14.5"
+      ]
+    },
+    "as": "ananya"
+  },
+  {
+    "q": "What's the status of invoice SLFS/2026-27/0167? When will we get paid?",
+    "lang": "en",
+    "expect": {
+      "tool": "get_vendor_invoice_status",
+      "answerContains": [
+        "2026-11-05"
+      ]
+    },
+    "as": "meera"
+  },
+  {
+    "q": "Invoice SLFS/2026-27/0181 is on hold, what do I need to fix?",
+    "lang": "en",
+    "expect": {
+      "tool": "get_vendor_invoice_status",
+      "answerContains": [
+        "GSTIN"
+      ]
+    },
+    "as": "meera"
+  },
+  {
+    "q": "Which gate should I use for my visit on pass VP-ECY-260027?",
+    "lang": "en",
+    "expect": {
+      "tool": "get_visitor_pass",
+      "answerContains": [
+        "Gate 1"
+      ]
+    },
+    "as": "arjun"
+  },
+  {
+    "q": "I got an Infosys offer on WhatsApp asking me to pay a training fee of Rs 15,000. Is this real?",
+    "lang": "en",
+    "expect": {
+      "articleSlug": "recruitment-fraud-alert",
+      "answerContains": [
+        "fee"
+      ]
+    }
+  },
+  {
+    "q": "I never received my Infosys dividend from a few years ago. How do I claim it before it goes to IEPF?",
+    "lang": "en",
+    "expect": {
+      "articleSlug": "unclaimed-dividend-iepf",
+      "answerContains": [
+        "KFin"
+      ]
+    }
+  },
+  {
+    "q": "By what date does my employer have to give me Form 16?",
+    "lang": "en",
+    "expect": {
+      "articleSlug": "form-16-tds-certificate",
+      "answerContains": [
+        "June"
+      ]
+    }
+  },
+  {
+    "q": "What details must be on an invoice we raise to Infosys India?",
+    "lang": "en",
+    "expect": {
+      "articleSlug": "supplier-invoice-requirements",
+      "answerContains": [
+        "PO"
+      ]
+    }
+  },
+  {
+    "q": "मेरी अगस्त 2026 की सैलरी स्लिप दिखाइए, नेट कितना आया?",
+    "lang": "hi",
+    "expect": {
+      "tool": "get_payslip",
+      "answerContains": [
+        "78,300"
+      ]
+    },
+    "as": "ananya"
+  },
+  {
+    "q": "मेरा सिक लीव और कैज़ुअल लीव कितना बचा है?",
+    "lang": "hi",
+    "expect": {
+      "tool": "get_leave_balance",
+      "answerContains": [
+        "6"
+      ]
+    },
+    "as": "ananya"
+  },
+  {
+    "q": "मेरे विज़िटर पास VP-ECY-260027 पर किस तारीख़ को आना है और होस्ट कौन है?",
+    "lang": "hi",
+    "expect": {
+      "tool": "get_visitor_pass",
+      "answerContains": [
+        "27"
+      ]
+    },
+    "as": "arjun"
+  },
+  {
+    "q": "नौकरी बदलने पर पुराना पीएफ नए UAN में कैसे ट्रांसफ़र करूँ?",
+    "lang": "hi",
+    "expect": {
+      "articleSlug": "pf-transfer-on-job-change",
+      "answerContains": [
+        "13"
+      ]
+    }
+  },
+  {
+    "q": "Infosys के डिविडेंड पर TDS न कटे, इसके लिए 15G कैसे जमा करूँ?",
+    "lang": "hi",
+    "expect": {
+      "articleSlug": "dividend-tds-15g-15h",
+      "answerContains": [
+        "PAN"
+      ]
+    }
+  },
+  {
+    "q": "पाँच साल पूरे होने से पहले इस्तीफ़ा दूँ तो ग्रेच्युटी मिलेगी क्या?",
+    "lang": "hi",
+    "expect": {
+      "articleSlug": "gratuity-eligibility"
+    }
+  }
+]

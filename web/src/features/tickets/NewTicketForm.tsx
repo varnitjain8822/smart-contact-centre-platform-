@@ -2,7 +2,8 @@ import { useRef, useState, type FormEvent, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CircleHelp } from 'lucide-react';
 import { ApiError } from '../../lib/api';
-import { CATEGORIES, PRIORITIES, type Category } from '../../lib/types';
+import { PRIORITIES, type Category } from '../../lib/types';
+import { categoryKeys } from '../../lib/company';
 import { categoryLabel, priorityLabel } from '../../lib/format';
 import { fieldErrors, validate } from '../../lib/validate';
 import { Button } from '../../ui/Button';
@@ -10,7 +11,7 @@ import { Field } from '../../ui/Field';
 import { FileDrop, type FileItem } from '../../ui/FileDrop';
 import { Input } from '../../ui/Input';
 import { Textarea } from '../../ui/Textarea';
-import { CATEGORY_ICON } from '../kb/CategoryGrid';
+import { categoryIcon } from '../kb/CategoryGrid';
 
 export type NewTicketValues = { subject: string; description: string; category: Category | null };
 type Key = 'subject' | 'description';
@@ -54,8 +55,8 @@ export function NewTicketForm({ initial, pending, error, onSubmit, onChange, asi
           <legend className="text-sm font-semibold text-ink">{t('details.topic')} <span className="font-normal text-muted">{t('common.optional')}</span></legend>
           <p className="mt-0.5 text-sm text-muted">{t('newTicket.topicHint')}</p>
           <div className="mt-2.5 grid grid-cols-2 gap-2 sm:grid-cols-4">
-            {[null, ...CATEGORIES].map((c) => {
-              const Icon = c ? CATEGORY_ICON[c] : CircleHelp;
+            {[null, ...categoryKeys()].map((c) => {
+              const Icon = c ? categoryIcon(c) : CircleHelp;
               return (
                 <label key={c ?? 'none'} className="relative">
                   <input type="radio" name="category" value={c ?? ''} checked={v.category === c} onChange={() => set({ category: c })}

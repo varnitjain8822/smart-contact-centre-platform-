@@ -1,0 +1,12 @@
+[
+  { "name": "get_order_status", "description": "Status of one of the customer's orders by order number (AC-…).", "collection": "orders", "scope": "owner",
+    "parameters": { "type": "object", "properties": { "orderNo": { "type": "string", "description": "Order number, e.g. AC-1001" } }, "required": ["orderNo"] },
+    "match": { "orderNo": "$orderNo" } },
+  { "name": "list_my_orders", "description": "All of the signed-in customer's orders.", "collection": "orders", "scope": "owner",
+    "parameters": { "type": "object", "properties": {} }, "match": {} },
+  { "name": "get_application_status", "description": "Application status by file number; needs date of birth.", "collection": "applications", "scope": "owner",
+    "parameters": { "type": "object", "properties": { "fileNo": { "type": "string" }, "dob": { "type": "string", "description": "YYYY-MM-DD" } }, "required": ["fileNo"] },
+    "match": { "fileNo": "$fileNo" }, "verify": ["dob"] },
+  { "name": "search_lost_found", "description": "Search lost and found items by item description.", "collection": "lost_found", "scope": "public",
+    "parameters": { "type": "object", "properties": { "item": { "type": "string" } }, "required": ["item"] }, "match": { "item": "$item" } }
+]

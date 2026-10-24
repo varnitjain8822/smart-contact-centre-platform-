@@ -1,0 +1,165 @@
+[
+  {
+    "q": "Where is my order TSO-26-104512? Has it left the plant?",
+    "lang": "en",
+    "expect": {
+      "tool": "get_order_status",
+      "answerContains": [
+        "Dispatched"
+      ]
+    },
+    "as": "agarwal-steel"
+  },
+  {
+    "q": "Can you track LR number JSR-LR-779342? When will the truck reach Kochi?",
+    "lang": "en",
+    "expect": {
+      "tool": "track_dispatch",
+      "answerContains": [
+        "AP16TY4402"
+      ]
+    },
+    "as": "kaveri-infra"
+  },
+  {
+    "q": "Please share the mill test certificate for heat J24K42210",
+    "lang": "en",
+    "expect": {
+      "tool": "get_test_certificate",
+      "answerContains": [
+        "589",
+        "Fe550D"
+      ]
+    },
+    "as": "agarwal-steel"
+  },
+  {
+    "q": "What is the total amount and IRN status on invoice TSL/JSR/26-27/019027?",
+    "lang": "en",
+    "expect": {
+      "tool": "get_invoice",
+      "answerContains": [
+        "Unpaid"
+      ]
+    },
+    "as": "sunrise-builders"
+  },
+  {
+    "q": "I supplied bearing housings, invoice MEW/2026/0418. When will I get paid?",
+    "lang": "en",
+    "expect": {
+      "tool": "get_vendor_payment",
+      "answerContains": [
+        "Under processing"
+      ]
+    },
+    "as": "mahato-engg"
+  },
+  {
+    "q": "What is the difference between Fe500 and Fe500D TMT bars?",
+    "lang": "en",
+    "expect": {
+      "articleSlug": "is-1786-grades-fe500-fe500d",
+      "answerContains": [
+        "16%"
+      ]
+    }
+  },
+  {
+    "q": "I ordered Tiscon on Aashiyana yesterday. Can I still cancel and how long does the refund take?",
+    "lang": "en",
+    "expect": {
+      "articleSlug": "aashiyana-cancellation-refund",
+      "answerContains": [
+        "24 hours",
+        "10 working days"
+      ]
+    }
+  },
+  {
+    "q": "Do I need an e-way bill for a 24 tonne steel truck from Jamshedpur to Ranchi, and how long is it valid?",
+    "lang": "en",
+    "expect": {
+      "articleSlug": "eway-bill-steel-dispatch",
+      "answerContains": [
+        "50,000",
+        "200 km"
+      ]
+    }
+  },
+  {
+    "q": "We are an MSME supplier and Tata Steel has not paid us in 60 days. What are our rights?",
+    "lang": "en",
+    "expect": {
+      "articleSlug": "msme-vendor-45-day-payment",
+      "answerContains": [
+        "45 days",
+        "Udyam"
+      ]
+    }
+  },
+  {
+    "q": "मेरा ऑर्डर TSO-26-105188 अभी तक क्यों नहीं निकला?",
+    "lang": "hi",
+    "expect": {
+      "tool": "get_order_status",
+      "answerContains": [
+        "019027"
+      ]
+    },
+    "as": "sunrise-builders"
+  },
+  {
+    "q": "LR नंबर JSR-LR-778201 का ई-वे बिल नंबर क्या है?",
+    "lang": "hi",
+    "expect": {
+      "tool": "track_dispatch",
+      "answerContains": [
+        "391004587216"
+      ]
+    },
+    "as": "agarwal-steel"
+  },
+  {
+    "q": "मेरे बिल SFS/26-27/097 का भुगतान क्यों रुका है?",
+    "lang": "hi",
+    "expect": {
+      "tool": "get_vendor_payment",
+      "answerContains": [
+        "PO-4510086612"
+      ]
+    },
+    "as": "singh-fabricators"
+  },
+  {
+    "q": "असली टाटा टिस्कॉन सरिया की पहचान कैसे करें?",
+    "lang": "hi",
+    "expect": {
+      "articleSlug": "genuine-tiscon-check",
+      "answerContains": [
+        "1800 108 8282"
+      ]
+    }
+  },
+  {
+    "q": "आशियाना पर सरिया कितने दिन में डिलीवर होता है? क्या डिलीवरी फ़्री है?",
+    "lang": "hi",
+    "expect": {
+      "articleSlug": "aashiyana-delivery-shipping",
+      "answerContains": [
+        "24",
+        "72"
+      ]
+    }
+  },
+  {
+    "q": "टाटा स्टील कस्टमर केयर का टोल फ़्री नंबर क्या है?",
+    "lang": "hi",
+    "expect": {
+      "articleSlug": "customer-care-contacts",
+      "answerContains": [
+        "1800 108 8282"
+      ]
+    }
+  }
+]

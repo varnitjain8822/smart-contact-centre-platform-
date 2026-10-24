@@ -57,7 +57,8 @@ async function compute(user, now) {
     ...tickets.filter((t) => t.csat?.submittedAt).map((t) => ({ type: 'csat', ticket: t.number, at: t.csat.submittedAt, text: `${t.csat.rating}/5` })),
   ].sort((a, b) => b.at - a.at).slice(0, 10).map((x) => ({ ...x, at: iso(x.at) }));
 
-  const popular = await localize(await KbArticle.find({}, 'slug title views').sort({ views: -1, slug: 1 }).limit(5).lean(), user.locale ?? 'en');
+  const popular = await localize(await KbArticle.find({ companyId: user.companyId }, 'companyId slug title views').sort({ views: -1, slug: 1 }).limit(5).lean(),
+    user.locale ?? 'en', user.companyId);
 
   return {
     counts: { open: agg.open ?? 0, aiHandling: agg.aiHandling ?? 0, waitingOnYou: agg.waitingOnYou ?? 0, resolved30d: agg.resolved30d ?? 0 },

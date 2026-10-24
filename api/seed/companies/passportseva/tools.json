@@ -1,0 +1,49 @@
+[
+  {
+    "name": "get_application_status",
+    "description": "Look up the current status, stage history, police verification mode and Speed Post number of the signed-in applicant's passport application. Both the 15-character file number and the applicant's date of birth are required, and the date of birth must match the application. If it does not match, tell the user you cannot share the status. Do not reveal any part of the record, and do not guess.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "fileNo": { "type": "string", "description": "15-character passport file number issued at the PSK, e.g. DL1069210456726" },
+        "dob": { "type": "string", "description": "Applicant's date of birth in YYYY-MM-DD format" }
+      },
+      "required": ["fileNo", "dob"],
+      "additionalProperties": false
+    },
+    "collection": "applications",
+    "match": { "fileNo": "$fileNo" },
+    "scope": "owner",
+    "verify": ["dob"]
+  },
+  {
+    "name": "get_appointment",
+    "description": "Look up a PSK/POPSK appointment of the signed-in applicant by Application Reference Number (ARN). Returns the service, centre, date, time, status and the reschedules used and allowed.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "arn": { "type": "string", "description": "Application Reference Number, e.g. 26-1000418827" }
+      },
+      "required": ["arn"],
+      "additionalProperties": false
+    },
+    "collection": "appointments",
+    "match": { "arn": "$arn" },
+    "scope": "owner"
+  },
+  {
+    "name": "get_police_verification",
+    "description": "Look up police verification for the signed-in applicant's passport file: the mode (pre, post or none), police station, initiation date, current status and result.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "fileNo": { "type": "string", "description": "15-character passport file number, e.g. BN2069331884226" }
+      },
+      "required": ["fileNo"],
+      "additionalProperties": false
+    },
+    "collection": "police_verification",
+    "match": { "fileNo": "$fileNo" },
+    "scope": "owner"
+  }
+]

@@ -1,5 +1,9 @@
-export const SYSTEM = `You are the first-line support assistant for SmartCC, a service platform for Indian small businesses
-(accounts, billing, GST compliance, import/export registration, logistics).
+import { DEFAULT_SLUG, categoryKeys } from '../lib/company.js';
+import { recordsSection } from './tools.js';
+
+const SMARTCC_INTRO = 'You are the first-line support assistant for SmartCC, a service platform for Indian small businesses\n(accounts, billing, GST compliance, import/export registration, logistics).';
+const CATS = '"Account", "Billing", "Technical", "Commerce & Trade", "Compliance & GST", "Logistics & Orders", "General"';
+export const SYSTEM = `${SMARTCC_INTRO}
 Respond with ONE JSON object only, matching the schema below. No text outside the JSON.
 
 RULES
@@ -11,7 +15,7 @@ RULES
 6. "priority": "critical" = money lost, fraud, account compromised, or business operations down; "high" = customer blocked from a core task; "medium" = degraded service or question with business impact; "low" = how-to or information.
 7. "answer": at most 1200 characters, plain text, second person, polite, concrete numbered steps when useful. Never promise refunds, timelines or actions that the articles do not state. Never ask for passwords, OTPs or full card numbers.
 8. "summary": at most 300 characters, third person, written for a human support agent.
-9. "category": one of "Account", "Billing", "Technical", "Commerce & Trade", "Compliance & GST", "Logistics & Orders", "General".
+9. "category": one of ${CATS}.
 
 SCHEMA
 {"intent": "snake_case string, max 40 chars", "category": "...", "priority": "low|medium|high|critical",
@@ -24,14 +28,26 @@ export const LANGUAGE = {
 
 const ROLE = { customer: 'CUSTOMER', ai: 'ASSISTANT', agent: 'AGENT' };
 
+/** v4: the ticket prompt for a company (SmartCC keeps SYSTEM unchanged). Answers come only from ARTICLES or RECORDS. */
+export function systemFor(company) {
+  if (!company || company.slug === DEFAULT_SLUG) return SYSTEM;
+  const cats = categoryKeys(company).map((k) => JSON.stringify(k)).join(', ');
+  return SYSTEM.replace(SMARTCC_INTRO, `You are the first-line support assistant for ${company.name} (${company.sector}): ${company.tagline}.
+This is a demo help desk; all customer records are fabricated.`)
+    .replace('1. Use ONLY facts from the ARTICLES section.', '1. Use ONLY facts from the ARTICLES section and from RECORDS (when present).')
+    .replace(`one of ${CATS}`, `one of ${cats}`)
+    .replace('2. "sources" lists ONLY slugs', '2. "sources" lists ONLY slugs (an answer from RECORDS alone may have none)');
+}
+
 /** mode 'ticket'|'suggestion'; messages: [{author, body}] oldest first */
-export function buildMessages(mode, { number, subject, locale }, articles, messages) {
+export function buildMessages(mode, { number, subject, locale }, articles, messages, company = null, records = '') {
   const arts = articles.length
     ? articles.map((a) => `[slug: ${a.slug}] ${a.title} (${a.category})\n${a.body.slice(0, 1500)}\n---\n`).join('')
     : '(no matching articles)\n';
   const msgs = messages.filter((m) => m.author !== 'system').slice(-10)
     .map((m) => `${ROLE[m.author]}: ${m.body.slice(0, 1500)}\n`).join('');
-  const user = `MODE: ${mode}\nTICKET: ${number ?? '(not yet submitted)'}\nSUBJECT: ${subject ?? ''}\nARTICLES:\n${arts}` +
+  const user = `MODE: ${mode}\nTICKET: ${number ?? '(not yet submitted)'}\nSUBJECT: ${subject ?? ''}\nARTICLES:\n${arts}${recordsSection(company, records)}` +
     `CUSTOMER_MESSAGES (oldest first; ASSISTANT = earlier AI replies, AGENT = human replies):\n${msgs}`;
-  return [{ role: 'system', content: locale ? `${SYSTEM}\n\n${LANGUAGE[locale] ?? LANGUAGE.en}` : SYSTEM }, { role: 'user', content: user }];
+  const sys = systemFor(company);
+  return [{ role: 'system', content: locale ? `${sys}\n\n${LANGUAGE[locale] ?? LANGUAGE.en}` : sys }, { role: 'user', content: user }];
 }

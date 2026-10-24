@@ -3,9 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { ArrowLeft, SearchX } from 'lucide-react';
 import { useKbArticles } from '../features/kb/hooks';
 import { ArticleList } from '../features/kb/ArticleList';
-import { CATEGORY_ICON, CategoryGrid } from '../features/kb/CategoryGrid';
+import { categoryIcon, CategoryGrid } from '../features/kb/CategoryGrid';
 import { KbSearchBox } from '../features/kb/KbSearchBox';
-import { CATEGORIES, type Category } from '../lib/types';
+import type { Category } from '../lib/types';
+import { categoryKeys } from '../lib/company';
 import { buttonClass } from '../ui/Button';
 import { EmptyState } from '../ui/EmptyState';
 import { PageTitle } from '../ui/PageTitle';
@@ -18,7 +19,7 @@ export default function HelpPage() {
   const [sp] = useSearchParams();
   const q = sp.get('q')?.trim() ?? '';
   const c = sp.get('category');
-  const category = CATEGORIES.includes(c as Category) ? (c as Category) : null;
+  const category = categoryKeys().includes(c as Category) ? (c as Category) : null;
   const filtered = Boolean(q || category);
   const all = useKbArticles({});
   const list = useKbArticles({ q, category });
@@ -66,8 +67,8 @@ export default function HelpPage() {
         <nav aria-labelledby="other-topics" className="mt-10">
           <h2 id="other-topics" className="mb-3 text-lg font-semibold">{t('help.otherTopics')}</h2>
           <ul className="flex flex-wrap gap-2">
-            {CATEGORIES.filter((c) => c !== category).map((c) => {
-              const Icon = CATEGORY_ICON[c];
+            {categoryKeys().filter((c) => c !== category).map((c) => {
+              const Icon = categoryIcon(c);
               return (
                 <li key={c}>
                   <Link to={`/help?category=${encodeURIComponent(c)}`} className="inline-flex min-h-11 items-center gap-2 rounded-pill border border-line bg-surface px-4 text-sm font-semibold text-ink-2 hover:border-line-strong hover:text-ink">
@@ -86,7 +87,7 @@ export default function HelpPage() {
 /** Topic landing: icon tile, name, article count. */
 function CategoryHeader({ category, count }: { category: Category; count?: number }) {
   const { t } = useTranslation();
-  const Icon = CATEGORY_ICON[category];
+  const Icon = categoryIcon(category);
   return (
     <div className="flex items-center gap-4">
       <span className="grid size-14 shrink-0 place-items-center rounded-md bg-accent-soft text-accent"><Icon aria-hidden size={26} strokeWidth={1.75} /></span>

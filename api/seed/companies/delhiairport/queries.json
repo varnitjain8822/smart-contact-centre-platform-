@@ -1,0 +1,158 @@
+[
+  {
+    "q": "Is 6E2134 to Mumbai on time today, 23 October 2026? Which gate?",
+    "lang": "en",
+    "expect": {
+      "tool": "get_flight_status",
+      "answerContains": [
+        "07:25",
+        "23"
+      ]
+    }
+  },
+  {
+    "q": "Any update on my missing suitcase? PIR reference DELEK48213.",
+    "lang": "en",
+    "expect": {
+      "tool": "get_baggage_claim",
+      "answerContains": [
+        "EK510"
+      ]
+    },
+    "as": "fatima"
+  },
+  {
+    "q": "I left my laptop at T3 security on 21 October. Has anyone found it?",
+    "lang": "en",
+    "expect": {
+      "tool": "search_lost_found",
+      "answerContains": [
+        "ready for collection"
+      ]
+    },
+    "as": "rohan"
+  },
+  {
+    "q": "Can you check my Park and Fly booking PNF-T3-260471? Which level do I park on?",
+    "lang": "en",
+    "expect": {
+      "tool": "get_parking_booking",
+      "answerContains": [
+        "Level 2"
+      ]
+    },
+    "as": "priya"
+  },
+  {
+    "q": "My booking H3MRB8 shows something odd, is my Kolkata flight still on?",
+    "lang": "en",
+    "expect": {
+      "tool": "get_booking",
+      "answerContains": [
+        "cancelled"
+      ]
+    },
+    "as": "rohan"
+  },
+  {
+    "q": "Which terminal does Akasa Air fly from at Delhi?",
+    "lang": "en",
+    "expect": {
+      "articleSlug": "which-terminal-is-my-flight",
+      "answerContains": [
+        "Terminal 1"
+      ]
+    }
+  },
+  {
+    "q": "IndiGo cancelled my 2-hour flight and told me only yesterday. What compensation can I get?",
+    "lang": "en",
+    "expect": {
+      "articleSlug": "flight-cancellation-compensation",
+      "answerContains": [
+        "7,500"
+      ]
+    }
+  },
+  {
+    "q": "How much is car parking for about 3 hours at Terminal 3?",
+    "lang": "en",
+    "expect": {
+      "articleSlug": "parking-charges",
+      "answerContains": [
+        "400"
+      ]
+    }
+  },
+  {
+    "q": "How much can I bring into India duty free when I come back from Dubai?",
+    "lang": "en",
+    "expect": {
+      "articleSlug": "customs-duty-free-allowance",
+      "answerContains": [
+        "75,000"
+      ]
+    }
+  },
+  {
+    "q": "24 अक्टूबर 2026 को AI101 न्यूयॉर्क वाली फ़्लाइट का स्टेटस क्या है?",
+    "lang": "hi",
+    "expect": {
+      "tool": "get_flight_status",
+      "answerContains": [
+        "12B"
+      ]
+    }
+  },
+  {
+    "q": "मेरे टूटे सूटकेस वाले PIR DEL6E20514 का क्या हुआ?",
+    "lang": "hi",
+    "expect": {
+      "tool": "get_baggage_claim",
+      "answerContains": [
+        "claim under review"
+      ]
+    },
+    "as": "aarav"
+  },
+  {
+    "q": "डिजीयात्रा पर रजिस्टर कैसे करूँ? क्या आधार ज़रूरी है?",
+    "lang": "hi",
+    "expect": {
+      "articleSlug": "digiyatra-at-delhi-airport",
+      "answerContains": [
+        "आधार"
+      ]
+    }
+  },
+  {
+    "q": "मुझे T1 से T3 जाना है, क्या कोई मुफ़्त बस है?",
+    "lang": "hi",
+    "expect": {
+      "articleSlug": "inter-terminal-transfer-shuttle",
+      "answerContains": [
+        "10"
+      ]
+    }
+  },
+  {
+    "q": "मेरी फ़्लाइट 3 घंटे से लेट है, क्या एयरलाइन खाना देगी?",
+    "lang": "hi",
+    "expect": {
+      "articleSlug": "flight-delay-rights",
+      "answerContains": [
+        "भोजन"
+      ]
+    }
+  },
+  {
+    "q": "एयरपोर्ट पर मेरा मोबाइल छूट गया, खोया-पाया से कैसे संपर्क करूँ?",
+    "lang": "hi",
+    "expect": {
+      "articleSlug": "lost-and-found-at-airport",
+      "answerContains": [
+        "lostproperty.dial@gmrgroup.in"
+      ]
+    }
+  }
+]

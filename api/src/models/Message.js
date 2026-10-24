@@ -8,6 +8,7 @@ const schema = new Schema({
   authorName: String,
   body: { type: String, required: true, minlength: 1, maxlength: 10000 },
   sources: [{ _id: false, slug: String, title: String }],
+  usedRecords: { type: Boolean, default: false },   // AI answer based on a customer-record lookup (v4 tools)
   attachments: [{ _id: false, id: Schema.Types.ObjectId, name: String, size: Number, mime: String }],   // denormalised from Attachment
   chatwootMessageId: { type: Number, default: null },
   clientMessageId: { type: String, default: null },

@@ -1,0 +1,77 @@
+[
+  {
+    "name": "get_order_status",
+    "description": "Look up one of the signed-in dealer's or builder's steel orders by order number (format TSO-YY-NNNNNN). Returns product, grade, size, tonnes, order date, status and status note.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "orderNo": { "type": "string", "description": "Order number, e.g. TSO-26-104512", "pattern": "^TSO-\\d{2}-\\d{6}$" }
+      },
+      "required": ["orderNo"],
+      "additionalProperties": false
+    },
+    "collection": "dealer_orders",
+    "match": { "orderNo": "$orderNo" },
+    "scope": "owner"
+  },
+  {
+    "name": "track_dispatch",
+    "description": "Track a dispatched truck by lorry receipt (LR) number (format JSR-LR-NNNNNN). Returns order number, truck number, route, dispatch date, ETA, status, and the e-way bill number and validity.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "lrNo": { "type": "string", "description": "Lorry receipt number, e.g. JSR-LR-778201", "pattern": "^JSR-LR-\\d{6}$" }
+      },
+      "required": ["lrNo"],
+      "additionalProperties": false
+    },
+    "collection": "dispatches",
+    "match": { "lrNo": "$lrNo" },
+    "scope": "owner"
+  },
+  {
+    "name": "get_invoice",
+    "description": "Fetch one of the signed-in customer's Tata Steel tax invoices by invoice number (format TSL/JSR/YY-YY/NNNNNN). Returns quantity, rate, taxable value, GST, total, IRN, e-way bill number, due date and payment status.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "invoiceNo": { "type": "string", "description": "Invoice number, e.g. TSL/JSR/26-27/018834" }
+      },
+      "required": ["invoiceNo"],
+      "additionalProperties": false
+    },
+    "collection": "invoices",
+    "match": { "invoiceNo": "$invoiceNo" },
+    "scope": "owner"
+  },
+  {
+    "name": "get_test_certificate",
+    "description": "Get the mill test certificate (MTC) for a heat number on the signed-in customer's own orders. Returns grade, size, chemical analysis (C, S, P, S+P, CE), mechanical results (yield, tensile, TS/YS ratio, elongation, Agt), bend/rebend result and conformity to IS 1786.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "heatNo": { "type": "string", "description": "Heat number from the bundle tag, e.g. J24K42210" }
+      },
+      "required": ["heatNo"],
+      "additionalProperties": false
+    },
+    "collection": "quality_certificates",
+    "match": { "heatNo": "$heatNo" },
+    "scope": "owner"
+  },
+  {
+    "name": "get_vendor_payment",
+    "description": "For signed-in suppliers: status of a supplier invoice raised on Tata Steel, by the supplier's own invoice number. Returns PO number, acceptance date, due date (45 days from acceptance for MSMEs), amount, status, hold reason, and payment date and UTR if paid.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "invoiceNo": { "type": "string", "description": "Supplier's invoice number, e.g. MEW/2026/0418" }
+      },
+      "required": ["invoiceNo"],
+      "additionalProperties": false
+    },
+    "collection": "vendor_payments",
+    "match": { "invoiceNo": "$invoiceNo" },
+    "scope": "owner"
+  }
+]

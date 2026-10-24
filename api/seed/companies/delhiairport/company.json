@@ -1,0 +1,42 @@
+{
+  "slug": "delhiairport",
+  "name": "Delhi Airport (Indira Gandhi International, DEL)",
+  "sector": "Airport",
+  "tagline": "Help for flyers at DEL: flights, terminals, baggage, parking and lost property",
+  "primaryColor": "#002C62",
+  "accentColor": "#FDD7B4",
+  "logoText": "DEL",
+  "supportHours": "24x7 (airport call centre +91-124-4797300); Lost Property main office Mon–Sat 09:30–18:00",
+  "slaOverride": { "critical": 10, "high": 30, "medium": 120, "low": 480 },
+  "categories": [
+    { "key": "flights", "label": "Flight status, delays & cancellations", "labelHi": "उड़ान स्थिति, देरी और रद्दीकरण" },
+    { "key": "terminals", "label": "Terminals & transfers", "labelHi": "टर्मिनल और ट्रांसफ़र" },
+    { "key": "checkin-security", "label": "Check-in, DigiYatra & security", "labelHi": "चेक-इन, डिजीयात्रा और सुरक्षा जाँच" },
+    { "key": "baggage", "label": "Baggage & PIR claims", "labelHi": "सामान और PIR दावे" },
+    { "key": "lost-found", "label": "Lost & found", "labelHi": "खोया-पाया" },
+    { "key": "parking", "label": "Parking & Park and Fly", "labelHi": "पार्किंग और पार्क एंड फ़्लाई" },
+    { "key": "assistance", "label": "Wheelchair, PRM & lounges", "labelHi": "व्हीलचेयर, विशेष सहायता और लाउंज" },
+    { "key": "customs", "label": "Customs & immigration", "labelHi": "कस्टम्स और इमिग्रेशन" }
+  ],
+  "sources": [
+    { "title": "Delhi Airport – FAQs (Terminal, Drop-N-Fly, Fog & Weather, Generic, DigiYatra, Atithya)", "url": "https://www.newdelhiairport.in/faq", "accessedAt": "2026-10-23" },
+    { "title": "Delhi Airport – Parking facilities and tariffs", "url": "https://www.newdelhiairport.in/parking", "accessedAt": "2026-10-23" },
+    { "title": "Delhi Airport – Park & Fly", "url": "https://www.newdelhiairport.in/park-and-fly", "accessedAt": "2026-10-23" },
+    { "title": "Delhi Airport – Lost & Found", "url": "https://www.newdelhiairport.in/lost-and-found", "accessedAt": "2026-10-23" },
+    { "title": "Delhi Airport – PRM Assistance", "url": "https://www.newdelhiairport.in/prm-assistance", "accessedAt": "2026-10-23" },
+    { "title": "Delhi Airport – Security & Baggage guide", "url": "https://www.newdelhiairport.in/security-baggage", "accessedAt": "2026-10-23" },
+    { "title": "Delhi Airport – Check-in guide", "url": "https://www.newdelhiairport.in/check-in", "accessedAt": "2026-10-23" },
+    { "title": "Delhi Airport – Immigration & Customs guide", "url": "https://www.newdelhiairport.in/immigration-and-customs", "accessedAt": "2026-10-23" },
+    { "title": "Delhi Airport – Transit journey guides (international/domestic transfers)", "url": "https://www.newdelhiairport.in/international-to-domestic", "accessedAt": "2026-10-23" },
+    { "title": "Delhi Airport – Inter-terminal commute", "url": "https://www.newdelhiairport.in/inter-terminal-commute", "accessedAt": "2026-10-23" },
+    { "title": "Delhi Airport – Lounges (Encalm)", "url": "https://www.newdelhiairport.in/encalm-lounge", "accessedAt": "2026-10-23" },
+    { "title": "Delhi Airport – DigiYatra", "url": "https://www.newdelhiairport.in/digi-yatra", "accessedAt": "2026-10-23" },
+    { "title": "BCAS list of prohibited items (Annexure I and II), as hosted by Delhi Airport", "url": "https://www.newdelhiairport.in/images/pdfs/list-of-prohibited-items-as-per-bcas-order-2.pdf", "accessedAt": "2026-10-23" },
+    { "title": "Ministry of Civil Aviation – Passenger Charter (DGCA CAR Section 3 Series M summary)", "url": "https://www.civilaviation.gov.in/sites/default/files/2026-01/passenger-charter-moca-india-feb-2019.pdf", "accessedAt": "2026-10-23" },
+    { "title": "Ministry of Civil Aviation – Passenger Charter of Rights page", "url": "https://www.civilaviation.gov.in/ministry-documents/passenger-charter-of-rights", "accessedAt": "2026-10-23" },
+    { "title": "CBIC FAQ on Baggage Rules, 2026 (reproduced by referencer.in)", "url": "https://referencer.in/Baggage_Rules/FAQ_Baggage_Rules_2026.aspx", "accessedAt": "2026-10-23" },
+    { "title": "SCC Times – Baggage Rules 2026: key provisions and allowances", "url": "https://www.scconline.com/blog/?p=374569", "accessedAt": "2026-10-23" },
+    { "title": "Delhi Airport – Customs guide for travellers (currency declaration thresholds)", "url": "https://www.newdelhiairport.in/images/pdfs/guide_for_travellers_v5-customs-document.pdf", "accessedAt": "2026-10-23" },
+    { "title": "European Consumer Centre Ireland – Baggage claims, PIR and Montreal Convention time limits", "url": "https://www.eccireland.ie/baggage-claim-what-happens-if-an-airline-loses-or-damages-your-luggage/", "accessedAt": "2026-10-23" }
+  ]
+}

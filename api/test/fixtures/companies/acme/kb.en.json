@@ -1,0 +1,11 @@
+[
+  { "slug": "return-window", "category": "returns", "title": "Return window and refund timelines",
+    "body": "You can return most items within 30 days of delivery.\n\nRefunds reach the original payment method within 7 business days after the return is received at the warehouse.",
+    "keywords": ["return", "refund", "30 days", "money back"] },
+  { "slug": "track-order", "category": "orders", "title": "Tracking your Acme order",
+    "body": "Every order has an order number that starts with AC-. Sign in and ask the assistant for the order status with that number.\n\nOrders ship within 2 working days.",
+    "keywords": ["order", "tracking", "delivery", "shipped", "status"] },
+  { "slug": "card-declined", "category": "payments", "title": "Card declined at checkout",
+    "body": "A declined card is usually a bank limit or a mistyped CVV. Try again or use UPI.\n\nWe never ask for your full card number or OTP.",
+    "keywords": ["card", "declined", "payment failed", "upi"] }
+]

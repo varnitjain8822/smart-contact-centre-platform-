@@ -16,7 +16,7 @@ void i18n.use(initReactI18next).init({
   lng: 'en',
   fallbackLng: 'en',
   initAsync: false,
-  interpolation: { escapeValue: false }, // React escapes
+  interpolation: { escapeValue: false, defaultVariables: { brand: 'SmartCC' } }, // React escapes; {{brand}} = the company (v4)
 });
 
 const syncHtml = (l: string) => { document.documentElement.lang = l; };

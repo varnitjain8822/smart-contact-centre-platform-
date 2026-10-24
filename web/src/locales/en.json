@@ -25,7 +25,7 @@
     "homeShort": "Home"
   },
   "shell": {
-    "home": "SmartCC home",
+    "home": "{{brand}} home",
     "skip": "Skip to content",
     "search": "Search",
     "searchPlaceholder": "Search tickets, articles, pages…",
@@ -34,7 +34,9 @@
     "account": "Account",
     "accountFor": "Account menu for {{name}}",
     "offline": "You're offline. We'll reconnect automatically when your connection is back.",
-    "reconnecting": "Reconnecting…"
+    "reconnecting": "Reconnecting…",
+    "demoData": "Demo data — every customer record here is fabricated",
+    "allPortals": "All help desks"
   },
   "theme": {
     "system": "System",
@@ -45,7 +47,7 @@
     "option": "{{theme}} theme"
   },
   "palette": {
-    "label": "Search SmartCC",
+    "label": "Search {{brand}}",
     "placeholder": "Type a ticket number, page or question…",
     "placeholderGuest": "Search pages and help articles…",
     "results": "Results",
@@ -99,7 +101,7 @@
     "convert": "Convert to ticket",
     "log": "Conversation with the AI assistant",
     "hello": "Hi {{name}}, what can I help with?",
-    "intro": "I answer from SmartCC's help articles and show you which ones. If I can't solve it, I'll turn this chat into a ticket for our team.",
+    "intro": "I answer from {{brand}}'s help articles and show you which ones. If I can't solve it, I'll turn this chat into a ticket for our team.",
     "tryAsking": "Try asking",
     "prompt1": "My payment went through but my plan is still inactive",
     "prompt2": "How do I download a GST invoice?",
@@ -225,7 +227,7 @@
     "allArticles": "All articles",
     "views_one": "{{count}} view",
     "views_other": "{{count}} views",
-    "firstTitle": "Welcome to SmartCC, {{name}}",
+    "firstTitle": "Welcome to {{brand}}, {{name}}",
     "firstBody": "Ask the AI assistant for an instant answer, or raise a ticket and we'll pick it up with a response time you can see."
   },
   "help": {
@@ -355,7 +357,8 @@
     "badge": "AI assistant",
     "said": "AI assistant said:",
     "basedOn_one": "Based on {{count}} article",
-    "basedOn_other": "Based on {{count}} articles"
+    "basedOn_other": "Based on {{count}} articles",
+    "checkedRecords": "Checked your records"
   },
   "suggest": {
     "looking": "Looking for an answer…",
@@ -559,5 +562,28 @@
     "expired": "This code has expired or was entered wrongly too many times. Send a new code.",
     "sendFailed": "We could not send the code. Try again in a minute.",
     "noAccount": "No account uses this email yet. Add your name to create one."
+  },
+  "picker": {
+    "title": "Choose a help desk",
+    "lede": "Each portal has its own help articles, topics and AI assistant. Customer records in the demo portals are fabricated.",
+    "demo": "Demo data",
+    "loadFailed": "Could not load the portals."
+  },
+  "voice": {
+    "startListening": "Voice input",
+    "stopListening": "Stop recording",
+    "transcribing": "Transcribing audio…",
+    "listening": "Listening… speak now",
+    "speaking": "Reading aloud…",
+    "stopSpeaking": "Stop reading",
+    "handsFreeOn": "Hands-free voice mode active",
+    "handsFreeOff": "Hands-free voice mode",
+    "handsFreeToggle": "Hands-free",
+    "handsFreeHelp": "Listens automatically after the AI answers",
+    "notSupported": "Voice is not supported in this browser",
+    "permissionDenied": "Microphone permission was denied",
+    "tooLong": "Recording reached 30 seconds limit",
+    "failed": "Could not transcribe audio. Please try again."
   }
 }
+

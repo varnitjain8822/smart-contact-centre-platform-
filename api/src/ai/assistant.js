@@ -5,6 +5,8 @@ import { AppError } from '../lib/errors.js';
 import { log } from '../lib/log.js';
 import { LANGUAGE } from './prompt.js';
 import { scanKeywords } from './triggers.js';
+import { lookup, recordsSection } from './tools.js';
+import { DEFAULT_SLUG, companyOf } from '../lib/company.js';
 
 export const MAX_TURNS = 10;
 export const MAX_CHARS = 4000;
@@ -29,11 +31,21 @@ export function capHistory(messages) {
   return out;
 }
 
-export function buildAssistantMessages(history, articles, locale) {
+/** v4: company intro + RECORDS (tool lookups) for companies other than SmartCC. */
+export function assistantSystem(company) {
+  if (!company || company.slug === DEFAULT_SLUG) return ASSISTANT_SYSTEM;
+  return ASSISTANT_SYSTEM.replace(/^You are the live help assistant for SmartCC[\s\S]*?logistics\)\./,
+    `You are the live help assistant for ${company.name} (${company.sector}): ${company.tagline}. This is a demo; all customer records are fabricated.`)
+    .replace('1. Answer ONLY with facts from the ARTICLES section.', '1. Answer ONLY with facts from the ARTICLES section and from RECORDS.')
+    .replace('"sources" lists ONLY slugs from ARTICLES that your answer relies on (empty if none).',
+      '"sources" lists ONLY slugs from ARTICLES that your answer relies on (empty if none, e.g. an answer from RECORDS only).');
+}
+
+export function buildAssistantMessages(history, articles, locale, company = null, records = '') {
   const arts = articles.length
     ? articles.map((a) => `[slug: ${a.slug}] ${a.title} (${a.category})\n${a.body.slice(0, 1500)}\n---\n`).join('')
     : '(no matching articles)\n';
-  return [{ role: 'system', content: `${ASSISTANT_SYSTEM}\n\n${LANGUAGE[locale] ?? LANGUAGE.en}\n\nMODE: assistant\nARTICLES:\n${arts}` }, ...history];
+  return [{ role: 'system', content: `${assistantSystem(company)}\n\n${LANGUAGE[locale] ?? LANGUAGE.en}\n\nMODE: assistant\nARTICLES:\n${arts}${recordsSection(company, records)}` }, ...history];
 }
 
 /** Splits a delta stream into visible text and the trailing META line (held back even when split across chunks). */
@@ -63,12 +75,15 @@ export async function chat(req, res, { messages, locale }) {
   const started = Date.now();
   const history = capHistory(messages);
   const userText = history.filter((m) => m.role === 'user').map((m) => m.content);
-  const articles = await topArticles(userText.slice(-2).join('\n'), 3, locale);
+  const company = await companyOf(req.user);
+  const articles = await topArticles(userText.slice(-2).join('\n'), 3, locale, company._id);
   const ctl = new AbortController();
   res.on('close', () => { if (!res.writableEnded) ctl.abort(); });
+  // v4: non-streamed tool round(s) first, then the streamed answer cites RECORDS
+  const records = await lookup(company, req.user, history);
   let deltas;
   try {
-    deltas = await deps.groq.stream(buildAssistantMessages(history, articles, locale), { signal: ctl.signal });
+    deltas = await deps.groq.stream(buildAssistantMessages(history, articles, locale, company, records.text), { signal: ctl.signal });
   } catch (e) {
     log.warn({ evt: 'assistant_ai_failed', err: e.code ?? e.message });
     throw new AppError(503, 'AI_UNAVAILABLE', 'The AI assistant is unavailable right now. You can raise a ticket instead.');
@@ -89,10 +104,11 @@ export async function chat(req, res, { messages, locale }) {
   const allowed = new Map(articles.map((a) => [a.slug, a.title]));
   const sources = [...new Set((Array.isArray(meta?.sources) ? meta.sources : []).filter((s) => allowed.has(s)))].map((slug) => ({ slug, title: allowed.get(slug) }));
   const confidence = Number(meta?.confidence) || 0;
-  const suggestTicket = failed || !meta || confidence < cfg.AI_DRAFT_THRESHOLD || !sources.length || scanKeywords(userText.join('\n')).length > 0;
+  const usedRecords = !failed && records.usedRecords;
+  const suggestTicket = failed || !meta || confidence < cfg.AI_DRAFT_THRESHOLD || (!sources.length && !usedRecords) || scanKeywords(userText.join('\n')).length > 0;
   if (failed) send('error', { code: 'AI_UNAVAILABLE', message: 'The answer was interrupted.' });
-  send('sources', { sources: failed ? [] : sources });
+  send('sources', { sources: failed ? [] : sources, usedRecords });
   send('done', { suggestTicket });
   res.end();
-  log.info({ evt: 'assistant_answer', userId: String(req.user._id), locale, sourceCount: sources.length, confidence, suggestTicket, latencyMs: Date.now() - started });
+  log.info({ evt: 'assistant_answer', userId: String(req.user._id), locale, sourceCount: sources.length, toolCalls: records.calls.length, usedRecords, confidence, suggestTicket, latencyMs: Date.now() - started });
 }

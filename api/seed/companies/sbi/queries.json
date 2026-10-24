@@ -1,0 +1,167 @@
+[
+  {
+    "q": "An HDFC ATM debited Rs 5000 from my account ending 8821 on 20 October but gave no cash. What is happening and when will I get it back?",
+    "lang": "en",
+    "as": "rahul",
+    "expect": {
+      "tool": "get_recent_transactions",
+      "articleSlug": "atm-cash-not-dispensed",
+      "answerContains": [
+        "100"
+      ]
+    }
+  },
+  {
+    "q": "I lost my debit card ending 9064. Is it blocked now, and where is my replacement card?",
+    "lang": "en",
+    "as": "priya",
+    "expect": {
+      "tool": "get_card_status",
+      "articleSlug": "block-lost-debit-card",
+      "answerContains": [
+        "5517"
+      ]
+    }
+  },
+  {
+    "q": "What is the status of my complaint CRCF-261016-2290 about the UPI fraud?",
+    "lang": "en",
+    "as": "priya",
+    "expect": {
+      "tool": "get_complaint_status",
+      "answerContains": [
+        "investigation"
+      ]
+    }
+  },
+  {
+    "q": "When is the next EMI due on my home loan HL26004417 and how much is still outstanding?",
+    "lang": "en",
+    "as": "rahul",
+    "expect": {
+      "tool": "get_loan_details",
+      "articleSlug": "home-loan-emi-prepayment",
+      "answerContains": [
+        "November"
+      ]
+    }
+  },
+  {
+    "q": "Did my IMPS of 40,000 to Kumar Packaging from my current account ending 3390 go through? They say they didn't get it.",
+    "lang": "en",
+    "as": "amit",
+    "expect": {
+      "tool": "get_recent_transactions",
+      "articleSlug": "neft-rtgs-imps",
+      "answerContains": [
+        "Kumar Packaging"
+      ]
+    }
+  },
+  {
+    "q": "What is the maximum I can send by UPI in a day from YONO?",
+    "lang": "en",
+    "expect": {
+      "articleSlug": "upi-limits",
+      "answerContains": [
+        "1,00,000"
+      ]
+    }
+  },
+  {
+    "q": "Someone took money from my account through a UPI fraud. What should I do right now?",
+    "lang": "en",
+    "expect": {
+      "articleSlug": "upi-failed-transaction",
+      "answerContains": [
+        "1800 11 1109"
+      ]
+    }
+  },
+  {
+    "q": "My SBI net banking login got locked after I typed the wrong password a few times. How do I unlock it?",
+    "lang": "en",
+    "expect": {
+      "articleSlug": "internet-banking-locked",
+      "answerContains": [
+        "next day"
+      ]
+    }
+  },
+  {
+    "q": "SBI hasn't resolved my complaint for over 30 days. How do I take it to the RBI Ombudsman?",
+    "lang": "en",
+    "expect": {
+      "articleSlug": "rbi-ombudsman",
+      "answerContains": [
+        "cms.rbi.org.in"
+      ]
+    }
+  },
+  {
+    "q": "मेरे खातों का केवाईसी कब तक अपडेट करना है? कोई खाता बकाया तो नहीं है?",
+    "lang": "hi",
+    "as": "amit",
+    "expect": {
+      "tool": "get_account_summary",
+      "articleSlug": "re-kyc-periodic-update",
+      "answerContains": [
+        "7745"
+      ]
+    }
+  },
+  {
+    "q": "मेरा एसबीआई डेबिट कार्ड खो गया है, उसे तुरंत कैसे ब्लॉक करूँ?",
+    "lang": "hi",
+    "expect": {
+      "articleSlug": "block-lost-debit-card",
+      "answerContains": [
+        "1800 1234"
+      ]
+    }
+  },
+  {
+    "q": "मेरे पर्सनल लोन PL25093310 की कितनी ईएमआई बकाया है और उस पर क्या शुल्क लगेगा?",
+    "lang": "hi",
+    "as": "amit",
+    "expect": {
+      "tool": "get_loan_details",
+      "articleSlug": "personal-loan-prepayment",
+      "answerContains": [
+        "6,640"
+      ]
+    }
+  },
+  {
+    "q": "NEFT और RTGS किस समय तक काम करते हैं और RTGS में कम से कम कितना भेजना होता है?",
+    "lang": "hi",
+    "expect": {
+      "articleSlug": "neft-rtgs-imps",
+      "answerContains": [
+        "24x7"
+      ]
+    }
+  },
+  {
+    "q": "मेरी शिकायत CRCF-261012-3305 की क्या स्थिति है?",
+    "lang": "hi",
+    "as": "sunita",
+    "expect": {
+      "tool": "get_complaint_status",
+      "articleSlug": "complaint-escalation",
+      "answerContains": [
+        "3305"
+      ]
+    }
+  },
+  {
+    "q": "बचत खाते में कितने नॉमिनी बना सकते हैं और नॉमिनी कैसे जोड़ें?",
+    "lang": "hi",
+    "expect": {
+      "articleSlug": "nomination",
+      "answerContains": [
+        "चार"
+      ]
+    }
+  }
+]

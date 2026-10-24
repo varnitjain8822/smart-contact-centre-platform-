@@ -1,0 +1,19 @@
+{
+  "slug": "acme",
+  "name": "Acme Retail",
+  "sector": "Retail",
+  "tagline": "Orders, returns and store help for Acme shoppers",
+  "primaryColor": "#E8B400",
+  "accentColor": "#0F766E",
+  "logoText": "Acme",
+  "supportHours": "Mon–Sat 9:00–18:00 IST",
+  "slaOverride": { "critical": 30, "high": 90, "medium": 300, "low": 1440 },
+  "categories": [
+    { "key": "orders", "label": "Orders", "labelHi": "ऑर्डर" },
+    { "key": "returns", "label": "Returns & refunds", "labelHi": "वापसी और रिफ़ंड" },
+    { "key": "payments", "label": "Payments", "labelHi": "भुगतान" },
+    { "key": "stores", "label": "Stores", "labelHi": "स्टोर" },
+    { "key": "general", "label": "General", "labelHi": "सामान्य" }
+  ],
+  "sources": [{ "title": "Fixture (test only)", "url": "https://example.com/acme", "accessedAt": "2026-10-23" }]
+}

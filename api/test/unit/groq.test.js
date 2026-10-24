@@ -53,3 +53,24 @@ test('comma-separated keys: round-robin, 429 switches key without waiting', asyn
   expect(new Set(used).size).toBe(3);
   expect(used.every((k) => ['a', 'b', 'c'].includes(k))).toBe(true);
 });
+
+test('transcribe: missing key → not_configured', async () => {
+  const { transcribe } = await import('../../src/ai/groq.js');
+  await expect(transcribe(Buffer.from('x'))).rejects.toMatchObject({ code: 'not_configured' });
+});
+
+test('transcribe: sends file, model, language to /audio/transcriptions', async () => {
+  cfg.GROQ_API_KEY = 'k';
+  const { transcribe } = await import('../../src/ai/groq.js');
+  const f = vi.fn(async () => reply(200, { text: 'hello world' }));
+  vi.stubGlobal('fetch', f);
+  const res = await transcribe(Buffer.from('audio'), 'audio/webm', { language: 'en' });
+  expect(res).toEqual({ text: 'hello world' });
+  expect(f).toHaveBeenCalledTimes(1);
+  const [url, init] = f.mock.calls[0];
+  expect(url).toBe(`${cfg.GROQ_URL}/audio/transcriptions`);
+  expect(init.headers.Authorization).toBe('Bearer k');
+  expect(init.body).toBeInstanceOf(FormData);
+  expect(init.body.get('model')).toBe('whisper-large-v3-turbo');
+  expect(init.body.get('language')).toBe('en');
+});

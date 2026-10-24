@@ -1,7 +1,9 @@
 import mongoose from 'mongoose';
+import { defaultCompanyId } from '../lib/company.js';
 
 const schema = new mongoose.Schema({
-  email: { type: String, lowercase: true, trim: true, unique: true, sparse: true },   // absent only for WhatsApp phone-only customers (v3)
+  companyId: { type: mongoose.Schema.Types.ObjectId, ref: 'Company', required: true },   // v4 tenancy: unique email per company
+  email: { type: String, lowercase: true, trim: true },   // absent only for WhatsApp phone-only customers (v3)
   name: { type: String, required: true, minlength: 2, maxlength: 80 },
   passwordHash: { type: String, select: false },                 // absent for accounts made with a sign-in code / from WhatsApp (v3)
   passwordChangedAt: { type: Date, default: Date.now },
@@ -15,6 +17,9 @@ const schema = new mongoose.Schema({
   },
 }, { timestamps: true });
 
-schema.index({ phone: 1 });   // OTP by SMS + WhatsApp customer link
+schema.index({ companyId: 1, email: 1 }, { unique: true, partialFilterExpression: { email: { $type: 'string' } } });
+schema.index({ companyId: 1, phone: 1 });   // OTP by SMS + WhatsApp customer link
+// pre-v4 callers (WhatsApp, tests) that name no company get the default one
+schema.pre('validate', async function setCompany() { if (!this.companyId) this.companyId = await defaultCompanyId(); });
 
 export const User = mongoose.model('User', schema);

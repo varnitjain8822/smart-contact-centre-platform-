@@ -50,4 +50,5 @@ export const routes: RouteObject[] = [
 
 export const future = { v7_relativeSplatPath: true, v7_fetcherPersist: true, v7_normalizeFormMethod: true,
   v7_partialHydration: true, v7_skipActionErrorRevalidation: true } as const;
-export const router = createBrowserRouter(routes, { future });
+/** v4: one portal per page load under `/c/<slug>` (basename), so every in-app link stays company-relative. */
+export const makeRouter = (basename?: string) => createBrowserRouter(routes, { future, basename });

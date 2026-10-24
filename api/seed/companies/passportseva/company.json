@@ -1,0 +1,42 @@
+{
+  "slug": "passportseva",
+  "name": "Passport Seva (Ministry of External Affairs)",
+  "sector": "Government documents website",
+  "tagline": "Passport services for Indian citizens: apply, book, track",
+  "primaryColor": "#0B3D91",
+  "accentColor": "#E87722",
+  "logoText": "PS",
+  "supportHours": "National Call Centre 1800-258-1800: executives 8 AM to 10 PM, automated IVRS 24 hours. Passport Seva Kendras: Monday to Friday, 9:30 AM to 4:30 PM.",
+  "categories": [
+    { "key": "apply", "label": "Fresh & re-issue applications", "labelHi": "नया और री-इश्यू आवेदन" },
+    { "key": "tatkaal", "label": "Tatkaal (urgent) passport", "labelHi": "तत्काल पासपोर्ट" },
+    { "key": "documents", "label": "Documents & annexures", "labelHi": "दस्तावेज़ और अनुलग्नक" },
+    { "key": "appointments", "label": "Fees, payment & appointments", "labelHi": "फीस, भुगतान और अपॉइंटमेंट" },
+    { "key": "police_verification", "label": "Police verification & PCC", "labelHi": "पुलिस सत्यापन और पीसीसी" },
+    { "key": "tracking", "label": "Status tracking & delivery", "labelHi": "स्टेटस ट्रैकिंग और डिलीवरी" },
+    { "key": "changes", "label": "Lost, damaged & changes", "labelHi": "खोया, क्षतिग्रस्त और बदलाव" },
+    { "key": "grievance", "label": "Grievances & helpline", "labelHi": "शिकायत और हेल्पलाइन" }
+  ],
+  "sources": [
+    { "title": "Passport Seva FAQ: Services Available (fresh, re-issue, minors, ECR, change of particulars, PCC)", "url": "https://www.passportindia.gov.in/psp/FaqServicesAvailable", "accessedAt": "2026-10-23" },
+    { "title": "Passport Seva FAQ: Police Verification", "url": "https://www.passportindia.gov.in/psp/FaqPoliceVerification", "accessedAt": "2026-10-23" },
+    { "title": "Passport Seva FAQ: Tatkaal Passports", "url": "https://www.passportindia.gov.in/psp/FaqTatkaalPassports", "accessedAt": "2026-10-23" },
+    { "title": "Passport Seva: Tatkaal Passports (documents, ineligible categories, rescheduling)", "url": "https://www.passportindia.gov.in/psp/TatkaalPassports", "accessedAt": "2026-10-23" },
+    { "title": "Passport Seva FAQ: Fee Payment", "url": "https://www.passportindia.gov.in/psp/FaqFeePayment", "accessedAt": "2026-10-23" },
+    { "title": "Passport Seva FAQ: Application Form (documents, proof of address)", "url": "https://www.passportindia.gov.in/psp/FaqApplicationForm", "accessedAt": "2026-10-23" },
+    { "title": "Passport Seva FAQ: Lost/Damaged Passports", "url": "https://www.passportindia.gov.in/psp/FaqLostDamagedPassports", "accessedAt": "2026-10-23" },
+    { "title": "Passport Seva FAQ: Postal Dispatch and Tracking", "url": "https://www.passportindia.gov.in/psp/FaqPostalDispatchTracking", "accessedAt": "2026-10-23" },
+    { "title": "Passport Seva FAQ: Call Centre", "url": "https://www.passportindia.gov.in/psp/FaqCallCentre", "accessedAt": "2026-10-23" },
+    { "title": "Passport Seva FAQ: Where to Apply", "url": "https://www.passportindia.gov.in/psp/FaqWhereToApply", "accessedAt": "2026-10-23" },
+    { "title": "Passport Seva FAQ: Miscellaneous (PSK working hours, physical presence)", "url": "https://www.passportindia.gov.in/psp/FaqMiscellaneous", "accessedAt": "2026-10-23" },
+    { "title": "Passport Seva: Getting Started (appointments, visit to PSK, touts)", "url": "https://www.passportindia.gov.in/psp/GettingStarted", "accessedAt": "2026-10-23" },
+    { "title": "Passport Seva: Quick Guides (apply for fresh / re-issue ordinary passport)", "url": "https://www.passportindia.gov.in/psp/QuickGuides", "accessedAt": "2026-10-23" },
+    { "title": "Passport Seva: Check Appointment Availability", "url": "https://www.passportindia.gov.in/psp/checkAppointmentAvailibility", "accessedAt": "2026-10-23" },
+    { "title": "Passport Seva: Register Feedback / Grievance and Track Grievance", "url": "https://www.passportindia.gov.in/psp/Grievance", "accessedAt": "2026-10-23" },
+    { "title": "Passport Seva: National Call Centre", "url": "https://www.passportindia.gov.in/psp/CallCenter", "accessedAt": "2026-10-23" },
+    { "title": "Passport Seva mobile app", "url": "https://www.passportindia.gov.in/psp/MpassportApp", "accessedAt": "2026-10-23" },
+    { "title": "Passport Seva portal English text bundle (source of the FAQ pages above, which render client-side)", "url": "https://www.passportindia.gov.in/psp/locales/en/translation.json", "accessedAt": "2026-10-23" },
+    { "title": "Instructions for Filling Passport Application Form, booklet V3.0 (police verification and dispatch table, Non-ECR categories, Table 3 documents, Table 4 fee list)", "url": "https://www.passportindia.gov.in/AppOnlineProject/pdf/ApplicationformInstructionBooklet-V3.0.pdf", "accessedAt": "2026-10-23" },
+    { "title": "Business Today: Passport fees hiked from July 1 (Passports (Amendment) Rules, 2026)", "url": "https://www.businesstoday.in/india/story/passport-fees-hiked-from-july-1-fresh-passport-to-cost-rs-2500-tatkal-fee-539278-2026-06-25", "accessedAt": "2026-10-23" }
+  ]
+}

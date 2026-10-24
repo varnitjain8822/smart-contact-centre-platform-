@@ -11,3 +11,6 @@ export const AiOutput = z.object({
   sources: z.array(z.string()).catch([]),
   summary: z.string().catch('').transform((s) => s.slice(0, 300)),
 });
+
+/** v4: AiOutput with the company's category keys (unknown → the company's fallback category). */
+export const aiOutputFor = (keys, fallback) => AiOutput.extend({ category: z.enum(keys).catch(fallback) });

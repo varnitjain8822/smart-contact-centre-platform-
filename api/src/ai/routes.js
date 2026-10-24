@@ -13,7 +13,7 @@ export const aiRouter = Router();
 aiRouter.post('/suggest', requireUser, limit({ windowMs: 60_000, max: 20, key: (req) => String(req.user._id) }), async (req, res) => {
   const b = z.object({ subject: z.string().trim().max(120).default(''),
     description: z.string().trim().min(20, 'Description must be at least 20 characters').max(5000) }).parse(req.body);
-  res.json(await suggest(req.user._id, b, req.user.locale));
+  res.json(await suggest(req.user, b, req.user.locale));
 });
 
 export const assistantRouter = Router();
@@ -42,7 +42,7 @@ assistantRouter.post('/feedback', requireUser, limit({ windowMs: 10 * 60_000, ma
   const key = { userId: req.user._id, hash: createHash('sha256').update(b.answer).digest('hex') };
   if (b.helpful === null) await AssistantFeedback.deleteOne(key);
   else {
-    await AssistantFeedback.updateOne(key, { $set: { excerpt: b.answer.slice(0, 1000), question: b.question?.slice(0, 1000), helpful: b.helpful,
+    await AssistantFeedback.updateOne(key, { $set: { companyId: req.user.companyId, excerpt: b.answer.slice(0, 1000), question: b.question?.slice(0, 1000), helpful: b.helpful,
       sources: b.sources, locale: req.user.locale ?? 'en' } }, { upsert: true });
   }
   res.status(204).end();

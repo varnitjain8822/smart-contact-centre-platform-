@@ -1,4 +1,5 @@
 import i18n from '../i18n';
+import { company, companyGiven, type Company } from './company';
 import type { ApiErrorBody, Attachment, Category, ErrorCode, KbArticle, KbArticleSummary, KbVotes, Source, Locale, Message, NotificationPage, NotifyPrefs,
   Overview, Page, Scope, Suggestion, TicketDetail, TicketFilters, TicketSummary, User } from './types';
 
@@ -7,9 +8,12 @@ export class ApiError extends Error {
     public details?: ApiErrorBody['error']['details'], public retryAfterS?: number) { super(message); }
 }
 
+/** v4: every request names the portal's company (the api scopes KB, sign-in and sessions by it). */
+const companyHeader = (): Record<string, string> => (companyGiven() ? { 'X-Company': company().slug } : {});
+
 async function req<T>(method: string, path: string, body?: unknown, headers?: Record<string, string>, signal?: AbortSignal): Promise<T> {
   const res = await fetch(`/api${path}`, { method, credentials: 'same-origin', signal,
-    headers: { ...(body !== undefined ? { 'Content-Type': 'application/json' } : {}), ...headers },
+    headers: { ...(body !== undefined ? { 'Content-Type': 'application/json' } : {}), ...companyHeader(), ...headers },
     body: body !== undefined ? JSON.stringify(body) : undefined });
   if (res.status === 204) return undefined as T;
   const json = await res.json().catch(() => null);
@@ -39,6 +43,8 @@ export type OtpTarget = { email: string } | { phone: string };
 export type MePatch = { name?: string; phone?: string; organization?: string; locale?: Locale; notify?: { email?: Partial<NotifyPrefs['email']>; inApp?: boolean } };
 
 export const api = {
+  companies: () => req<{ items: Company[] }>('GET', '/companies'),
+  company: (slug: string) => req<{ company: Company }>('GET', `/companies/${encodeURIComponent(slug)}`),
   register: (v: { name: string; email: string; password: string }) => req<U>('POST', '/auth/register', v),
   login: (v: { email: string; password: string; remember?: boolean }) => req<U>('POST', '/auth/login', v),
   logout: () => req<void>('POST', '/auth/logout', {}),
@@ -69,6 +75,23 @@ export const api = {
   suggest: (subject: string, description: string, signal?: AbortSignal) => req<Suggestion>('POST', '/ai/suggest', { subject, description }, undefined, signal),
   notifications: (before?: string | null, unread?: boolean) => req<NotificationPage>('GET', `/notifications${qs({ before, unread: unread ? 'true' : undefined })}`),
   readNotifications: (v: { ids: string[] } | { all: true }) => req<{ unreadCount: number }>('POST', '/notifications/read', v),
+  transcribeVoice: async (blob: Blob, language?: string): Promise<{ text: string }> => {
+    const fd = new FormData();
+    fd.append('file', blob, 'audio.webm');
+    if (language) fd.append('language', language);
+    const res = await fetch('/api/voice/transcribe', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: companyHeader(),
+      body: fd,
+    });
+    if (!res.ok) {
+      const json = await res.json().catch(() => null);
+      const e = (json as ApiErrorBody | null)?.error;
+      throw new ApiError(res.status, e?.code ?? 'INTERNAL', e?.message ?? i18n.t('error.title'));
+    }
+    return res.json();
+  },
 };
 
 /** Multipart upload with progress (fetch has no upload progress). `ticket` null = pre-ticket upload (New ticket form). */
@@ -77,6 +100,7 @@ export function upload(file: File, ticket: string | null, onProgress: (pct: numb
     const x = new XMLHttpRequest();
     x.open('POST', `/api${ticket ? `${t(ticket)}/attachments` : '/attachments'}`);
     x.withCredentials = true;
+    for (const [k, v] of Object.entries(companyHeader())) x.setRequestHeader(k, v);
     x.upload.onprogress = (e) => { if (e.lengthComputable) onProgress((e.loaded / e.total) * 100); };
     x.onload = () => {
       let json: { attachment?: Attachment } & Partial<ApiErrorBody> | null = null;

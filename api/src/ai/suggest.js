@@ -4,15 +4,19 @@ import { topArticles } from '../kb/retrieve.js';
 import { log } from '../lib/log.js';
 import { toKbSummary } from '../tickets/dto.js';
 import { buildMessages } from './prompt.js';
-import { AiOutput } from './schema.js';
+import { aiOutputFor } from './schema.js';
+import { categoryKeys, companyOf, fallbackCategory } from '../lib/company.js';
 import { scanKeywords } from './triggers.js';
 
-export async function suggest(userId, { subject, description }, locale = 'en') {
+export async function suggest(user, { subject, description }, locale = 'en') {
+  const userId = user._id;
+  const company = await companyOf(user);
   const text = `${subject} ${description}`.trim();
-  const articles = await topArticles(text, 3, locale);
+  const articles = await topArticles(text, 3, locale, company._id);
   let out = null;
   try {
-    out = AiOutput.parse(await deps.groq.complete(buildMessages('suggestion', { subject, locale }, articles, [{ author: 'customer', body: description }])));
+    out = aiOutputFor(categoryKeys(company), fallbackCategory(company)).parse(await deps.groq.complete(buildMessages('suggestion', { subject, locale }, articles,
+      [{ author: 'customer', body: description }], company)));
   } catch (e) {
     log.warn({ evt: 'suggest_ai_failed', err: e.code ?? e.message });
   }

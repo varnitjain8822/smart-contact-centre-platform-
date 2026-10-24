@@ -219,7 +219,7 @@ describe('P6 assistant stream', () => {
     const h = handlers();
     await chatStream([{ role: 'user', content: 'hi' }], 'hi', h);
     expect(h.onToken.mock.calls.map((c) => c[0]).join('')).toBe('Wait 30 minutes');
-    expect(h.onSources).toHaveBeenCalledWith([{ slug: 's', title: 'S' }]);
+    expect(h.onSources).toHaveBeenCalledWith([{ slug: 's', title: 'S' }], false);
     expect(h.onDone).toHaveBeenCalledWith({ suggestTicket: false });
     expect(h.onError).not.toHaveBeenCalled();
     const [url, init] = (fetch as unknown as { mock: { calls: [string, RequestInit][] } }).mock.calls[0]!;
