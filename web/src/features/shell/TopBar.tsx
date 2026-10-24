@@ -10,6 +10,8 @@ import { LanguageSwitch } from './LanguageSwitch';
 import { LiveBell } from './NotificationBell';
 import { UserMenu } from './UserMenu';
 
+import { CompanySwitcher } from './CompanySwitcher';
+
 export const isMac = () => typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform);
 
 export function Logo() {
@@ -33,7 +35,7 @@ export function TopBar({ user, onSearch, onSignOut }: { user: User | null | unde
   return (
     <header className="sticky top-0 z-30 border-b border-line bg-bg/85 backdrop-blur-md print:hidden">
       <div className="mx-auto flex h-14 items-center gap-1 px-3 sm:px-4 md:h-16 xl:px-10">
-        <Link to={user ? '/' : '/help'} className="mr-auto flex items-center rounded-sm xl:hidden" aria-label={t('shell.home')}><Logo /></Link>
+        <div className="mr-auto flex items-center xl:hidden"><CompanySwitcher /></div>
         {user && (
           <nav aria-label={t('nav.main')} className="mr-2 hidden md:block xl:hidden">
             <ul className="flex items-center gap-0.5">
