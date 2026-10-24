@@ -35,6 +35,7 @@ export const routes: RouteObject[] = [
   { element: <AppShell />, errorElement: <RouteError />, children: [
     { path: '/help', element: <HelpPage /> },
     { path: '/help/:slug', element: <ArticlePage /> },
+    { path: '/assistant', element: <AssistantPage /> },
     { path: '*', element: <NotFoundPage /> },
     { element: <RequireAuth><Outlet /></RequireAuth>, children: [
       { path: '/', element: <HomePage /> },
@@ -42,7 +43,6 @@ export const routes: RouteObject[] = [
       { path: '/tickets/new', element: <NewTicketPage /> },
       { path: '/notifications', element: <NotificationsPage /> },
       { path: '/tickets/:number', element: <TicketPage /> },
-      { path: '/assistant', element: <AssistantPage /> },
       { path: '/profile', element: <ProfilePage /> },
     ] },
   ] },

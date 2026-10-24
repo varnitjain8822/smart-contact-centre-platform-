@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { createHash } from 'node:crypto';
 import { z } from 'zod';
 import { AssistantFeedback } from '../models/Feedback.js';
-import { requireUser } from '../auth/session.js';
+import { requireUser, optionalUser } from '../auth/session.js';
 import { limit } from '../lib/limit.js';
 import { LOCALES } from '../constants.js';
 import { chat } from './assistant.js';
@@ -24,9 +24,9 @@ const chatBody = z.object({
   locale: z.enum(LOCALES).optional(),
 });
 
-assistantRouter.post('/chat', requireUser, limit({ windowMs: 10 * 60_000, max: 20, key: (req) => String(req.user._id) }), async (req, res) => {
+assistantRouter.post('/chat', optionalUser, limit({ windowMs: 10 * 60_000, max: 30, key: (req) => (req.user?._id ? String(req.user._id) : req.ip) }), async (req, res) => {
   const b = chatBody.parse(req.body);
-  await chat(req, res, { messages: b.messages, locale: b.locale ?? req.user.locale ?? 'en' });
+  await chat(req, res, { messages: b.messages, locale: b.locale ?? req.user?.locale ?? 'en' });
 });
 
 // 👍/👎 on an assistant answer, stored for review. helpful:null withdraws the vote. Chats themselves are still not stored.

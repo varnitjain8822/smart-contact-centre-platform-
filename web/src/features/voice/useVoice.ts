@@ -165,7 +165,8 @@ export function useVoice({ onTranscribed, language, initialHandsFree = false }: 
 
         setState('transcribing');
         try {
-          const res = await api.transcribeVoice(audioBlob, currentLang);
+          const sttLang = language ? language : (currentLang.startsWith('hi') ? 'hi' : undefined);
+          const res = await api.transcribeVoice(audioBlob, sttLang);
           const text = res.text?.trim() || '';
           setState('idle');
           if (text) {
@@ -190,7 +191,7 @@ export function useVoice({ onTranscribed, language, initialHandsFree = false }: 
       const msg = (err as Error)?.name === 'NotAllowedError' ? t('voice.permissionDenied') : t('voice.failed');
       setError(msg);
     }
-  }, [currentLang, stopListening, stopSpeaking, stopTracks, t]);
+  }, [currentLang, language, stopListening, stopSpeaking, stopTracks, t]);
 
   const speak = useCallback(
     (rawText: string, options?: { onEnd?: () => void }) => {
@@ -204,11 +205,13 @@ export function useVoice({ onTranscribed, language, initialHandsFree = false }: 
       }
 
       try {
+        const isHindiText = /[\u0900-\u097F]/.test(clean);
+        const targetLang = isHindiText ? 'hi-IN' : (currentLang.startsWith('hi') ? 'hi-IN' : 'en-IN');
         const utterance = new SpeechSynthesisUtterance(clean);
-        utterance.lang = currentLang.startsWith('hi') ? 'hi-IN' : 'en-IN';
+        utterance.lang = targetLang;
 
         const voices = voicesRef.current.length ? voicesRef.current : window.speechSynthesis.getVoices();
-        const voice = pickVoice(voices, currentLang);
+        const voice = pickVoice(voices, isHindiText ? 'hi' : currentLang);
         if (voice) {
           utterance.voice = voice;
         }

@@ -88,7 +88,7 @@ export function AppShell() {
       </div>
       {user && <BottomTabs />}
       {paletteLoaded && <Suspense fallback={null}><CommandPalette open={palette} onClose={() => setPalette(false)} signedIn={!!user} /></Suspense>}
-      {user && <AssistantLauncher />}
+      <AssistantLauncher />
       <div role="status" aria-live="polite" className="pointer-events-none fixed inset-x-0 top-3 z-50 flex justify-center px-4">
         {user && online && live === 'reconnecting' && (
           <span className="arrive inline-flex items-center gap-2 rounded-pill bg-ink px-4 py-2 text-sm font-medium text-bg shadow-card">

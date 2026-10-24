@@ -37,11 +37,17 @@ export function pickVoice(voices: SpeechSynthesisVoice[], lang: string): SpeechS
   const isHindi = lang.toLowerCase().startsWith('hi');
 
   if (isHindi) {
-    const hiVoice = voices.find((v) => v.lang.toLowerCase().replace('_', '-').startsWith('hi'));
+    const hiVoice = voices.find((v) =>
+      v.lang.toLowerCase().replace('_', '-').startsWith('hi') ||
+      /hindi|lekha|kavya|madhur|swara|neerja|हिन्दी/i.test(v.name)
+    );
     if (hiVoice) return hiVoice;
   } else {
     // English priority: Indian English (en-IN), then any English (en-US, en-GB)
-    const enInVoice = voices.find((v) => v.lang.toLowerCase().replace('_', '-').startsWith('en-in'));
+    const enInVoice = voices.find((v) =>
+      v.lang.toLowerCase().replace('_', '-').startsWith('en-in') ||
+      /india|rishi|veena|prabhat|sangeeta/i.test(v.name)
+    );
     if (enInVoice) return enInVoice;
     const enVoice = voices.find((v) => v.lang.toLowerCase().startsWith('en'));
     if (enVoice) return enVoice;

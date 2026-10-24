@@ -18,7 +18,7 @@ export const NAV = [
 /** ≥1280 only. */
 export function SideNav({ user }: { user: User | null | undefined }) {
   const { t } = useTranslation();
-  const items = user ? NAV.filter((n) => n.to !== '/tickets/new') : NAV.filter((n) => n.to === '/help');
+  const items = user ? NAV.filter((n) => n.to !== '/tickets/new') : NAV.filter((n) => n.to === '/help' || n.to === '/assistant');
   return (
     <header className="sticky top-0 hidden h-dvh w-60 shrink-0 flex-col border-r border-line px-4 pb-5 xl:flex print:hidden">
       <div className="-mx-4 flex h-16 items-center border-b border-line px-5">

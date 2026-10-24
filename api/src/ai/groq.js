@@ -112,8 +112,9 @@ export async function transcribe(fileBuffer, mimeType = 'audio/webm', { language
   const fd = new FormData();
   fd.append('file', new Blob([fileBuffer], { type: mimeType }), filename);
   fd.append('model', 'whisper-large-v3-turbo');
-  if (language) fd.append('language', language);
-  if (prompt) fd.append('prompt', prompt);
+  if (language && language !== 'auto') fd.append('language', language);
+  const defaultPrompt = 'Customer support query in Hindi (हिंदी) or English (SBI, Tata Steel, Delhi Airport, Passport Seva, Infosys, SmartCC, खाते, बिल, चालान, शिकायत, टिकट)';
+  fd.append('prompt', prompt || defaultPrompt);
   fd.append('response_format', 'json');
 
   const tries = Math.max(2, Math.min(keys().length, 4));

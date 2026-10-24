@@ -36,20 +36,18 @@ export function TopBar({ user, onSearch, onSignOut }: { user: User | null | unde
     <header className="sticky top-0 z-30 border-b border-line bg-bg/85 backdrop-blur-md print:hidden">
       <div className="mx-auto flex h-14 items-center gap-1 px-3 sm:px-4 md:h-16 xl:px-10">
         <div className="mr-auto flex items-center xl:hidden"><CompanySwitcher /></div>
-        {user && (
-          <nav aria-label={t('nav.main')} className="mr-2 hidden md:block xl:hidden">
-            <ul className="flex items-center gap-0.5">
-              {NAV.filter((n) => ['/', '/tickets', '/help', '/assistant'].includes(n.to)).map(({ to, label, short }) => (
-                <li key={to}>
-                  <NavLink to={to} end aria-label={t(label)} className={({ isActive }) =>
-                    `inline-flex min-h-11 items-center rounded-pill px-3 text-[15px] font-semibold transition-colors ${isActive ? 'bg-surface-2 text-ink' : 'text-ink-2 hover:text-ink'}`}>
-                    {t(short)}
-                  </NavLink>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        )}
+        <nav aria-label={t('nav.main')} className="mr-2 hidden md:block xl:hidden">
+          <ul className="flex items-center gap-0.5">
+            {NAV.filter((n) => user ? ['/', '/tickets', '/help', '/assistant'].includes(n.to) : ['/help', '/assistant'].includes(n.to)).map(({ to, label, short }) => (
+              <li key={to}>
+                <NavLink to={to} end aria-label={t(label)} className={({ isActive }) =>
+                  `inline-flex min-h-11 items-center rounded-pill px-3 text-[15px] font-semibold transition-colors ${isActive ? 'bg-surface-2 text-ink' : 'text-ink-2 hover:text-ink'}`}>
+                  {t(short)}
+                </NavLink>
+              </li>
+            ))}
+          </ul>
+        </nav>
         <button type="button" onClick={onSearch} aria-keyshortcuts="Meta+K Control+K"
           className="group hidden min-h-11 w-full max-w-md items-center gap-3 rounded-pill border border-line-strong/50 bg-surface px-4 text-left text-[15px] text-muted transition-colors hover:border-line-strong lg:flex xl:mr-auto">
           <Search aria-hidden size={18} />

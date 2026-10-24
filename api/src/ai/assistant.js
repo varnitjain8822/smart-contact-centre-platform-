@@ -75,7 +75,7 @@ export async function chat(req, res, { messages, locale }) {
   const started = Date.now();
   const history = capHistory(messages);
   const userText = history.filter((m) => m.role === 'user').map((m) => m.content);
-  const company = await companyOf(req.user);
+  const company = req.company || await companyOf(req.user);
   const articles = await topArticles(userText.slice(-2).join('\n'), 3, locale, company._id);
   const ctl = new AbortController();
   res.on('close', () => { if (!res.writableEnded) ctl.abort(); });
@@ -110,5 +110,5 @@ export async function chat(req, res, { messages, locale }) {
   send('sources', { sources: failed ? [] : sources, usedRecords });
   send('done', { suggestTicket });
   res.end();
-  log.info({ evt: 'assistant_answer', userId: String(req.user._id), locale, sourceCount: sources.length, toolCalls: records.calls.length, usedRecords, confidence, suggestTicket, latencyMs: Date.now() - started });
+  log.info({ evt: 'assistant_answer', userId: req.user?._id ? String(req.user._id) : 'guest', locale, sourceCount: sources.length, toolCalls: records.calls.length, usedRecords, confidence, suggestTicket, latencyMs: Date.now() - started });
 }
