@@ -1,9 +1,51 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { api } from '../../lib/api';
-import { cleanForSpeech, getSupportedAudioMime, pickVoice } from './voiceUtils';
+import { cleanForSpeech, getSupportedAudioMime, pickVoice, splitIntoSentences } from './voiceUtils';
 
 export type VoiceState = 'idle' | 'listening' | 'transcribing' | 'speaking';
+
+export interface VoiceSettings {
+  /** Explicit preferred voice name (empty string = automatic best natural voice) */
+  voiceName: string;
+  /** Speech rate / speed: 0.85 to 1.25 (default 0.94 for natural conversational warmth) */
+  rate: number;
+  /** Speech pitch: 0.85 to 1.15 (default 1.02 for polite customer service tone) */
+  pitch: number;
+}
+
+const SETTINGS_KEY = 'smartcc_voice_settings_v1';
+
+export function loadVoiceSettings(): VoiceSettings {
+  if (typeof window === 'undefined') {
+    return { voiceName: '', rate: 0.94, pitch: 1.02 };
+  }
+  try {
+    const raw = localStorage.getItem(SETTINGS_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (typeof parsed === 'object' && parsed !== null) {
+        return {
+          voiceName: typeof parsed.voiceName === 'string' ? parsed.voiceName : '',
+          rate: typeof parsed.rate === 'number' ? parsed.rate : 0.94,
+          pitch: typeof parsed.pitch === 'number' ? parsed.pitch : 1.02,
+        };
+      }
+    }
+  } catch {
+    // fallback
+  }
+  return { voiceName: '', rate: 0.94, pitch: 1.02 };
+}
+
+export function saveVoiceSettings(s: VoiceSettings): void {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify(s));
+  } catch {
+    // ignore
+  }
+}
 
 export interface UseVoiceOptions {
   /** Callback invoked when audio has been transcribed into text. */
@@ -21,14 +63,18 @@ export function useVoice({ onTranscribed, language, initialHandsFree = false }: 
   const [state, setState] = useState<VoiceState>('idle');
   const [error, setError] = useState<string | null>(null);
   const [handsFree, setHandsFree] = useState<boolean>(initialHandsFree);
+  const [voiceSettings, setVoiceSettingsState] = useState<VoiceSettings>(loadVoiceSettings);
+  const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([]);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const chunksRef = useRef<Blob[]>([]);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const sentenceTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const voicesRef = useRef<SpeechSynthesisVoice[]>([]);
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
   const isCancelledRef = useRef<boolean>(false);
+  const isSpeakingCancelledRef = useRef<boolean>(false);
   const handsFreeRef = useRef<boolean>(handsFree);
   const onTranscribedRef = useRef(onTranscribed);
 
@@ -41,7 +87,9 @@ export function useVoice({ onTranscribed, language, initialHandsFree = false }: 
     const synth = window.speechSynthesis;
     const updateVoices = () => {
       try {
-        voicesRef.current = synth.getVoices?.() || [];
+        const v = synth.getVoices?.() || [];
+        voicesRef.current = v;
+        setAvailableVoices(v);
       } catch {
         // ignore
       }
@@ -56,6 +104,7 @@ export function useVoice({ onTranscribed, language, initialHandsFree = false }: 
   useEffect(() => {
     return () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      if (sentenceTimeoutRef.current) clearTimeout(sentenceTimeoutRef.current);
       if (streamRef.current) {
         streamRef.current.getTracks().forEach((track) => track.stop());
       }
@@ -69,6 +118,14 @@ export function useVoice({ onTranscribed, language, initialHandsFree = false }: 
     };
   }, []);
 
+  const updateVoiceSettings = useCallback((partial: Partial<VoiceSettings>) => {
+    setVoiceSettingsState((prev) => {
+      const next = { ...prev, ...partial };
+      saveVoiceSettings(next);
+      return next;
+    });
+  }, []);
+
   const stopTracks = useCallback(() => {
     if (streamRef.current) {
       streamRef.current.getTracks().forEach((t) => t.stop());
@@ -77,6 +134,11 @@ export function useVoice({ onTranscribed, language, initialHandsFree = false }: 
   }, []);
 
   const stopSpeaking = useCallback(() => {
+    isSpeakingCancelledRef.current = true;
+    if (sentenceTimeoutRef.current) {
+      clearTimeout(sentenceTimeoutRef.current);
+      sentenceTimeoutRef.current = null;
+    }
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
       try {
         window.speechSynthesis.cancel();
@@ -218,56 +280,97 @@ export function useVoice({ onTranscribed, language, initialHandsFree = false }: 
 
         const isHindiText = /[\u0900-\u097F]/.test(clean);
         const targetLang = isHindiText ? 'hi-IN' : (currentLang.startsWith('hi') ? 'hi-IN' : 'en-IN');
-        const utterance = new SpeechSynthesisUtterance(clean);
-        utteranceRef.current = utterance; // Keep ref to avoid garbage collection
+        const voiceList = (voicesRef.current.length ? voicesRef.current : window.speechSynthesis.getVoices()) || [];
+        const chosenVoice = pickVoice(voiceList, isHindiText ? 'hi' : currentLang, voiceSettings.voiceName);
 
-        const voices = (voicesRef.current.length ? voicesRef.current : window.speechSynthesis.getVoices()) || [];
-        const voice = pickVoice(voices, isHindiText ? 'hi' : currentLang);
-        if (voice) {
-          utterance.voice = voice;
-          utterance.lang = voice.lang || targetLang;
-        } else {
-          utterance.lang = targetLang;
+        const sentences = splitIntoSentences(clean);
+        if (sentences.length === 0) {
+          options?.onEnd?.();
+          return;
         }
 
-        utterance.volume = 1.0;
-        utterance.rate = isHindiText ? 0.95 : 1.0;
-        utterance.pitch = 1.0;
+        isSpeakingCancelledRef.current = false;
+        let currentIndex = 0;
 
-        utterance.onstart = () => {
-          setState('speaking');
-        };
-
-        const handleFinish = () => {
-          utteranceRef.current = null;
-          setState((prev) => (prev === 'speaking' ? 'idle' : prev));
-          options?.onEnd?.();
-        };
-
-        utterance.onend = handleFinish;
-        utterance.onerror = (e) => {
-          utteranceRef.current = null;
-          if (e.error !== 'canceled' && e.error !== 'interrupted') {
-            setError(t('voice.failed'));
+        const speakNextSentence = () => {
+          if (isSpeakingCancelledRef.current || currentIndex >= sentences.length) {
+            utteranceRef.current = null;
+            setState((prev) => (prev === 'speaking' ? 'idle' : prev));
+            options?.onEnd?.();
+            return;
           }
-          handleFinish();
+
+          const currentSentence = sentences[currentIndex++]!;
+          const utterance = new SpeechSynthesisUtterance(currentSentence);
+          utteranceRef.current = utterance; // Keep ref to prevent Chrome GC
+
+          if (chosenVoice) {
+            utterance.voice = chosenVoice;
+            utterance.lang = chosenVoice.lang || targetLang;
+          } else {
+            utterance.lang = targetLang;
+          }
+
+          utterance.volume = 1.0;
+          utterance.rate = voiceSettings.rate || (isHindiText ? 0.94 : 0.96);
+          utterance.pitch = voiceSettings.pitch || 1.02;
+
+          utterance.onstart = () => {
+            setState('speaking');
+          };
+
+          utterance.onend = () => {
+            if (isSpeakingCancelledRef.current) return;
+            if (currentIndex < sentences.length) {
+              // Natural 70ms breathing pause between sentences
+              sentenceTimeoutRef.current = setTimeout(speakNextSentence, 70);
+            } else {
+              utteranceRef.current = null;
+              setState((prev) => (prev === 'speaking' ? 'idle' : prev));
+              options?.onEnd?.();
+            }
+          };
+
+          utterance.onerror = (e) => {
+            utteranceRef.current = null;
+            if (e.error !== 'canceled' && e.error !== 'interrupted') {
+              setError(t('voice.failed'));
+            }
+            setState((prev) => (prev === 'speaking' ? 'idle' : prev));
+            options?.onEnd?.();
+          };
+
+          window.speechSynthesis.speak(utterance);
+
+          // Chrome safety ping: if speech stops unexpectedly, resume
+          setTimeout(() => {
+            if (window.speechSynthesis.speaking && window.speechSynthesis.paused) {
+              window.speechSynthesis.resume();
+            }
+          }, 150);
         };
 
-        window.speechSynthesis.speak(utterance);
-
-        // Chrome safety ping: if speech stops unexpectedly, resume
-        setTimeout(() => {
-          if (window.speechSynthesis.speaking && window.speechSynthesis.paused) {
-            window.speechSynthesis.resume();
-          }
-        }, 150);
+        speakNextSentence();
       } catch {
         utteranceRef.current = null;
         setState('idle');
         options?.onEnd?.();
       }
     },
-    [currentLang, stopSpeaking, t]
+    [currentLang, stopSpeaking, t, voiceSettings]
+  );
+
+  const testVoice = useCallback(
+    (sampleText?: string) => {
+      const isHi = currentLang.startsWith('hi');
+      const sample =
+        sampleText ||
+        (isHi
+          ? 'नमस्ते! स्मार्ट कस्टमर केयर में आपका स्वागत है। मैं आपकी सहायता के लिए तैयार हूँ।'
+          : 'Hello! Welcome to Smart Customer Care. I am ready to assist you today.');
+      speak(sample);
+    },
+    [currentLang, speak]
   );
 
   const stopAll = useCallback(() => {
@@ -281,6 +384,10 @@ export function useVoice({ onTranscribed, language, initialHandsFree = false }: 
     error,
     handsFree,
     setHandsFree,
+    voiceSettings,
+    updateVoiceSettings,
+    availableVoices,
+    testVoice,
     startListening,
     stopListening,
     cancelListening,

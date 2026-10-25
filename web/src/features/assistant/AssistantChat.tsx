@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type FormEvent, type KeyboardEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ArrowUp, CircleAlert, Clock, RotateCcw, Sparkles, Square, ThumbsDown, ThumbsUp, TicketPlus, Volume2, VolumeX } from 'lucide-react';
+import { ArrowUp, CircleAlert, Clock, RotateCcw, Sliders, Sparkles, Square, ThumbsDown, ThumbsUp, TicketPlus, Volume2, VolumeX } from 'lucide-react';
 import { useMe } from '../auth/hooks';
 import { SourceChips } from '../tickets/SourceChips';
 import { Badge } from '../../ui/Badge';
@@ -10,6 +10,7 @@ import { RecordsChip } from '../tickets/RecordsChip';
 import { HandsFreeToggle } from '../voice/HandsFreeToggle';
 import { VoiceButton } from '../voice/VoiceButton';
 import { useVoice } from '../voice/useVoice';
+import { VoiceSettingsModal } from '../voice/VoiceSettingsModal';
 import { toTicket, useAssistant, type Turn } from './useAssistant';
 
 const PROMPTS = ['assistant.prompt1', 'assistant.prompt2', 'assistant.prompt3'];
@@ -23,6 +24,7 @@ export function AssistantChat({ compact, onNavigate }: { compact?: boolean; onNa
   const [text, setText] = useState('');
   const [said, setSaid] = useState('');
   const [autoSpeak, setAutoSpeak] = useState(true);
+  const [showVoiceSettings, setShowVoiceSettings] = useState(false);
   const input = useRef<HTMLTextAreaElement>(null);
   const end = useRef<HTMLDivElement>(null);
   const last = a.turns[a.turns.length - 1];
@@ -99,6 +101,15 @@ export function AssistantChat({ compact, onNavigate }: { compact?: boolean; onNa
           >
             {autoSpeak ? <Volume2 size={13} className="text-sky-600 dark:text-sky-400" /> : <VolumeX size={13} />}
             <span>{autoSpeak ? 'Voice Output ON' : 'Muted'}</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setShowVoiceSettings(true)}
+            className="inline-flex min-h-8 items-center gap-1.5 rounded-full border border-slate-200/90 bg-slate-50 px-2.5 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition-all shadow-2xs"
+            title="Voice Tone & Settings (आवाज़ सेटिंग्स)"
+          >
+            <Sliders size={13} className="text-slate-500" />
+            <span className="hidden xs:inline">Voice Tune</span>
           </button>
         </div>
         {hasChat && (
@@ -192,6 +203,16 @@ export function AssistantChat({ compact, onNavigate }: { compact?: boolean; onNa
         {voice.error && <p role="alert" className="mt-1 px-1 text-xs text-bad">{voice.error}</p>}
         <p className="mt-1.5 px-1 text-xs text-muted">{t('assistant.disclaimer')}</p>
       </form>
+
+      <VoiceSettingsModal
+        open={showVoiceSettings}
+        onClose={() => setShowVoiceSettings(false)}
+        settings={voice.voiceSettings}
+        onUpdate={voice.updateVoiceSettings}
+        availableVoices={voice.availableVoices}
+        onTestVoice={voice.testVoice}
+        isSpeaking={voice.state === 'speaking'}
+      />
     </div>
   );
 }
