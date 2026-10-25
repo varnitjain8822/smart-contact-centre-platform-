@@ -18,7 +18,7 @@ export function UserMenu({ user, onSignOut }: { user: User; onSignOut(): void })
       ]}
       trigger={(p) => (
         <button type="button" {...p}
-          className="inline-grid size-11 shrink-0 place-items-center rounded-full transition-[box-shadow] hover:ring-2 hover:ring-line">
+          className="inline-grid size-9 shrink-0 place-items-center rounded-full border border-slate-200/90 bg-white shadow-2xs transition-all hover:ring-2 hover:ring-slate-300">
           {/* sr-only name, not aria-label: the visible initials must not contradict the accessible name (WCAG 2.5.3) */}
           <span className="sr-only">{t('shell.accountFor', { name: user.name })}</span>
           <Avatar name={user.name} size="sm" />

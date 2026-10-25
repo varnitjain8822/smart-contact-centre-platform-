@@ -16,12 +16,12 @@ export function LanguageSwitch({ variant = 'default' }: { variant?: 'light' | 'd
       items={(['en', 'hi'] as const).map((l) => ({ label: <span lang={l}>{NAMES[l]}</span>, checked: locale === l, onSelect: () => setLocale(l) }))}
       trigger={(p) => (
         <button type="button" {...p} aria-label={`${SHORT[locale]} · ${t('shell.languageCurrent', { lang: NAMES[locale] })}`}
-          className={`inline-flex h-9 min-w-9 shrink-0 items-center justify-center gap-1.5 rounded-pill px-2.5 text-xs font-bold transition-all ${
+          className={`inline-flex h-9 shrink-0 items-center justify-center gap-1.5 rounded-full px-2.5 text-xs font-bold transition-all whitespace-nowrap ${
             isLight
               ? 'bg-white/15 text-white hover:bg-white/25 border border-white/20'
-              : 'text-ink-2 hover:bg-surface-2 hover:text-ink'
+              : 'border border-slate-200/90 bg-slate-50 hover:bg-slate-100 text-slate-700 hover:text-slate-900 shadow-2xs'
           }`}>
-          <Languages aria-hidden size={15} strokeWidth={1.75} className="hidden sm:block" />
+          <Languages aria-hidden size={14} strokeWidth={2} className="hidden sm:block text-slate-500" />
           <span aria-hidden>{SHORT[locale]}</span>
         </button>
       )} />

@@ -236,7 +236,7 @@ export default function CompanyPickerPage() {
               <ExternalLink size={12} className="text-slate-500" />
             </a>
 
-            <LanguageSwitch variant="light" />
+            <LanguageSwitch variant="default" />
           </div>
         </div>
       </header>

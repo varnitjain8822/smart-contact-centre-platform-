@@ -19,10 +19,10 @@ export function NotificationBell({ unread = 0, items = [], onOpen, onMarkAllRead
     <Popover label={t('notifications.title')} className="w-[22rem]"
       trigger={(p) => (
         <button type="button" {...p} aria-label={unread ? t('notifications.labelUnread', { count: unread }) : t('notifications.title')}
-          className="relative inline-flex size-11 shrink-0 items-center justify-center rounded-pill text-ink-2 transition-colors hover:bg-surface-2 hover:text-ink">
-          <Bell aria-hidden size={20} strokeWidth={1.75} />
+          className="relative inline-flex size-9 shrink-0 items-center justify-center rounded-full border border-slate-200/90 bg-slate-50 text-slate-600 shadow-2xs transition-colors hover:bg-slate-100 hover:text-slate-900">
+          <Bell aria-hidden size={16} strokeWidth={1.75} />
           {unread > 0 && (
-            <span aria-hidden className="absolute right-1.5 top-1.5 grid h-[18px] min-w-[18px] place-items-center rounded-pill bg-bad px-1 text-[11px] font-bold leading-none text-white ring-2 ring-bg tnum">
+            <span aria-hidden className="absolute -top-1 -right-1 grid h-[18px] min-w-[18px] place-items-center rounded-full bg-red-600 px-1 text-[10px] font-bold leading-none text-white ring-2 ring-white tnum">
               {unread > 9 ? '9+' : unread}
             </span>
           )}
