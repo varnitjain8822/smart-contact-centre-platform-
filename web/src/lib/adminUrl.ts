@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-const LOCAL_ADMIN = 'http://localhost:3310';
+const LOCAL_ADMIN = 'http://localhost:3310/app/login';
 let cachedAdminUrl: string | null = null;
 
 export async function fetchAdminUrl(): Promise<string> {
@@ -23,8 +23,10 @@ export async function fetchAdminUrl(): Promise<string> {
     if (res.ok) {
       const data = await res.json();
       if (data.adminPortalUrl) {
-        cachedAdminUrl = data.adminPortalUrl;
-        return data.adminPortalUrl;
+        const clean = data.adminPortalUrl.replace(/\/app.*$/, '').replace(/\/$/, '');
+        const fullUrl = `${clean}/app/login`;
+        cachedAdminUrl = fullUrl;
+        return fullUrl;
       }
     }
   } catch {
