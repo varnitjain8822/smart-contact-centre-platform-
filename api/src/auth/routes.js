@@ -28,7 +28,7 @@ authRouter.post('/register', limit({ windowMs: 3600_000, max: 5, key: (req) => r
   res.status(201).json({ user: toUser(user) });
 });
 
-authRouter.post('/login', limit({ windowMs: 15 * 60_000, max: 100, failuresOnly: true, key: (req) => `${req.ip}|${req.company.slug}|${String(req.body?.email ?? '').toLowerCase()}` }),
+authRouter.post('/login', limit({ windowMs: 15 * 60_000, max: 10, failuresOnly: true, key: (req) => `${req.ip}|${req.company.slug}|${String(req.body?.email ?? '').toLowerCase()}` }),
   async (req, res) => {
     const b = z.object({ email, password: z.string().min(1, 'Enter your password').max(128), remember: z.boolean().default(true) }).parse(req.body);
 

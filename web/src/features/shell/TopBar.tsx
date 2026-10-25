@@ -3,11 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { Plus, Search, Sparkles } from 'lucide-react';
 import type { User } from '../../lib/types';
 import { NAV } from './SideNav';
-import { ThemeToggle } from './ThemeToggle';
 import { LanguageSwitch } from './LanguageSwitch';
 import { LiveBell } from './NotificationBell';
 import { UserMenu } from './UserMenu';
-import { CompanySwitcher } from './CompanySwitcher';
 import { company } from '../../lib/company';
 
 export const isMac = () => typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform);
@@ -52,8 +50,20 @@ export function TopBar({ user, onSearch, onSignOut }: { user: User | null | unde
   return (
     <header className={`sticky top-0 z-30 border-b bg-gradient-to-r ${gradientClass} text-white shadow-sm print:hidden transition-colors duration-300`}>
       <div className="mx-auto flex h-14 md:h-16 items-center justify-between gap-2 px-3 sm:px-6 xl:px-10">
-        <div className="flex items-center gap-2">
-          <CompanySwitcher variant="light" />
+        <div className="flex items-center gap-2.5">
+          <Link to="/" className="flex items-center gap-2.5 group">
+            <span className="grid size-9 place-items-center rounded-xl bg-white/20 text-white font-bold text-xs shadow-xs backdrop-blur-xs">
+              {current.logoText || current.name.slice(0, 3)}
+            </span>
+            <div className="min-w-0">
+              <span className="font-display font-black text-sm sm:text-base tracking-tight leading-tight block text-white truncate max-w-[200px] sm:max-w-[320px]">
+                {current.name}
+              </span>
+              <span className="text-[10px] text-white/80 font-medium block leading-none truncate">
+                {current.sector} • Citizen Portal
+              </span>
+            </div>
+          </Link>
         </div>
 
         <nav aria-label={t('nav.main')} className="hidden md:flex items-center">
@@ -101,7 +111,6 @@ export function TopBar({ user, onSearch, onSignOut }: { user: User | null | unde
           </button>
 
           <LanguageSwitch variant="light" />
-          <ThemeToggle variant="light" />
 
           {user ? (
             <div className="flex items-center gap-2 pl-1">

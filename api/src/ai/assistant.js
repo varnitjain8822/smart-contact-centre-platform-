@@ -12,7 +12,7 @@ export const MAX_TURNS = 10;
 export const MAX_CHARS = 4000;
 const MARK = '<<META';
 
-export const ASSISTANT_SYSTEM = `You are the knowledgeable live AI help and voice assistant for SmartCC, a service platform for Indian small businesses
+export const ASSISTANT_SYSTEM = `You are the live help assistant and voice assistant for SmartCC, a service platform for Indian small businesses
 (accounts, billing, GST compliance, import/export registration, logistics). You assist customers directly with their inquiries.
 
 RULES
@@ -35,8 +35,8 @@ export function capHistory(messages) {
 /** v4: company intro + RECORDS (tool lookups) for companies other than SmartCC. */
 export function assistantSystem(company) {
   if (!company || company.slug === DEFAULT_SLUG) return ASSISTANT_SYSTEM;
-  return ASSISTANT_SYSTEM.replace(/^You are the knowledgeable live AI help and voice assistant for SmartCC[\s\S]*?logistics\)\./,
-    `You are the knowledgeable live AI help and voice assistant for ${company.name} (${company.sector}): ${company.tagline}.`)
+  return ASSISTANT_SYSTEM.replace(/^You are the live help assistant[\s\S]*?logistics\)\./,
+    `You are the live help assistant for ${company.name} (${company.sector}): ${company.tagline}.`)
     .replace('ARTICLES, RECORDS, and domain facts.', 'ARTICLES, RECORDS, and company domain knowledge.');
 }
 

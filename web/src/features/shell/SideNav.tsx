@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { House, LifeBuoy, Plus, Sparkles, Tickets, UserRound } from 'lucide-react';
 import type { User } from '../../lib/types';
 import { buttonClass } from '../../ui/Button';
-import { CompanySwitcher } from './CompanySwitcher';
+import { Logo } from './TopBar';
 
 /** `label`/`short` are i18n keys. `short` (bottom tabs) must stay a substring of `label` (WCAG 2.5.3). `tab` = in the mobile bottom bar. */
 export const NAV = [
@@ -22,7 +22,7 @@ export function SideNav({ user }: { user: User | null | undefined }) {
   return (
     <header className="sticky top-0 hidden h-dvh w-60 shrink-0 flex-col border-r border-line px-4 pb-5 xl:flex print:hidden">
       <div className="-mx-4 flex h-16 items-center border-b border-line px-5">
-        <CompanySwitcher />
+        <Logo />
       </div>
       {user ? (
         <Link to="/tickets/new" className={buttonClass('primary', 'mt-6 w-full')}><Plus aria-hidden size={18} /> {t('nav.newTicket')}</Link>

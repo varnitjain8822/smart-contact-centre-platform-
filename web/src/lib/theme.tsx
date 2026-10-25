@@ -1,34 +1,22 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, type ReactNode } from 'react';
 
-export type ThemePref = 'system' | 'light' | 'dark';
-const KEY = 'scc-theme';
-const mq = () => window.matchMedia('(prefers-color-scheme: dark)');
+export type ThemePref = 'light';
 
-function read(): ThemePref {
-  try {
-    const v = localStorage.getItem(KEY);
-    return v === 'light' || v === 'dark' ? v : 'system';
-  } catch { return 'system'; }
-}
-
-const Ctx = createContext<{ pref: ThemePref; setPref(p: ThemePref): void }>({ pref: 'system', setPref: () => {} });
+const Ctx = createContext<{ pref: ThemePref; setPref(p: ThemePref): void }>({ pref: 'light', setPref: () => {} });
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [pref, setPrefState] = useState<ThemePref>(read);
   useEffect(() => {
-    const m = mq();
-    const apply = () => { document.documentElement.dataset.theme = pref === 'system' ? (m.matches ? 'dark' : 'light') : pref; };
-    apply();
-    if (pref !== 'system') return;
-    m.addEventListener('change', apply);
-    return () => m.removeEventListener('change', apply);
-  }, [pref]);
-  const setPref = (p: ThemePref) => {
-    setPrefState(p);
-    try { p === 'system' ? localStorage.removeItem(KEY) : localStorage.setItem(KEY, p); } catch { /* private mode */ }
-  };
-  return <Ctx.Provider value={{ pref, setPref }}>{children}</Ctx.Provider>;
+    document.documentElement.dataset.theme = 'light';
+    document.documentElement.classList.remove('dark');
+    try {
+      localStorage.setItem('scc-theme', 'light');
+    } catch {
+      // ignore
+    }
+  }, []);
+
+  return <Ctx.Provider value={{ pref: 'light', setPref: () => {} }}>{children}</Ctx.Provider>;
 }
 
 export const useTheme = () => useContext(Ctx);
-export const NEXT_THEME: Record<ThemePref, ThemePref> = { system: 'light', light: 'dark', dark: 'system' };
+export const NEXT_THEME: Record<string, string> = { light: 'light' };

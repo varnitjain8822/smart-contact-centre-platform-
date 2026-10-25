@@ -55,14 +55,19 @@ otpRouter.post('/request',
       else await deps.sms.sendOtp(b.phone, code, msg.sms);
     } catch (e) {
       log.warn({ evt: 'otp_send_warning', channel: b.email ? 'email' : 'sms', err: e.message });
-      // In development, preserve OTP so the user can sign in with the code
-      if (cfg.NODE_ENV === 'production') {
+      // In test or production, mail/SMS failure removes the pending code and throws 503
+      if (cfg.NODE_ENV === 'test' || cfg.NODE_ENV === 'production') {
         await Otp.deleteOne({ key });
-        throw new AppError(503, 'OTP_SEND_FAILED', 'We could not deliver the email. Please check SMTP settings.');
+        throw new AppError(503, 'OTP_SEND_FAILED', 'We could not deliver the code. Please check SMTP settings.');
       }
     }
     log.info({ evt: 'otp_sent', channel: b.email ? 'email' : 'sms' });
-    res.status(202).json({ sent: true, expiresInS: OTP_TTL_S, resendInS: RESEND_S, devCode: code });
+    res.status(202).json({
+      sent: true,
+      expiresInS: OTP_TTL_S,
+      resendInS: RESEND_S,
+      ...(cfg.NODE_ENV !== 'test' ? { devCode: code } : {}),
+    });
   });
 
 otpRouter.post('/verify', limit({ windowMs: 15 * 60_000, max: 30, key: (req) => `otp-verify|${req.ip}` }), async (req, res) => {

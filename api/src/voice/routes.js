@@ -56,6 +56,9 @@ voiceRouter.post('/transcribe', optionalUser, limit({
     if (err.code === 'not_configured') {
       return next(new AppError(503, 'NOT_CONFIGURED', 'Voice transcription is not configured'));
     }
+    if (err.code === 'http_400' && (err.message?.includes('audio_too_short') || err.message?.includes('too short'))) {
+      return res.json({ text: '' });
+    }
     next(err);
   }
 });

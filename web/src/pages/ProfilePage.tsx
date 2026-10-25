@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Bell, Languages, LaptopMinimal, LogOut, Mail, Monitor, Moon, Sun } from 'lucide-react';
+import { Bell, Languages, LaptopMinimal, LogOut, Mail, Sun } from 'lucide-react';
 import { ApiError } from '../lib/api';
-import { useTheme, type ThemePref } from '../lib/theme';
 import { useChangePassword, useLogout, useLogoutOthers, useMe, useUpdateMe } from '../features/auth/hooks';
 import type { NotifyPrefs } from '../lib/types';
 import { ProfileForm } from '../features/profile/ProfileForm';
@@ -16,7 +15,6 @@ import { useToast } from '../ui/Toast';
 import { Avatar } from '../ui/Avatar';
 import { useLocale } from '../lib/locale';
 
-const THEMES: { value: ThemePref; icon: typeof Sun }[] = [{ value: 'system', icon: Monitor }, { value: 'light', icon: Sun }, { value: 'dark', icon: Moon }];
 const LANGS = [{ value: 'en', label: 'English' }, { value: 'hi', label: 'हिन्दी' }] as const;
 
 const tile = `flex min-h-[76px] flex-col items-center justify-center gap-1.5 rounded-sm border border-line text-sm font-semibold text-ink-2 transition-colors
@@ -45,7 +43,6 @@ export default function ProfilePage() {
   const pw = useChangePassword();
   const others = useLogoutOthers();
   const [confirmOthers, setConfirmOthers] = useState(false);
-  const { pref, setPref } = useTheme();
   const toast = useToast();
   if (!user) return null; // RequireAuth redirects
 
@@ -86,13 +83,11 @@ export default function ProfilePage() {
         <Section title={t('profile.appearanceTitle')} desc={t('profile.appearanceDesc')}>
           <fieldset>
             <legend className="sr-only">{t('profile.theme')}</legend>
-            <div className="grid grid-cols-3 gap-2">
-              {THEMES.map(({ value, icon: Icon }) => (
-                <label key={value} className="relative">
-                  <input type="radio" name="theme" value={value} checked={pref === value} onChange={() => setPref(value)} className="peer absolute inset-0 cursor-pointer opacity-0" />
-                  <span className={tile}><Icon aria-hidden size={20} /> {t(`theme.${value}`)}</span>
-                </label>
-              ))}
+            <div className="grid grid-cols-1 sm:max-w-xs">
+              <div className="flex min-h-[76px] flex-col items-center justify-center gap-1.5 rounded-sm border border-accent bg-accent-soft text-sm font-semibold text-accent">
+                <Sun aria-hidden size={20} />
+                <span>Light Mode</span>
+              </div>
             </div>
           </fieldset>
         </Section>

@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from 'vitest';
-import { render, screen, within } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import { QueryClientProvider } from '@tanstack/react-query';
 import i18n from '../src/i18n';
@@ -83,19 +83,16 @@ describe('v4 branding (WCAG AA)', () => {
 });
 
 describe('v4 picker + records chip', () => {
-  it('picker: one card per company linking to /c/<slug>, demo badge', async () => {
+  it('picker: one card per company linking to /c/<slug>', async () => {
     routeFetch({ 'GET /api/companies': { body: { items: [{ ...acme, slug: 'smartcc', name: 'SmartCC', demo: false }, acme] } } });
     render(<CompanyPickerPage />, { wrapper: wrap() });
-    const card = await screen.findByRole('link', { name: /^Acme Retail/ });
+    const card = await screen.findByRole('link', { name: /Enter Acme Retail/ });
     expect(card.getAttribute('href')).toBe('/c/acme');
-    expect(within(card).getByText('Demo data')).toBeTruthy();
-    expect(within(screen.getByRole('link', { name: /^SmartCC/ })).queryByText('Demo data')).toBeNull();
-    expect(screen.getByRole('heading', { level: 1, name: 'Choose a help desk' })).toBeTruthy();
+    expect(screen.getByRole('heading', { level: 1, name: /One Intelligent Platform/ })).toBeTruthy();
   });
-  it('demo ribbon (every page of a demo portal, also signed out) links back to the picker', () => {
-    render(<DemoRibbon />, { wrapper: wrap() });
-    expect(screen.getByRole('note').textContent).toContain('Demo data');
-    expect(within(screen.getByRole('note')).getByRole('link', { name: 'All help desks' }).getAttribute('href')).toBe('/');
+  it('demo ribbon is silenced per requirements and returns null', () => {
+    const { container } = render(<DemoRibbon />, { wrapper: wrap() });
+    expect(container.firstChild).toBeNull();
   });
   it('AI message shows "Checked your records" only when the answer used records', () => {
     const { rerender } = render(<AiMessage m={msg({ author: 'ai', usedRecords: true })} />, { wrapper: wrap() });

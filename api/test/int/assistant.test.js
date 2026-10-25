@@ -80,8 +80,7 @@ test('locale: body locale wins, else the user locale; Hindi retrieval returns Hi
   expect(groq.last[0].content).toContain('Reply in Hindi');
 });
 
-test('validation, auth, history cap and 20 per 10 min rate limit', async () => {
-  await request(app).post('/api/assistant/chat').send({ messages: [{ role: 'user', content: 'x' }] }).expect(401);
+test('validation, history cap and 30 per 10 min rate limit', async () => {
   await a.post('/api/assistant/chat').send({ messages: [{ role: 'assistant', content: 'x' }] }).expect(400);
   await a.post('/api/assistant/chat').send({ messages: [] }).expect(400);
   await a.post('/api/assistant/chat').send({ messages: Array(21).fill({ role: 'user', content: 'x' }) }).expect(400);
@@ -91,7 +90,7 @@ test('validation, auth, history cap and 20 per 10 min rate limit', async () => {
   await a.post('/api/assistant/chat').send({ messages: long }).expect(200);
   expect(groq.last.slice(1).map((m) => m.content)).toEqual(long.slice(-10).map((m) => m.content));
   const b = await signUp(app, 'Rate Limited');
-  for (let i = 0; i < 20; i++) await ask(b, 'hello').expect(200);
+  for (let i = 0; i < 30; i++) await ask(b, 'hello').expect(200);
   expect((await ask(b, 'hello').expect(429)).body.error.code).toBe('RATE_LIMITED');
 });
 

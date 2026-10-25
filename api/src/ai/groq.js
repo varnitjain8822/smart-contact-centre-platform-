@@ -108,9 +108,10 @@ const EXT_MAP = {
  */
 export async function transcribe(fileBuffer, mimeType = 'audio/webm', { language, prompt } = {}) {
   if (!cfg.GROQ_API_KEY) throw new AiError('not_configured');
-  const filename = EXT_MAP[mimeType] ?? 'audio.webm';
+  const cleanMime = (mimeType || 'audio/webm').split(';')[0].trim().toLowerCase();
+  const filename = EXT_MAP[cleanMime] ?? 'audio.webm';
   const fd = new FormData();
-  fd.append('file', new Blob([fileBuffer], { type: mimeType }), filename);
+  fd.append('file', new Blob([fileBuffer], { type: cleanMime }), filename);
   fd.append('model', 'whisper-large-v3-turbo');
   if (language && language !== 'auto') fd.append('language', language);
   const defaultPrompt = 'Customer support query in Hindi (हिंदी) or English (SBI, Tata Steel, Delhi Airport, Passport Seva, Infosys, SmartCC, खाते, बिल, चालान, शिकायत, टिकट)';
@@ -128,6 +129,13 @@ export async function transcribe(fileBuffer, mimeType = 'audio/webm', { language
     if (res.ok) {
       const j = await res.json();
       return { text: j.text ?? '' };
+    }
+    if (res.status === 400) {
+      const errText = await res.text().catch(() => '');
+      if (errText.includes('audio_too_short') || errText.includes('too short')) {
+        return { text: '' };
+      }
+      throw new AiError(`http_${res.status}`, errText);
     }
     if (attempt < tries - 1 && (res.status === 429 || res.status >= 500)) {
       if (res.status === 429 && keys().length > 1) continue;

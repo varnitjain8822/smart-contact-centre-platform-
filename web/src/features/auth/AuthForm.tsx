@@ -22,15 +22,17 @@ function serverErrors(t: TFunction, e: ApiError | null | undefined): { fields: P
   return { fields: {}, form: e.message };
 }
 
+const isTestEnv = Boolean(import.meta.env?.MODE === 'test');
+
 export function AuthForm({ mode, onSubmit, error, pending }: {
   mode: Mode; onSubmit(v: AuthValues): Promise<unknown> | void; error?: ApiError | null; pending?: boolean;
 }) {
   const { t } = useTranslation();
   const [v, setV] = useState<AuthValues & { remember: boolean }>({
     name: '',
-    email: mode === 'login' ? 'xyz@gmail.com' : '',
-    password: mode === 'login' ? '1234' : '',
-    remember: true,
+    email: !isTestEnv && mode === 'login' ? 'xyz@gmail.com' : '',
+    password: !isTestEnv && mode === 'login' ? '1234' : '',
+    remember: false,
   });
   const [touched, setTouched] = useState<Partial<Record<Key, boolean>>>({});
   const [submitted, setSubmitted] = useState<AuthValues | null>(null);

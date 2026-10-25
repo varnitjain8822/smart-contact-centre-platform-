@@ -23,11 +23,10 @@ SCHEMA
  "confidence": 0.0, "triggers": ["..."], "answer": "...", "sources": ["slug"], "summary": "..."}`;
 
 export const LANGUAGE = {
-  en: `LANGUAGE & MULTILINGUAL INSTRUCTIONS:
+  en: `LANGUAGE: Reply in English.
 - CRITICAL: If the customer writes in Hindi, Hinglish (Hindi written using English/Latin alphabet, e.g. "mera order kahan hai", "paise cut gaye", "flight status batao", "card block kaise karein", "kya rules hain"), or mixed Hindi-English: You MUST reply entirely in natural, polite Hindi written in Hindi Devanagari script (e.g. "नमस्ते! आपका कार्ड ब्लॉक करने के लिए...", "रिफंड 3 से 5 कार्य दिवसों में..."). This allows browser voice speech synthesis to speak the response aloud in native Hindi.
 - Only when the customer writes purely in standard English without Hindi/Hinglish phrasing: reply in English.`,
-  hi: `LANGUAGE & MULTILINGUAL INSTRUCTIONS:
-- You MUST reply entirely in natural everyday Hindi in Devanagari script. Keep technical acronyms (OTP, UPI, PNR, LR, GSTIN, App, KYC) intact. Write "summary" in English for the agent.`,
+  hi: `LANGUAGE: Reply in Hindi, in natural everyday Hindi (Devanagari script). Keep technical acronyms (OTP, UPI, PNR, LR, GSTIN, App, KYC) intact. Write "summary" in English for the agent.`,
 };
 
 const ROLE = { customer: 'CUSTOMER', ai: 'ASSISTANT', agent: 'AGENT' };

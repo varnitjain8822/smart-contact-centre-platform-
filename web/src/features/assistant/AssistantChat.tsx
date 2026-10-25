@@ -27,14 +27,17 @@ export function AssistantChat({ compact, onNavigate }: { compact?: boolean; onNa
   const end = useRef<HTMLDivElement>(null);
   const last = a.turns[a.turns.length - 1];
 
+  // Prevent speaking historical turns restored from session storage on mount
+  const initialTurnIdRef = useRef<string | null>(last?.id ?? null);
+  const spokenTurnRef = useRef<string | null>(initialTurnIdRef.current);
+
   const voice = useVoice({
     onTranscribed: (transcribed) => {
-      if (voice.handsFree) {
-        void a.send(transcribed);
-      } else {
-        setText((prev) => (prev ? `${prev} ${transcribed}` : transcribed));
-        input.current?.focus();
-      }
+      const clean = transcribed.trim();
+      if (!clean) return;
+      setText(clean);
+      void a.send(clean);
+      setText('');
     },
   });
 
@@ -43,7 +46,6 @@ export function AssistantChat({ compact, onNavigate }: { compact?: boolean; onNa
   useEffect(() => { if (last?.role === 'assistant' && !last.streaming && last.content) setSaid(last.content); }, [last?.streaming, last?.role, last?.content]);
 
   // Read aloud automatically when autoSpeak is on or in hands-free mode
-  const spokenTurnRef = useRef<string | null>(null);
   useEffect(() => {
     if (last?.role === 'assistant' && !last.streaming && last.content && last.id !== spokenTurnRef.current) {
       spokenTurnRef.current = last.id;
