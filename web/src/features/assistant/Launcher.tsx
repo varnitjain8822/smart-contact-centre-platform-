@@ -6,7 +6,7 @@ import { useMediaQuery } from '../../lib/useMediaQuery';
 
 const AssistantPanel = lazy(() => import('./AssistantPanel'));
 
-/** Floating "Ask AI" button; the chat chunk loads on first open. Hidden on /assistant and on the thread page below 1280 px (composer). */
+/** Floating "Ask AI" button; the chat chunk loads on first open. Hidden on /assistant, on Home (which has its own Ask AI buttons, and the floating one sat over its article list) and on the thread page below 1280 px (composer). */
 export function AssistantLauncher() {
   const { t } = useTranslation();
   const { pathname } = useLocation();
@@ -15,7 +15,7 @@ export function AssistantLauncher() {
   const btn = useRef<HTMLButtonElement>(null);
   const thread = /^\/tickets\/(?!new$)[^/]+$/.test(pathname);
   useEffect(() => setOpen(false), [pathname]);
-  if (pathname === '/assistant' || (thread && !wide)) return null;
+  if (pathname === '/assistant' || pathname === '/' || (thread && !wide)) return null;
   const close = () => { setOpen(false); btn.current?.focus(); };
   return (
     <div className="fixed bottom-[calc(72px+env(safe-area-inset-bottom))] right-4 z-40 md:bottom-6 md:right-6 print:hidden">

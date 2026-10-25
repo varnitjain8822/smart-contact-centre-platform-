@@ -26,9 +26,9 @@ export function AuthLayout({ title, lede, children, footer }: { title: string; l
   return (
     <div className="min-h-dvh xl:grid xl:grid-cols-[1.1fr_1fr]">
       <aside aria-hidden className="relative hidden overflow-hidden border-r border-line bg-surface-2/70 xl:flex xl:flex-col xl:justify-between xl:p-12 2xl:p-14">
-        <div>
+        <div className="flex flex-col items-start">
           <Logo />
-          <div className="mt-8 inline-flex items-center gap-2 rounded-full border border-line bg-surface/90 px-3.5 py-1.5 text-xs font-bold text-ink shadow-2xs backdrop-blur-xs">
+          <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-line bg-surface/90 px-3.5 py-1.5 text-xs font-bold text-ink shadow-2xs backdrop-blur-xs">
             {theme.badgeIcon}
             <span>{theme.badge}</span>
           </div>

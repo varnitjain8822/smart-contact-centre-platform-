@@ -4,7 +4,20 @@ import { useTranslation } from 'react-i18next';
 import {
   ArrowRight,
   BookOpen,
+  Bot,
+  Briefcase,
   Building2,
+  CalendarCheck,
+  CreditCard,
+  Factory,
+  FileBadge,
+  FileText,
+  Globe,
+  Laptop,
+  Luggage,
+  Mail,
+  ScanFace,
+  Timer,
   Check,
   Copy,
   Database,
@@ -18,7 +31,9 @@ import {
   ShieldCheck,
   Sparkles,
   Truck,
+  X,
   Zap,
+  type LucideIcon,
 } from 'lucide-react';
 import { api } from '../lib/api';
 import { basenameFor } from '../lib/company';
@@ -90,43 +105,43 @@ const companyLiveStatus = (slug: string) => {
   }
 };
 
-const companyCapabilities = (slug: string): { icon: string; label: string }[] => {
+const companyCapabilities = (slug: string): { icon: LucideIcon; label: string }[] => {
   switch (slug) {
     case 'sbi':
       return [
-        { icon: '💳', label: 'RuPay & SBI Debit Cards' },
-        { icon: '⚡', label: 'YONO & UPI Disputes' },
-        { icon: '🎙️', label: 'Hindi / English Voice' },
+        { icon: CreditCard, label: 'RuPay & SBI Debit Cards' },
+        { icon: Zap, label: 'YONO & UPI Disputes' },
+        { icon: Mic, label: 'Hindi / English Voice' },
       ];
     case 'tatasteel':
       return [
-        { icon: '🏗️', label: 'TMT Rebar Grade Fe 550D' },
-        { icon: '🚛', label: 'GPS Lorry Dispatches' },
-        { icon: '📜', label: 'Mill Test Certificates' },
+        { icon: Factory, label: 'TMT Rebar Grade Fe 550D' },
+        { icon: Truck, label: 'GPS Lorry Dispatches' },
+        { icon: FileBadge, label: 'Mill Test Certificates' },
       ];
     case 'delhiairport':
       return [
-        { icon: '✈️', label: 'Flight Radar & Terminals' },
-        { icon: '🛂', label: 'DigiYatra Smart Gate' },
-        { icon: '🧳', label: 'Lost & Found / Baggage' },
+        { icon: Plane, label: 'Flight Radar & Terminals' },
+        { icon: ScanFace, label: 'DigiYatra Smart Gate' },
+        { icon: Luggage, label: 'Lost & Found / Baggage' },
       ];
     case 'passportseva':
       return [
-        { icon: '🏛️', label: 'PSK Appointment Booking' },
-        { icon: '🔍', label: 'Police Verification' },
-        { icon: '📮', label: 'Speed Post Tracking' },
+        { icon: CalendarCheck, label: 'PSK Appointment Booking' },
+        { icon: Search, label: 'Police Verification' },
+        { icon: Mail, label: 'Speed Post Tracking' },
       ];
     case 'infosys':
       return [
-        { icon: '💼', label: 'Vendor Invoice Status' },
-        { icon: '💻', label: 'Corporate IT Assets' },
-        { icon: '📄', label: 'Payslip & Leave Balances' },
+        { icon: Briefcase, label: 'Vendor Invoice Status' },
+        { icon: Laptop, label: 'Corporate IT Assets' },
+        { icon: FileText, label: 'Payslip & Leave Balances' },
       ];
     default:
       return [
-        { icon: '🤖', label: '3-Tier Autonomous AI' },
-        { icon: '⏱️', label: 'Dynamic SLA Routing' },
-        { icon: '🌐', label: 'Chatwoot Human Inboxes' },
+        { icon: Bot, label: '3-Tier Autonomous AI' },
+        { icon: Timer, label: 'Dynamic SLA Routing' },
+        { icon: Globe, label: 'Chatwoot Human Inboxes' },
       ];
   }
 };
@@ -180,7 +195,7 @@ export default function CompanyPickerPage() {
           {/* Logo Brand */}
           <div className="flex items-center gap-3">
             <span className="grid size-10 place-items-center rounded-xl bg-gradient-to-tr from-sky-600 via-blue-600 to-indigo-600 text-white shadow-md shadow-sky-500/20">
-              <Sparkles size={20} className="animate-pulse" />
+              <Sparkles size={20} />
             </span>
             <div>
               <div className="flex items-center gap-2">
@@ -276,9 +291,10 @@ export default function CompanyPickerPage() {
               <button
                 type="button"
                 onClick={() => setQuery('')}
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400 hover:text-slate-700 bg-slate-100 hover:bg-slate-200 size-5 rounded-full grid place-items-center"
+                aria-label={t('picker.clearSearch')}
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 bg-slate-100 hover:bg-slate-200 size-5 rounded-full grid place-items-center"
               >
-                ✕
+                <X size={12} strokeWidth={3} />
               </button>
             )}
           </div>
@@ -286,23 +302,25 @@ export default function CompanyPickerPage() {
           {/* Filter Pills */}
           <div className="mt-5 flex flex-wrap items-center justify-center gap-2 text-xs font-semibold">
             {[
-              { id: 'all', label: 'All Portals (6)' },
-              { id: 'banking', label: '🏛️ Banking & Finance' },
-              { id: 'industrial', label: '🏗️ Steel & Factory' },
-              { id: 'aviation', label: '✈️ Airport & Aviation' },
-              { id: 'govt', label: '🛂 Passport & Public' },
-              { id: 'tech', label: '💻 Enterprise IT & SMB' },
+              { id: 'all', label: `All portals (${items.length || 6})`, icon: null },
+              { id: 'banking', label: 'Banking & Finance', icon: Landmark },
+              { id: 'industrial', label: 'Steel & Factory', icon: Factory },
+              { id: 'aviation', label: 'Airport & Aviation', icon: Plane },
+              { id: 'govt', label: 'Passport & Public', icon: ScanFace },
+              { id: 'tech', label: 'Enterprise IT & SMB', icon: Laptop },
             ].map((f) => (
               <button
                 key={f.id}
                 type="button"
                 onClick={() => setSelectedFilter(f.id)}
-                className={`rounded-full px-4 py-2 transition-all ${
+                aria-pressed={selectedFilter === f.id}
+                className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 transition-all ${
                   selectedFilter === f.id
                     ? 'bg-slate-900 text-white shadow-sm ring-2 ring-slate-900/10'
                     : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-slate-900'
                 }`}
               >
+                {f.icon && <f.icon size={13} className={selectedFilter === f.id ? 'text-white/80' : 'text-slate-400'} />}
                 {f.label}
               </button>
             ))}
@@ -362,7 +380,7 @@ export default function CompanyPickerPage() {
                           {companyBadgeLabel(c.slug)}
                         </span>
                         <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200/60">
-                          <span className="size-1.5 rounded-full bg-emerald-500 animate-ping" />
+                          <span className="size-1.5 rounded-full bg-emerald-500" />
                           <span>{companyLiveStatus(c.slug)}</span>
                         </span>
                       </div>
@@ -370,13 +388,13 @@ export default function CompanyPickerPage() {
 
                     {/* Company Name & Sector */}
                     <div className="mt-5">
-                      <h2 className="font-display text-2xl font-black text-slate-900 group-hover:text-sky-600 transition-colors tracking-tight">
+                      <h2 className="font-display text-2xl font-black leading-tight text-slate-900 group-hover:text-sky-600 transition-colors tracking-tight line-clamp-2 min-h-[3.75rem]" title={c.name}>
                         {c.name}
                       </h2>
                       <span className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mt-0.5">
                         {c.sector}
                       </span>
-                      <p className="mt-2.5 text-sm text-slate-600 leading-relaxed line-clamp-2">
+                      <p className="mt-2.5 text-sm text-slate-600 leading-relaxed line-clamp-2 min-h-[2.75rem]">
                         {c.tagline}
                       </p>
                     </div>
@@ -388,7 +406,7 @@ export default function CompanyPickerPage() {
                           key={i}
                           className="inline-flex items-center gap-1 rounded-lg bg-slate-50 border border-slate-200/80 px-2.5 py-1 text-[11px] font-medium text-slate-700"
                         >
-                          <span>{cap.icon}</span>
+                          <cap.icon size={12} className="shrink-0 text-slate-400" />
                           <span>{cap.label}</span>
                         </span>
                       ))}
@@ -400,9 +418,10 @@ export default function CompanyPickerPage() {
                     {/* Primary Button */}
                     <a
                       href={basenameFor(c.slug)}
+                      aria-label={t('picker.enterAria', { name: c.name })}
                       className="flex items-center justify-between w-full rounded-2xl bg-gradient-to-r from-sky-600 to-blue-600 px-5 py-3 text-sm font-bold text-white shadow-sm hover:from-sky-500 hover:to-blue-500 transition-all group-hover:shadow-md"
                     >
-                      <span>Enter {c.name}</span>
+                      <span>{t('picker.enter')}</span>
                       <ArrowRight size={16} className="transition-transform group-hover:translate-x-1.5" />
                     </a>
 

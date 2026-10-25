@@ -141,7 +141,7 @@ export function TopBar({ user, onSearch, onSignOut }: { user: User | null | unde
               <LiveBell />
               <Link
                 to="/tickets/new"
-                className="hidden lg:inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-bold text-white shadow-xs hover:opacity-90 transition-all shrink-0 whitespace-nowrap"
+                className="hidden lg:inline-flex xl:hidden items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-bold text-white shadow-xs hover:opacity-90 transition-all shrink-0 whitespace-nowrap"
                 style={{ backgroundColor: current.primaryColor || '#0284c7' }}
               >
                 <Plus aria-hidden size={14} strokeWidth={2.5} className="shrink-0" />

@@ -567,7 +567,10 @@
     "title": "Choose a help desk",
     "lede": "Each portal has its own help articles, topics and AI assistant. Customer records in the demo portals are fabricated.",
     "demo": "Demo data",
-    "loadFailed": "Could not load the portals."
+    "loadFailed": "Could not load the portals.",
+    "enter": "Enter portal",
+    "enterAria": "Enter {{name}}",
+    "clearSearch": "Clear search"
   },
   "voice": {
     "startListening": "Voice input",
@@ -586,4 +589,3 @@
     "failed": "Could not transcribe audio. Please try again."
   }
 }
-

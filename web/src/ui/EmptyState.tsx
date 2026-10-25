@@ -10,7 +10,7 @@ export function EmptyState({ icon, title, children, actions, compact, as: H = 'h
   icon?: ReactNode; title: string; children?: ReactNode; actions?: ReactNode; compact?: boolean; as?: 'h1' | 'h2' | 'h3';
 }) {
   return (
-    <div className={`flex flex-col items-center text-center ${compact ? 'px-4 py-8' : 'rounded-md border border-dashed border-line-strong/50 bg-surface/40 px-6 py-12 sm:py-14'}`}>
+    <div className={`flex flex-col items-center text-center ${compact ? 'px-4 py-8' : 'justify-center rounded-md border border-line bg-surface px-6 py-12 shadow-card sm:py-14'}`}>
       {icon && (
         <div className={`relative mb-4 grid place-items-center rounded-full bg-surface-2 text-ink-2 ${compact ? 'size-12' : 'size-16'}`}>
           <svg aria-hidden viewBox="0 0 64 64" className="absolute inset-0 size-full -rotate-90 text-accent">

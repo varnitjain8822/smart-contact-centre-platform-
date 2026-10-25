@@ -16,7 +16,6 @@ import { Skeleton } from '../ui/Skeleton';
 import { SlaRing } from '../ui/SlaRing';
 import { StatCard } from '../ui/StatCard';
 import { buttonClass } from '../ui/Button';
-import { FeatureShowcase } from '../features/home/FeatureShowcase';
 import { CompanyDashboardWidget } from '../features/home/CompanyDashboardWidget';
 
 const OPEN: Status[] = ['ai_handling', 'in_progress', 'waiting_on_customer'];
@@ -91,7 +90,6 @@ export default function HomePage() {
           </div>
         </>
       )}
-      <FeatureShowcase />
     </div>
   );
 }
@@ -109,7 +107,8 @@ function QuickActions() {
   const { t } = useTranslation();
   return (
     <nav aria-label={t('home.quick')} className="flex flex-wrap gap-2">
-      <Link to="/tickets/new" className={buttonClass('primary')}><Plus aria-hidden size={18} /> {t('nav.newTicket')}</Link>
+      {/* the side nav carries New ticket from xl up; below it this is the only one */}
+      <Link to="/tickets/new" className={buttonClass('primary', 'xl:hidden')}><Plus aria-hidden size={18} /> {t('nav.newTicket')}</Link>
       <Link to="/assistant" className={buttonClass('ai')}><Sparkles aria-hidden size={17} /> {t('home.askAi')}</Link>
       <Link to="/help" className={buttonClass('secondary', 'max-md:hidden')}><LifeBuoy aria-hidden size={17} /> {t('nav.helpShort')}</Link>
     </nav>
