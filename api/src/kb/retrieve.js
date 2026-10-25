@@ -78,4 +78,16 @@ export async function searchArticles(query, { locale = 'en', limit = 3, filter =
   return localize(ranked, locale);
 }
 
-export const topArticles = (query, n = 3, locale = 'en', companyId = undefined) => searchArticles(query, { locale, limit: n, companyId });
+export async function topArticles(query, n = 6, locale = 'en', companyId = undefined) {
+  let res = await searchArticles(query, { locale, limit: n, companyId });
+  if (res.length < 3) {
+    const cId = await cid(companyId);
+    const existing = new Set(res.map((a) => a.slug));
+    const extra = await KbArticle.find({ companyId: cId, slug: { $nin: [...existing] } }).limit(6 - res.length).lean();
+    if (extra.length) {
+      const locExtra = await localize(extra, locale, cId);
+      res = [...res, ...locExtra];
+    }
+  }
+  return res;
+}

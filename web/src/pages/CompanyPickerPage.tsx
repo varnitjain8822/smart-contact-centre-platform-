@@ -22,6 +22,7 @@ import { RetryBlock } from '../ui/EmptyState';
 import { Loading, Skeleton } from '../ui/Skeleton';
 import { LanguageSwitch } from '../features/shell/LanguageSwitch';
 import { ThemeToggle } from '../features/shell/ThemeToggle';
+import { GoogleIcon } from '../features/auth/GoogleSsoButton';
 
 const companyDomainIcon = (slug: string) => {
   switch (slug) {
@@ -128,6 +129,13 @@ export default function CompanyPickerPage() {
             <div className="hidden lg:flex items-center gap-2 rounded-full border border-white/20 bg-white/15 px-3 py-1 text-xs backdrop-blur-xs text-white/95">
               <span>Universal Login:</span>
               <code className="font-mono font-bold bg-white/25 px-1.5 py-0.5 rounded text-[11px]">xyz@gmail.com / 1234</code>
+            </div>
+
+            <div className="hidden md:inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-white/20 px-3 py-1 text-xs font-semibold text-white shadow-xs">
+              <span className="grid size-4 place-items-center rounded-full bg-white text-[10px]">
+                <GoogleIcon size={12} />
+              </span>
+              <span>Google SSO Enabled</span>
             </div>
 
             <a
@@ -289,8 +297,11 @@ export default function CompanyPickerPage() {
                       <a href={`${basenameFor(c.slug)}/login`} className="hover:text-ink transition-colors flex items-center gap-1 font-medium">
                         <LogIn size={11} /> Login
                       </a>
+                      <a href={`${basenameFor(c.slug)}/login`} className="hover:text-emerald-600 transition-colors flex items-center gap-1 font-medium text-emerald-600 dark:text-emerald-400">
+                        <GoogleIcon size={12} /> Google SSO
+                      </a>
                       <a href={`${basenameFor(c.slug)}/help`} className="hover:text-ink transition-colors flex items-center gap-1 font-medium">
-                        <BookOpen size={11} /> Help Articles
+                        <BookOpen size={11} /> Help
                       </a>
                       <a href={`${basenameFor(c.slug)}/assistant`} className="hover:text-sky-600 transition-colors flex items-center gap-1 font-semibold text-sky-600">
                         <Mic size={11} /> Voice AI

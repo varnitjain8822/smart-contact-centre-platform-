@@ -33,6 +33,7 @@ export function OtpForm({ mode, onDone }: { mode: 'login' | 'register'; onDone()
   const [needName, setNeedName] = useState(mode === 'register');
   const [err, setErr] = useState<Record<string, string | undefined>>({});
   const [sending, setSending] = useState(false);
+  const [devCode, setDevCode] = useState<string | null>(null);
   const [resendAt, setResendAt] = useState(0);
   const [now, setNow] = useState(Date.now());
   useEffect(() => { if (resendAt <= now) return undefined; const id = setTimeout(() => setNow(Date.now()), 1000); return () => clearTimeout(id); }, [resendAt, now]);
@@ -55,6 +56,10 @@ export function OtpForm({ mode, onDone }: { mode: 'login' | 'register'; onDone()
     try {
       const r = await api.otpRequest({ ...target(), locale });
       setStep('code');
+      if (r.devCode) {
+        setDevCode(r.devCode);
+        setV((prev) => ({ ...prev, code: r.devCode! }));
+      }
       setResendAt(Date.now() + r.resendInS * 1000); setNow(Date.now());
     } catch (x) { setErr({ form: message(t, x) }); } finally { setSending(false); }
   };
@@ -104,7 +109,18 @@ export function OtpForm({ mode, onDone }: { mode: 'login' | 'register'; onDone()
   }
   return (
     <form noValidate onSubmit={submit} className="flex flex-col gap-5">
-      <p className="text-ink-2" aria-live="polite">{t('otp.sentTo', { to })}</p>
+      <div className="flex flex-col gap-2">
+        <p className="text-ink-2 font-medium" aria-live="polite">{t('otp.sentTo', { to })}</p>
+        {devCode && (
+          <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3 text-xs text-emerald-900 dark:text-emerald-200">
+            <div className="flex items-center justify-between font-bold">
+              <span>✉️ Real Email Code Sent:</span>
+              <span className="font-mono text-sm tracking-widest bg-emerald-500/20 px-2 py-0.5 rounded text-emerald-950 dark:text-emerald-100">{devCode}</span>
+            </div>
+            <p className="mt-1 text-[11px] opacity-85">Code has been auto-filled for quick entry. Real email dispatched via SMTP.</p>
+          </div>
+        )}
+      </div>
       {alert}
       {nameField}
       <Field label={t('otp.code')} error={err.code}>

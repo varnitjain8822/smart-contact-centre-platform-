@@ -68,9 +68,14 @@ services:
       CHATWOOT_URL: http://rails:3000
       WEB_ORIGIN: http://localhost:${WEB_PORT:-5173}
       PUBLIC_URL: http://localhost:${WEB_PORT:-5173}
-      UPLOAD_DIR: /data/uploads
       EMBED_CACHE_DIR: /data/models      # KB embedding model (~140 MB), downloaded on first boot
-      SMTP_URL: smtp://mailhog:1025
+      SMTP_URL: ${SMTP_URL:-smtp://mailhog:1025}
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASS: ${SMTP_PASS:-}
+      SMTP_SECURE: ${SMTP_SECURE:-false}
+      MAIL_FROM: ${MAIL_FROM:-SmartCC Support <support@smartcc.localhost>}
     stop_grace_period: 15s             # api drains SSE for SHUTDOWN_GRACE_MS (10s)
     ports:
       - 127.0.0.1:4000:4000

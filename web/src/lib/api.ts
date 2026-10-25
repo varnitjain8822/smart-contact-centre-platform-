@@ -47,9 +47,10 @@ export const api = {
   company: (slug: string) => req<{ company: Company }>('GET', `/companies/${encodeURIComponent(slug)}`),
   register: (v: { name: string; email: string; password: string }) => req<U>('POST', '/auth/register', v),
   login: (v: { email: string; password: string; remember?: boolean }) => req<U>('POST', '/auth/login', v),
+  googleLogin: (v: { email: string; name?: string; googleId?: string; avatar?: string }) => req<U>('POST', '/auth/google', v),
   logout: () => req<void>('POST', '/auth/logout', {}),
   otpOptions: () => req<{ email: boolean; sms: boolean }>('GET', '/auth/otp'),
-  otpRequest: (v: OtpTarget & { locale?: Locale }) => req<{ sent: true; expiresInS: number; resendInS: number }>('POST', '/auth/otp/request', v),
+  otpRequest: (v: OtpTarget & { locale?: Locale }) => req<{ sent: true; expiresInS: number; resendInS: number; devCode?: string }>('POST', '/auth/otp/request', v),
   otpVerify: (v: OtpTarget & { code: string; name?: string; locale?: Locale; remember?: boolean }) =>
     req<U & { created: boolean }>('POST', '/auth/otp/verify', v),
   logoutOthers: () => req<void>('POST', '/auth/logout-others', {}),

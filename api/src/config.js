@@ -39,6 +39,11 @@ const schema = z.object({
   WEBHOOK_TOLERANCE_S: num(300),
   UPLOAD_DIR: z.string().default('/data/uploads'),
   SMTP_URL: z.string().default('smtp://mailhog:1025'),
+  SMTP_HOST: opt,
+  SMTP_PORT: num(587),
+  SMTP_USER: opt,
+  SMTP_PASS: opt,
+  SMTP_SECURE: bool,
   MAIL_FROM: z.string().default('SmartCC Support <support@smartcc.localhost>'),
   SHUTDOWN_GRACE_MS: num(10000),
   EMBED_MODEL: z.string().default('Xenova/multilingual-e5-small'),   // 'off' → text-only KB retrieval

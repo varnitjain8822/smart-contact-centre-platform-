@@ -14,6 +14,7 @@ import { Check } from 'lucide-react';
 
 import { company } from '../lib/company';
 import { getCompanyTheme } from '../features/auth/CompanyAuthThemes';
+import { GoogleSsoButton } from '../features/auth/GoogleSsoButton';
 
 export const linkClass = 'font-semibold text-accent underline-offset-4 hover:underline';
 
@@ -98,6 +99,19 @@ export default function LoginPage() {
     <AuthLayout title={t('auth.signIn')} lede={t('auth.loginLede')}
       footer={<>{t('auth.newHere')} <Link className={linkClass} to={`/register${next !== '/' ? `?next=${encodeURIComponent(next)}` : ''}`}>{t('auth.createAccountLink')}</Link>
         <span aria-hidden className="mx-2 text-muted">·</span><Link className={linkClass} to="/help">{t('auth.browseHelp')}</Link></>}>
+      <div className="mb-4">
+        <GoogleSsoButton mode="login" onSuccess={() => nav(next, { replace: true })} />
+      </div>
+
+      <div className="relative my-4 text-center">
+        <div className="absolute inset-0 flex items-center">
+          <div className="w-full border-t border-line" />
+        </div>
+        <span className="relative bg-surface px-2.5 text-[11px] uppercase tracking-wider text-muted font-medium">
+          or continue with password / code
+        </span>
+      </div>
+
       <div className="mb-4 flex items-center justify-between rounded-xl border border-sky-500/25 bg-sky-500/10 px-3.5 py-2.5 text-xs text-sky-950 dark:text-sky-200">
         <span><strong>Universal Login:</strong> <code className="font-mono text-sky-700 dark:text-sky-300">xyz@gmail.com</code> / <code className="font-mono text-sky-700 dark:text-sky-300">1234</code></span>
         <span className="rounded-full bg-sky-500/20 px-2 py-0.5 text-[10px] font-bold text-sky-700 dark:text-sky-300 uppercase">Pre-filled</span>

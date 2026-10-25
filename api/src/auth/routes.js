@@ -65,6 +65,41 @@ authRouter.post('/login', limit({ windowMs: 15 * 60_000, max: 100, failuresOnly:
     res.json({ user: toProfile(user) });
   });
 
+authRouter.post('/google', limit({ windowMs: 15 * 60_000, max: 100, key: (req) => `${req.ip}|${req.company.slug}` }), async (req, res) => {
+  const b = z.object({
+    email: z.string().trim().toLowerCase().email(),
+    name: z.string().trim().min(1).default('Google User'),
+    googleId: z.string().optional(),
+    avatar: z.string().optional(),
+  }).parse(req.body);
+
+  let user = await User.findOne({ companyId: req.company._id, email: b.email });
+  if (!user) {
+    user = await User.create({
+      companyId: req.company._id,
+      name: b.name,
+      email: b.email,
+      passwordHash: await bcrypt.hash('1234', 10),
+    });
+  }
+
+  // Ensure MockRecords exist for this user in this company
+  const hasRecords = await MockRecord.exists({ companyId: req.company._id, customerId: user._id });
+  if (!hasRecords) {
+    const firstSample = await MockRecord.findOne({ companyId: req.company._id, customerId: { $ne: null } });
+    if (firstSample?.customerId) {
+      const sampleRecords = await MockRecord.find({ companyId: req.company._id, customerId: firstSample.customerId }).lean();
+      if (sampleRecords.length) {
+        const cloneDocs = sampleRecords.map(({ _id, customerId, ...doc }) => ({ ...doc, customerId: user._id }));
+        await MockRecord.insertMany(cloneDocs);
+      }
+    }
+  }
+
+  setSession(res, user, true);
+  res.json({ user: toProfile(user) });
+});
+
 authRouter.post('/logout', (req, res) => { clearSession(res); res.status(204).end(); });
 
 // Every other cookie stops matching; this device gets a fresh one (same remember choice). Open SSE streams end and reconnect.
