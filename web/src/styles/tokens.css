@@ -22,26 +22,26 @@
 
 :root, [data-theme='light'] {
   color-scheme: light;
-  --bg: 246 244 238; /* #F6F4EE */
-  --surface: 255 255 255; /* #FFFFFF */
-  --surface-2: 237 234 225; /* #EDEAE1 */
-  --ink: 23 26 35; /* #171A23 */
-  --ink-2: 75 82 99; /* #4B5263 */
-  --muted: 94 101 118; /* #5E6576 */
-  --line: 221 216 204; /* #DDD8CC */
-  --line-strong: 140 133 120; /* #8C8578 */
-  --accent: 61 53 200; /* #3D35C8 */
+  --bg: 248 250 252; /* #F8FAFC crisp slate-50 */
+  --surface: 255 255 255; /* #FFFFFF pure white */
+  --surface-2: 241 245 249; /* #F1F5F9 clean slate-100 */
+  --ink: 15 23 42; /* #0F172A slate-900 */
+  --ink-2: 51 65 85; /* #334155 slate-700 */
+  --muted: 100 116 139; /* #64748B slate-500 */
+  --line: 226 232 240; /* #E2E8F0 slate-200 */
+  --line-strong: 148 163 184; /* #94A3B8 slate-400 */
+  --accent: 0 160 236; /* #00A0EC vibrant fintech cyan-blue */
   --on-accent: 255 255 255; /* #FFFFFF */
-  --accent-soft: 231 229 251; /* #E7E5FB */
-  --ai: 109 40 217; /* #6D28D9 */
-  --ai-soft: 241 234 254; /* #F1EAFE */
-  --ok: 22 101 52; /* #166534 */
-  --warn: 146 64 14; /* #92400E */
-  --bad: 185 28 28; /* #B91C1C */
-  --info: 29 78 216; /* #1D4ED8 */
+  --accent-soft: 236 250 255; /* #ECFAFF soft cyan */
+  --ai: 14 165 233; /* #0EA5E9 sky-500 */
+  --ai-soft: 240 249 255; /* #F0F9FF sky-50 */
+  --ok: 16 185 129; /* #10B981 emerald-500 */
+  --warn: 245 158 11; /* #F59E0B amber-500 */
+  --bad: 239 68 68; /* #EF4444 red-500 */
+  --info: 2 132 199; /* #0284C7 sky-600 */
   --focus: var(--accent);
-  --shadow: 0 1px 2px rgb(23 26 35 / .06), 0 8px 24px rgb(23 26 35 / .06);
-  --shadow-pop: 0 2px 4px rgb(23 26 35 / .06), 0 16px 40px -8px rgb(23 26 35 / .18);
+  --shadow: 0 1px 3px 0 rgb(15 23 42 / .06), 0 4px 16px 0 rgb(15 23 42 / .04);
+  --shadow-pop: 0 12px 28px -4px rgb(15 23 42 / .12), 0 4px 12px -2px rgb(15 23 42 / .08);
 }
 
 [data-theme='dark'] {

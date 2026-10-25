@@ -1,6 +1,6 @@
 import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, SearchX } from 'lucide-react';
+import { ArrowLeft, Mic, SearchX, Sparkles } from 'lucide-react';
 import { useKbArticles } from '../features/kb/hooks';
 import { ArticleList } from '../features/kb/ArticleList';
 import { categoryIcon, CategoryGrid } from '../features/kb/CategoryGrid';
@@ -40,6 +40,24 @@ export default function HelpPage() {
       )}
       {!filtered && <p className="mt-3 max-w-xl text-lg text-ink-2">{t('help.lede')}</p>}
       <div className="mt-6"><KbSearchBox key={q} initial={q} size={filtered ? 'md' : 'lg'} /></div>
+
+      {!filtered && (
+        <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 rounded-2xl bg-gradient-to-r from-sky-500/10 via-sky-400/5 to-cyan-500/10 border border-sky-500/20 p-5 shadow-sm">
+          <div className="flex items-center gap-3.5">
+            <span className="grid size-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-r from-[#0082f5] to-[#00b9f5] text-white shadow-md">
+              <Mic aria-hidden size={22} />
+            </span>
+            <div>
+              <p className="font-bold text-base text-ink">{t('assistant.voiceHelpTitle', 'Ask anything with Voice AI')}</p>
+              <p className="text-sm text-ink-2">{t('assistant.voiceHelpDesc', 'Speak in Hindi or English — get instant answers from help articles & account records.')}</p>
+            </div>
+          </div>
+          <Link to="/assistant" className="inline-flex min-h-10 items-center gap-2 rounded-full bg-gradient-to-r from-[#0082f5] to-[#00b9f5] text-white px-5 text-sm font-semibold shadow hover:brightness-105 transition-all shrink-0">
+            <Sparkles aria-hidden size={15} />
+            <span>Try Voice Assistant &gt;</span>
+          </Link>
+        </div>
+      )}
 
       <section aria-labelledby="kb-list" className="mt-10">
         <h2 id="kb-list" className={filtered ? 'sr-only' : 'mb-4 text-xl font-semibold'}>{filtered ? t('help.articles') : t('help.browse')}</h2>

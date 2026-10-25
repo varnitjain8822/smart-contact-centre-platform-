@@ -16,6 +16,7 @@ import { Skeleton } from '../ui/Skeleton';
 import { SlaRing } from '../ui/SlaRing';
 import { StatCard } from '../ui/StatCard';
 import { buttonClass } from '../ui/Button';
+import { FeatureShowcase } from '../features/home/FeatureShowcase';
 
 const OPEN: Status[] = ['ai_handling', 'in_progress', 'waiting_on_customer'];
 const href = (s: Status[]) => `/tickets?status=${s.join(',')}`;
@@ -87,6 +88,7 @@ export default function HomePage() {
           </div>
         </>
       )}
+      <FeatureShowcase />
     </div>
   );
 }

@@ -4,7 +4,7 @@ import { api } from '../../lib/api';
 import { basenameFor, company, DEFAULT_COMPANY, type Company } from '../../lib/company';
 import { DropdownMenu, type MenuItem } from '../../ui/DropdownMenu';
 
-export function CompanySwitcher() {
+export function CompanySwitcher({ variant = 'default' }: { variant?: 'light' | 'default' } = {}) {
   const current = company();
   const q = useQuery({
     queryKey: ['companies'],
@@ -58,6 +58,8 @@ export function CompanySwitcher() {
     },
   ];
 
+  const isLight = variant === 'light';
+
   return (
     <DropdownMenu
       label="Switch company"
@@ -68,18 +70,22 @@ export function CompanySwitcher() {
         <button
           type="button"
           {...p}
-          className="group inline-flex items-center gap-2 rounded-pill py-1 text-left font-display text-xl font-bold tracking-tight text-ink transition-colors hover:text-accent"
+          className={`group inline-flex items-center gap-2 rounded-pill px-3 py-1.5 text-left font-display text-lg md:text-xl font-bold tracking-tight transition-all ${
+            isLight
+              ? 'bg-white/15 text-white hover:bg-white/25 border border-white/20 shadow-sm'
+              : 'text-ink hover:text-accent'
+          }`}
           title="Click to switch company"
         >
-          <svg aria-hidden width="26" height="26" viewBox="0 0 20 20" className="shrink-0 text-accent">
-            <circle cx="10" cy="10" r="7.5" fill="none" stroke="currentColor" strokeOpacity=".22" strokeWidth="3" />
+          <svg aria-hidden width="24" height="24" viewBox="0 0 20 20" className={`shrink-0 ${isLight ? 'text-white' : 'text-accent'}`}>
+            <circle cx="10" cy="10" r="7.5" fill="none" stroke="currentColor" strokeOpacity=".25" strokeWidth="3" />
             <circle cx="10" cy="10" r="7.5" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeDasharray="33 60" transform="rotate(-90 10 10)" />
           </svg>
-          <span className="truncate">{current.logoText || current.name}</span>
+          <span className="truncate max-w-[130px] sm:max-w-[200px]">{current.logoText || current.name}</span>
           <ChevronDown
             aria-hidden
             size={16}
-            className="shrink-0 text-ink-2 transition-transform duration-150 group-aria-expanded:rotate-180"
+            className={`shrink-0 transition-transform duration-150 group-aria-expanded:rotate-180 ${isLight ? 'text-white/80' : 'text-ink-2'}`}
           />
         </button>
       )}
