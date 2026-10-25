@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type FormEvent, type KeyboardEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ArrowUp, CircleAlert, Clock, RotateCcw, Sparkles, Square, ThumbsDown, ThumbsUp, TicketPlus, Volume2 } from 'lucide-react';
+import { ArrowUp, CircleAlert, Clock, RotateCcw, Sparkles, Square, ThumbsDown, ThumbsUp, TicketPlus, Volume2, VolumeX } from 'lucide-react';
 import { useMe } from '../auth/hooks';
 import { SourceChips } from '../tickets/SourceChips';
 import { Badge } from '../../ui/Badge';
@@ -22,6 +22,7 @@ export function AssistantChat({ compact, onNavigate }: { compact?: boolean; onNa
   const nav = useNavigate();
   const [text, setText] = useState('');
   const [said, setSaid] = useState('');
+  const [autoSpeak, setAutoSpeak] = useState(true);
   const input = useRef<HTMLTextAreaElement>(null);
   const end = useRef<HTMLDivElement>(null);
   const last = a.turns[a.turns.length - 1];
@@ -41,12 +42,12 @@ export function AssistantChat({ compact, onNavigate }: { compact?: boolean; onNa
   // Screen readers get each finished answer once, not every streamed token.
   useEffect(() => { if (last?.role === 'assistant' && !last.streaming && last.content) setSaid(last.content); }, [last?.streaming, last?.role, last?.content]);
 
-  // Read aloud automatically and listen again when in hands-free mode
+  // Read aloud automatically when autoSpeak is on or in hands-free mode
   const spokenTurnRef = useRef<string | null>(null);
   useEffect(() => {
     if (last?.role === 'assistant' && !last.streaming && last.content && last.id !== spokenTurnRef.current) {
       spokenTurnRef.current = last.id;
-      if (voice.handsFree) {
+      if (autoSpeak || voice.handsFree) {
         voice.speak(last.content, {
           onEnd: () => {
             if (voice.handsFree) {
@@ -56,7 +57,7 @@ export function AssistantChat({ compact, onNavigate }: { compact?: boolean; onNa
         });
       }
     }
-  }, [last?.id, last?.role, last?.streaming, last?.content, voice]);
+  }, [last?.id, last?.role, last?.streaming, last?.content, autoSpeak, voice]);
 
   const convert = () => { onNavigate?.(); nav('/tickets/new', { state: toTicket(a.turns) }); };
   const submit = (e?: FormEvent) => { e?.preventDefault(); if (!text.trim() || a.streaming) return; void a.send(text); setText(''); };
@@ -65,26 +66,46 @@ export function AssistantChat({ compact, onNavigate }: { compact?: boolean; onNa
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
-      <div className="flex flex-wrap items-center justify-between gap-1 border-b border-line px-3 py-1.5">
-        <HandsFreeToggle
-          enabled={voice.handsFree}
-          onToggle={(enabled) => {
-            voice.setHandsFree(enabled);
-            if (enabled && voice.state === 'idle' && !a.streaming) {
-              void voice.startListening();
-            } else if (!enabled) {
-              voice.stopAll();
-            }
-          }}
-          disabled={a.streaming}
-        />
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-line px-3 py-2 bg-surface/50">
+        <div className="flex items-center gap-2">
+          <HandsFreeToggle
+            enabled={voice.handsFree}
+            onToggle={(enabled) => {
+              voice.setHandsFree(enabled);
+              if (enabled && voice.state === 'idle' && !a.streaming) {
+                void voice.startListening();
+              } else if (!enabled) {
+                voice.stopAll();
+              }
+            }}
+            disabled={a.streaming}
+          />
+          <button
+            type="button"
+            onClick={() => {
+              if (voice.state === 'speaking') {
+                voice.stopSpeaking();
+              }
+              setAutoSpeak((prev) => !prev);
+            }}
+            className={`inline-flex min-h-8 items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold transition-all ${
+              autoSpeak
+                ? 'bg-sky-500/15 text-sky-700 dark:text-sky-300 border border-sky-500/30 shadow-xs'
+                : 'text-muted hover:bg-surface-2 border border-transparent'
+            }`}
+            title={autoSpeak ? 'Auto Voice Speech: ON (Click to mute)' : 'Auto Voice Speech: OFF (Click to unmute)'}
+          >
+            {autoSpeak ? <Volume2 size={13} className="text-sky-600 dark:text-sky-400" /> : <VolumeX size={13} />}
+            <span>{autoSpeak ? 'Voice Output ON' : 'Muted'}</span>
+          </button>
+        </div>
         {hasChat && (
           <div className="flex items-center gap-1">
-            <button type="button" onClick={() => { voice.stopAll(); a.clear(); }} className="inline-flex min-h-11 items-center gap-1.5 rounded-pill px-3 text-sm font-semibold text-ink-2 hover:bg-surface-2 hover:text-ink">
-              <RotateCcw aria-hidden size={15} /> {t('assistant.newChat')}
+            <button type="button" onClick={() => { voice.stopAll(); a.clear(); }} className="inline-flex min-h-8 items-center gap-1.5 rounded-pill px-2.5 text-xs font-semibold text-ink-2 hover:bg-surface-2 hover:text-ink">
+              <RotateCcw aria-hidden size={14} /> {t('assistant.newChat')}
             </button>
-            <button type="button" onClick={convert} className="inline-flex min-h-11 items-center gap-1.5 rounded-pill px-3 text-sm font-semibold text-accent hover:bg-accent-soft">
-              <TicketPlus aria-hidden size={16} /> {t('assistant.convert')}
+            <button type="button" onClick={convert} className="inline-flex min-h-8 items-center gap-1.5 rounded-pill px-2.5 text-xs font-semibold text-accent hover:bg-accent-soft">
+              <TicketPlus aria-hidden size={15} /> {t('assistant.convert')}
             </button>
           </div>
         )}
@@ -216,9 +237,15 @@ function AnswerBubble({ turn, onRate, onConvert, onSpeak }: { turn: Turn; onRate
       </div>
       {!turn.streaming && turn.content && (
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 pl-1">
-          <button type="button" onClick={() => onSpeak(turn.content)} aria-label={t('voice.speaking')} title={t('voice.speaking')}
-            className="grid size-11 place-items-center rounded-pill text-muted hover:bg-surface-2 hover:text-ink transition-colors">
-            <Volume2 aria-hidden size={17} />
+          <button
+            type="button"
+            onClick={() => onSpeak(turn.content)}
+            aria-label={t('voice.speaking')}
+            title="Listen aloud to this answer"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-sky-700 dark:text-sky-300 bg-sky-500/10 hover:bg-sky-500/20 border border-sky-500/25 transition-all shadow-2xs"
+          >
+            <Volume2 aria-hidden size={14} className="text-sky-600 dark:text-sky-400" />
+            <span>Listen Aloud</span>
           </button>
           <span className="text-sm text-muted">{t('assistant.helpful')}</span>
           {(['up', 'down'] as const).map((v) => {

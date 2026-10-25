@@ -76,6 +76,10 @@ export default function LoginPage() {
     <AuthLayout title={t('auth.signIn')} lede={t('auth.loginLede')}
       footer={<>{t('auth.newHere')} <Link className={linkClass} to={`/register${next !== '/' ? `?next=${encodeURIComponent(next)}` : ''}`}>{t('auth.createAccountLink')}</Link>
         <span aria-hidden className="mx-2 text-muted">·</span><Link className={linkClass} to="/help">{t('auth.browseHelp')}</Link></>}>
+      <div className="mb-4 flex items-center justify-between rounded-xl border border-sky-500/25 bg-sky-500/10 px-3.5 py-2.5 text-xs text-sky-950 dark:text-sky-200">
+        <span><strong>Universal Login:</strong> <code className="font-mono text-sky-700 dark:text-sky-300">xyz@gmail.com</code> / <code className="font-mono text-sky-700 dark:text-sky-300">1234</code></span>
+        <span className="rounded-full bg-sky-500/20 px-2 py-0.5 text-[10px] font-bold text-sky-700 dark:text-sky-300 uppercase">Pre-filled</span>
+      </div>
       {code ? <OtpForm mode="login" onDone={() => nav(next, { replace: true })} /> : (
         <AuthForm mode="login" pending={login.isPending} error={login.error as ApiError | null}
           onSubmit={(v) => login.mutateAsync({ email: v.email.trim(), password: v.password, remember: !!v.remember }).then(() => nav(next, { replace: true }), () => {})} />

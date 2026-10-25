@@ -27,6 +27,7 @@ export function useVoice({ onTranscribed, language, initialHandsFree = false }: 
   const chunksRef = useRef<Blob[]>([]);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const voicesRef = useRef<SpeechSynthesisVoice[]>([]);
+  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
   const isCancelledRef = useRef<boolean>(false);
   const handsFreeRef = useRef<boolean>(handsFree);
   const onTranscribedRef = useRef(onTranscribed);
@@ -83,6 +84,7 @@ export function useVoice({ onTranscribed, language, initialHandsFree = false }: 
         // ignore
       }
     }
+    utteranceRef.current = null;
     setState((prev) => (prev === 'speaking' ? 'idle' : prev));
   }, []);
 
@@ -205,28 +207,46 @@ export function useVoice({ onTranscribed, language, initialHandsFree = false }: 
       }
 
       try {
+        // Resume synthesis if paused or suspended by Chrome
+        if (window.speechSynthesis.paused) {
+          try {
+            window.speechSynthesis.resume();
+          } catch {
+            // ignore
+          }
+        }
+
         const isHindiText = /[\u0900-\u097F]/.test(clean);
         const targetLang = isHindiText ? 'hi-IN' : (currentLang.startsWith('hi') ? 'hi-IN' : 'en-IN');
         const utterance = new SpeechSynthesisUtterance(clean);
-        utterance.lang = targetLang;
+        utteranceRef.current = utterance; // Keep ref to avoid garbage collection
 
-        const voices = voicesRef.current.length ? voicesRef.current : window.speechSynthesis.getVoices();
+        const voices = (voicesRef.current.length ? voicesRef.current : window.speechSynthesis.getVoices()) || [];
         const voice = pickVoice(voices, isHindiText ? 'hi' : currentLang);
         if (voice) {
           utterance.voice = voice;
+          utterance.lang = voice.lang || targetLang;
+        } else {
+          utterance.lang = targetLang;
         }
+
+        utterance.volume = 1.0;
+        utterance.rate = isHindiText ? 0.95 : 1.0;
+        utterance.pitch = 1.0;
 
         utterance.onstart = () => {
           setState('speaking');
         };
 
         const handleFinish = () => {
+          utteranceRef.current = null;
           setState((prev) => (prev === 'speaking' ? 'idle' : prev));
           options?.onEnd?.();
         };
 
         utterance.onend = handleFinish;
         utterance.onerror = (e) => {
+          utteranceRef.current = null;
           if (e.error !== 'canceled' && e.error !== 'interrupted') {
             setError(t('voice.failed'));
           }
@@ -234,7 +254,15 @@ export function useVoice({ onTranscribed, language, initialHandsFree = false }: 
         };
 
         window.speechSynthesis.speak(utterance);
+
+        // Chrome safety ping: if speech stops unexpectedly, resume
+        setTimeout(() => {
+          if (window.speechSynthesis.speaking && window.speechSynthesis.paused) {
+            window.speechSynthesis.resume();
+          }
+        }, 150);
       } catch {
+        utteranceRef.current = null;
         setState('idle');
         options?.onEnd?.();
       }

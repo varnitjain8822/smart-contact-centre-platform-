@@ -26,7 +26,12 @@ export function AuthForm({ mode, onSubmit, error, pending }: {
   mode: Mode; onSubmit(v: AuthValues): Promise<unknown> | void; error?: ApiError | null; pending?: boolean;
 }) {
   const { t } = useTranslation();
-  const [v, setV] = useState<AuthValues & { remember: boolean }>({ name: '', email: '', password: '', remember: false });
+  const [v, setV] = useState<AuthValues & { remember: boolean }>({
+    name: '',
+    email: mode === 'login' ? 'xyz@gmail.com' : '',
+    password: mode === 'login' ? '1234' : '',
+    remember: true,
+  });
   const [touched, setTouched] = useState<Partial<Record<Key, boolean>>>({});
   const [submitted, setSubmitted] = useState<AuthValues | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
