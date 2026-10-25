@@ -10,7 +10,7 @@ const proxy = { '/api': { target, xfwd: true } };
 
 export default defineConfig({
   plugins: [react()],
-  server: { port: 5173, proxy },
-  preview: { port: 5173, host: '0.0.0.0', proxy },
+  server: { port: 5173, proxy, allowedHosts: true },
+  preview: { port: 5173, host: '0.0.0.0', proxy, allowedHosts: true },
   test: { environment: 'jsdom', setupFiles: ['./test/setup.ts'] },
 });
