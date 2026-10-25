@@ -181,8 +181,8 @@ export default function CompanyPickerPage() {
   return (
     <div className="ts relative min-h-dvh flex flex-col overflow-x-hidden">
       {/* Top bar — glass, hairline */}
-      <header className="ts-glass sticky top-0 z-40 border-x-0 border-t-0">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+      <header className="ts-glass sticky top-0 z-40 border-x-0 border-t-0 px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4">
           <a href="/" className="flex items-center gap-2.5">
             <span className="grid size-8 place-items-center rounded-lg border ts-hair bg-white/[.04]">
               <Sparkles size={16} className="text-white" />
@@ -200,10 +200,10 @@ export default function CompanyPickerPage() {
       </header>
 
       {/* Hero — two columns, like the ThinqScript landing: the pitch, and the product doing its job */}
-      <section className="relative overflow-hidden px-4 pb-16 pt-16 sm:px-6 lg:px-8 lg:pt-24">
+      <section className="relative flex min-h-[calc(100dvh-4rem)] items-center overflow-hidden px-4 py-16 sm:px-6 lg:px-8">
         <div aria-hidden className="ts-glow pointer-events-none absolute inset-0" />
         <div aria-hidden className="ts-grid pointer-events-none absolute inset-0" />
-        <div className="relative mx-auto grid max-w-7xl items-center gap-14 lg:grid-cols-[1.05fr_1fr]">
+        <div className="relative mx-auto grid w-full max-w-7xl items-center gap-14 lg:grid-cols-[1.05fr_1fr]">
           <div className="text-center lg:text-left">
             <p className="ts-label ts-rise">Unified customer support · {items.length || 6} workspaces</p>
             <h1 className="ts-rise ts-rise-2 mt-6 text-[clamp(40px,5.6vw,76px)] font-bold leading-[1.0] tracking-[-0.05em]">
@@ -225,39 +225,12 @@ export default function CompanyPickerPage() {
             </ul>
           </div>
 
-          {/* Product card: a ticket the AI resolves from the customer's records */}
-          <div aria-hidden className="ts-rise ts-rise-3 ts-glass relative mx-auto w-full max-w-[560px] overflow-hidden rounded-[18px] shadow-[0_40px_120px_-40px_rgba(120,145,190,.45)]">
-            <div className="flex items-center gap-3 border-b ts-hair px-4 py-3">
-              <span className="flex gap-1.5">{[0, 1, 2].map((i) => <span key={i} className="size-2.5 rounded-full bg-white/15" />)}</span>
-              <span className="ts-mono ts-ink3 text-xs">ticket SBI-2207</span>
-              <span className="ts-mono ml-auto text-[11px] text-[color:var(--ts-gold)]">STATE BANK · हिंदी</span>
-            </div>
-            <div className="flex flex-col gap-3 px-5 py-5 text-[13.5px] leading-relaxed">
-              <div className="max-w-[85%] self-end rounded-2xl rounded-br-md bg-white/[.07] px-4 py-2.5 text-white">
-                ATM se paise nahi nikle par account se ₹5,000 kat gaye.
-              </div>
-              <div className="ts-mono ts-ink3 flex items-center gap-2 text-[11px]">
-                <span className="size-1.5 rounded-full bg-emerald-400" /> checked passbook · txn 08:41 · ATM DEL-0193
-              </div>
-              <div className="max-w-[90%] rounded-2xl rounded-bl-md border ts-hair bg-white/[.03] px-4 py-2.5 text-[color:var(--ts-ink1)]">
-                Mil gaya — 25 Oct, 08:41 ka ₹5,000 debit failed dispense hai. Reversal shuru kar diya hai;
-                RBI ke T+5 niyam se 30 Oct tak wapas aa jaayega.
-              </div>
-              <div className="flex flex-wrap gap-2 pt-1">
-                <span className="ts-chip px-3 py-1 text-[11px]">Dispute raised · UPI/ATM</span>
-                <span className="ts-chip px-3 py-1 text-[11px]">Refund by 30 Oct</span>
-              </div>
-            </div>
-            <div className="flex items-center justify-between border-t ts-hair px-5 py-3 text-[12px]">
-              <span className="ts-ink3">Resolved by AI · no agent needed</span>
-              <span className="ts-mono text-white">38s</span>
-            </div>
-          </div>
+          <LiveChats />
         </div>
       </section>
 
       {/* Find a portal */}
-      <section id="portals" className="relative scroll-mt-20 px-4 pb-8 sm:px-6 lg:px-8">
+      <section id="portals" className="relative scroll-mt-20 px-4 pb-8 pt-16 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-4xl text-center">
           <p className="ts-label">Pick a portal</p>
           <h2 className="ts-steel mt-4 text-[clamp(28px,3.4vw,44px)] font-bold tracking-[-0.035em]">Six help desks, one platform</h2>
@@ -421,6 +394,76 @@ export default function CompanyPickerPage() {
           <p className="ts-mono">Groq Whisper Turbo · Chatwoot · MongoDB</p>
         </div>
       </footer>
+    </div>
+  );
+}
+
+type Chat = { ticket: string; org: string; ask: string; check: string; reply: string; chips: string[]; secs: string; by: string };
+const CHATS: Chat[] = [
+  { ticket: 'SBI-2207', org: 'STATE BANK · हिंदी', ask: 'ATM se paise nahi nikle par account se ₹5,000 kat gaye.',
+    check: 'checked passbook · txn 08:41 · ATM DEL-0193',
+    reply: 'Mil gaya — 25 Oct, 08:41 ka ₹5,000 debit failed dispense hai. Reversal shuru kar diya hai; RBI ke T+5 niyam se 30 Oct tak wapas aa jaayega.',
+    chips: ['Dispute raised · ATM', 'Refund by 30 Oct'], secs: '38s', by: 'Resolved by AI · no agent needed' },
+  { ticket: 'DEL-5512', org: 'DELHI AIRPORT · EN', ask: 'My bag didn\u2019t come off flight 6E2134. What do I do?',
+    check: 'checked PNR X7K2QD · belt 6 · T1 baggage desk',
+    reply: 'Found it: your bag missed the connection and arrives on 6E2178 at 19:40. A delivery to your address is booked for tonight.',
+    chips: ['PIR filed · DEL-BG-118', 'Home delivery tonight'], secs: '52s', by: 'Resolved by AI · no agent needed' },
+  { ticket: 'TSL-0931', org: 'TATA STEEL · हिंदी', ask: 'Mera Fe 550D ka truck kab tak pahunchega?',
+    check: 'checked dispatch LR JSR-LR-778201 · GPS',
+    reply: 'Truck JH-05-CD-4421 Ranchi stockyard se 42 km door hai. Aaj shaam 6:30 tak pahunch jaayega; mill test certificate attach kar diya hai.',
+    chips: ['ETA 18:30', 'MTC attached'], secs: '27s', by: 'Resolved by AI · no agent needed' },
+  { ticket: 'PSK-3380', org: 'PASSPORT SEVA · EN', ask: 'Police verification is pending for 3 weeks. Can someone check?',
+    check: 'checked file DL1069…· police station Saket',
+    reply: 'The report is with the Saket station since 4 Oct. I\u2019ve escalated it and handed this to an officer who will call you within a day.',
+    chips: ['Escalated', 'Handed to an agent'], secs: '1m 04s', by: 'Handed to a person · context passed' },
+];
+
+/** The hero's product card: conversations play one after another (ask → records check → typing → answer). */
+function LiveChats() {
+  const [i, setI] = useState(0);
+  const [step, setStep] = useState(0);
+  useEffect(() => {
+    const still = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    if (still) { setStep(5); return; }
+    const delays = [500, 900, 900, 1500, 900, 3200];
+    const id = window.setTimeout(() => {
+      if (step < 5) setStep(step + 1);
+      else { setStep(0); setI((n) => (n + 1) % CHATS.length); }
+    }, delays[step]);
+    return () => window.clearTimeout(id);
+  }, [step]);
+  const c = CHATS[i] ?? CHATS[0]!;
+  const show = (n: number) => (step >= n ? 'opacity-100 translate-y-0' : 'pointer-events-none opacity-0 translate-y-2');
+  return (
+    <div aria-hidden className="ts-rise ts-rise-3 ts-glass relative mx-auto w-full max-w-[560px] overflow-hidden rounded-[18px] shadow-[0_40px_120px_-40px_rgba(120,145,190,.45)]">
+      <div className="flex items-center gap-3 border-b ts-hair px-4 py-3">
+        <span className="flex gap-1.5">{[0, 1, 2].map((d) => <span key={d} className="size-2.5 rounded-full bg-white/15" />)}</span>
+        <span className="ts-mono ts-ink3 text-xs">ticket {c.ticket}</span>
+        <span className="ts-mono ml-auto text-[11px] text-[color:var(--ts-gold)]">{c.org}</span>
+      </div>
+      <div className="flex min-h-[300px] flex-col gap-3 px-5 py-5 text-[13.5px] leading-relaxed">
+        <div className={`max-w-[85%] self-end rounded-2xl rounded-br-md bg-white/[.07] px-4 py-2.5 text-white transition-all duration-500 ${show(1)}`}>{c.ask}</div>
+        <div className={`ts-mono ts-ink3 flex items-center gap-2 text-[11px] transition-all duration-500 ${show(2)}`}>
+          <span className="size-1.5 rounded-full bg-emerald-400" /> {c.check}
+        </div>
+        {step === 3 ? (
+          <div className="flex w-16 gap-1.5 rounded-2xl rounded-bl-md border ts-hair bg-white/[.03] px-4 py-3">
+            {[0, 1, 2].map((d) => <span key={d} className="size-1.5 animate-bounce rounded-full bg-white/50" style={{ animationDelay: `${d * 120}ms` }} />)}
+          </div>
+        ) : (
+          <div className={`max-w-[90%] rounded-2xl rounded-bl-md border ts-hair bg-white/[.03] px-4 py-2.5 text-[color:var(--ts-ink1)] transition-all duration-500 ${show(4)}`}>{c.reply}</div>
+        )}
+        <div className={`flex flex-wrap gap-2 pt-1 transition-all duration-500 ${show(5)}`}>
+          {c.chips.map((x) => <span key={x} className="ts-chip px-3 py-1 text-[11px]">{x}</span>)}
+        </div>
+      </div>
+      <div className="flex items-center justify-between border-t ts-hair px-5 py-3 text-[12px]">
+        <span className={`ts-ink3 transition-opacity duration-500 ${step >= 5 ? 'opacity-100' : 'opacity-0'}`}>{c.by}</span>
+        <span className="flex items-center gap-3">
+          <span className="flex gap-1">{CHATS.map((_, n) => <span key={n} className={`h-1 rounded-full transition-all ${n === i ? 'w-4 bg-white' : 'w-1.5 bg-white/20'}`} />)}</span>
+          <span className={`ts-mono text-white transition-opacity duration-500 ${step >= 5 ? 'opacity-100' : 'opacity-0'}`}>{c.secs}</span>
+        </span>
+      </div>
     </div>
   );
 }
