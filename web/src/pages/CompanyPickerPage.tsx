@@ -18,8 +18,6 @@ import {
   Mail,
   ScanFace,
   Timer,
-  Check,
-  Copy,
   Database,
   ExternalLink,
   Headphones,
@@ -150,7 +148,6 @@ export default function CompanyPickerPage() {
   const { t, i18n } = useTranslation();
   const [query, setQuery] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('all');
-  const [copied, setCopied] = useState(false);
   const adminUrl = useAdminUrl();
 
   const q = useQuery({ queryKey: ['companies'], queryFn: () => api.companies().then((r) => r.items as CompanyItem[]) });
@@ -160,12 +157,6 @@ export default function CompanyPickerPage() {
   }, [t, i18n.language]);
 
   const items = q.data ?? [];
-
-  const handleCopyCredentials = () => {
-    navigator.clipboard?.writeText('xyz@gmail.com');
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2500);
-  };
 
   const filteredItems = useMemo(() => {
     return items.filter((c) => {
@@ -192,34 +183,18 @@ export default function CompanyPickerPage() {
       {/* Top bar — glass, hairline */}
       <header className="ts-glass sticky top-0 z-40 border-x-0 border-t-0">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-3">
-            <span className="grid size-9 place-items-center rounded-xl border ts-hair bg-white/[.04]">
-              <Sparkles size={18} className="text-white" />
+          <a href="/" className="flex items-center gap-2.5">
+            <span className="grid size-8 place-items-center rounded-lg border ts-hair bg-white/[.04]">
+              <Sparkles size={16} className="text-white" />
             </span>
-            <div className="leading-none">
-              <span className="ts-steel text-[19px] font-semibold tracking-[-0.03em]">SmartCC</span>
-              <span className="ts-label mt-1 block text-[9.5px] tracking-[.28em]">Enterprise Hub</span>
-            </div>
-          </div>
+            <span className="ts-steel text-[19px] font-semibold tracking-[-0.03em]">SmartCC</span>
+          </a>
 
-          <div className="flex items-center gap-2 sm:gap-2.5">
-            <button
-              type="button"
-              onClick={handleCopyCredentials}
-              title="Click to copy universal demo email"
-              className="ts-chip hidden lg:inline-flex px-3.5 py-1.5 text-xs"
-            >
-              <span className="ts-ink3">Demo login</span>
-              <code className="ts-mono text-[11px] text-white">xyz@gmail.com / 1234</code>
-              {copied ? <Check size={12} strokeWidth={3} className="text-emerald-400" /> : <Copy size={12} className="ts-ink3" />}
-            </button>
-            <span className="ts-chip hidden sm:inline-flex px-3 py-1.5 text-xs">
-              <GoogleIcon size={13} /> Google SSO
-            </span>
-            <a href={adminUrl} target="_blank" rel="noopener noreferrer" className="ts-btn ts-btn--steel !h-9 !rounded-full !px-4 !text-xs">
-              <ShieldCheck size={13} /> Admin Portal <ExternalLink size={12} className="opacity-60" />
+          <div className="flex items-center gap-2">
+            <a href={adminUrl} target="_blank" rel="noopener noreferrer" className="ts-btn ts-btn--steel !h-9 !rounded-full !px-4 !text-[13px]">
+              Admin portal <ExternalLink size={12} className="opacity-60" />
             </a>
-            <div className="rounded-full bg-white/90"><LanguageSwitch variant="default" /></div>
+            <LanguageSwitch variant="light" />
           </div>
         </div>
       </header>
