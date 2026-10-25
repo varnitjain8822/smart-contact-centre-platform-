@@ -26,6 +26,7 @@ import { RetryBlock } from '../ui/EmptyState';
 import { Loading, Skeleton } from '../ui/Skeleton';
 import { LanguageSwitch } from '../features/shell/LanguageSwitch';
 import { GoogleIcon } from '../features/auth/GoogleSsoButton';
+import { useAdminUrl } from '../lib/adminUrl';
 
 interface CompanyItem {
   slug: string;
@@ -135,6 +136,7 @@ export default function CompanyPickerPage() {
   const [query, setQuery] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('all');
   const [copied, setCopied] = useState(false);
+  const adminUrl = useAdminUrl();
 
   const q = useQuery({ queryKey: ['companies'], queryFn: () => api.companies().then((r) => r.items as CompanyItem[]) });
 
@@ -227,13 +229,14 @@ export default function CompanyPickerPage() {
 
             {/* Admin Desk Link */}
             <a
-              href="http://localhost:3310"
+              href={adminUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-full border border-slate-300 bg-white px-3.5 py-1.5 text-xs font-bold text-slate-800 hover:bg-slate-50 hover:border-slate-400 transition-all shadow-2xs"
+              className="inline-flex items-center gap-1.5 rounded-full border border-sky-300 bg-sky-50 px-3.5 py-1.5 text-xs font-bold text-sky-900 hover:bg-sky-100 hover:border-sky-400 transition-all shadow-2xs"
             >
+              <ShieldCheck size={13} className="text-sky-600" />
               <span>Admin Portal</span>
-              <ExternalLink size={12} className="text-slate-500" />
+              <ExternalLink size={12} className="text-sky-500" />
             </a>
 
             <LanguageSwitch variant="default" />
@@ -490,14 +493,25 @@ export default function CompanyPickerPage() {
               </p>
             </div>
 
-            <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-xs hover:border-slate-300 transition-all">
-              <span className="grid size-12 place-items-center rounded-2xl bg-amber-50 text-amber-600 mb-4 border border-amber-100">
-                <Headphones size={22} />
-              </span>
-              <h3 className="font-display font-bold text-base text-slate-900">Chatwoot Agent CRM</h3>
-              <p className="mt-2 text-xs text-slate-600 leading-relaxed">
-                Dedicated company inboxes, live webhooks, SLA enforcement, and seamless bot-to-human agent escalation in real-time.
-              </p>
+            <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-xs hover:border-slate-300 transition-all flex flex-col justify-between">
+              <div>
+                <span className="grid size-12 place-items-center rounded-2xl bg-amber-50 text-amber-600 mb-4 border border-amber-100">
+                  <Headphones size={22} />
+                </span>
+                <h3 className="font-display font-bold text-base text-slate-900">Chatwoot Agent CRM</h3>
+                <p className="mt-2 text-xs text-slate-600 leading-relaxed">
+                  Dedicated company inboxes, live webhooks, SLA enforcement, and seamless bot-to-human agent escalation in real-time.
+                </p>
+              </div>
+              <a
+                href={adminUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-amber-700 hover:text-amber-800 transition-colors"
+              >
+                <span>Open Agent Workspace</span>
+                <ArrowRight size={13} />
+              </a>
             </div>
           </div>
         </section>

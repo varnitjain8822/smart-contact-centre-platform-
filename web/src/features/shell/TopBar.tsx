@@ -1,12 +1,13 @@
 import { Link, NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Plus, Search, Sparkles } from 'lucide-react';
+import { Plus, Search, ShieldCheck, Sparkles } from 'lucide-react';
 import type { User } from '../../lib/types';
 import { NAV } from './SideNav';
 import { LanguageSwitch } from './LanguageSwitch';
 import { LiveBell } from './NotificationBell';
 import { UserMenu } from './UserMenu';
 import { company } from '../../lib/company';
+import { useAdminUrl } from '../../lib/adminUrl';
 
 export const isMac = () => typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform);
 
@@ -46,6 +47,7 @@ export const companyTopBarGradient = companyBrandGradient;
 export function TopBar({ user, onSearch, onSignOut }: { user: User | null | undefined; onSearch(): void; onSignOut(): void }) {
   const { t } = useTranslation();
   const current = company();
+  const adminUrl = useAdminUrl();
   const shortcut = isMac() ? '⌘K' : 'Ctrl K';
   const brandGradient = companyBrandGradient(current.slug);
 
@@ -126,6 +128,16 @@ export function TopBar({ user, onSearch, onSignOut }: { user: User | null | unde
 
           {user ? (
             <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+              <a
+                href={adminUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hidden xl:inline-flex items-center gap-1.5 rounded-full border border-slate-200/90 bg-slate-50 hover:bg-slate-100 text-slate-700 px-3 py-1.5 text-xs font-bold shadow-2xs transition-all shrink-0 whitespace-nowrap"
+                title="Open Chatwoot Agent & Admin Workspace"
+              >
+                <ShieldCheck aria-hidden size={13} className="text-sky-600 shrink-0" />
+                <span>Admin Desk</span>
+              </a>
               <LiveBell />
               <Link
                 to="/tickets/new"

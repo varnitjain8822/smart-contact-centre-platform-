@@ -1,18 +1,21 @@
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { LogOut, UserRound } from 'lucide-react';
+import { LogOut, ShieldCheck, UserRound } from 'lucide-react';
 import type { User } from '../../lib/types';
 import { Avatar } from '../../ui/Avatar';
 import { DropdownMenu } from '../../ui/DropdownMenu';
+import { useAdminUrl } from '../../lib/adminUrl';
 
 export function UserMenu({ user, onSignOut }: { user: User; onSignOut(): void }) {
   const { t } = useTranslation();
   const nav = useNavigate();
+  const adminUrl = useAdminUrl();
   return (
     <DropdownMenu label={t('shell.account')}
       header={<><p className="truncate font-semibold text-ink">{user.name}</p><p className="truncate text-sm text-muted">{user.email}</p></>}
       items={[
         { label: t('nav.profile'), icon: UserRound, onSelect: () => nav('/profile') },
+        { label: 'Admin Desk / CRM', icon: ShieldCheck, onSelect: () => window.open(adminUrl, '_blank') },
         'separator',
         { label: t('auth.signOut'), icon: LogOut, danger: true, onSelect: onSignOut },
       ]}
