@@ -8,6 +8,29 @@ import { RetryBlock } from '../ui/EmptyState';
 import { Loading, Skeleton } from '../ui/Skeleton';
 import { LanguageSwitch } from '../features/shell/LanguageSwitch';
 import { ThemeToggle } from '../features/shell/ThemeToggle';
+import { Building2, Landmark, Plane, ShieldCheck, Sparkles, Truck } from 'lucide-react';
+
+const companyDomainIcon = (slug: string) => {
+  switch (slug) {
+    case 'sbi': return <Landmark size={22} className="text-white" />;
+    case 'tatasteel': return <Truck size={22} className="text-white" />;
+    case 'delhiairport': return <Plane size={22} className="text-white" />;
+    case 'passportseva': return <ShieldCheck size={22} className="text-white" />;
+    case 'infosys': return <Building2 size={22} className="text-white" />;
+    default: return <Sparkles size={22} className="text-white" />;
+  }
+};
+
+const companyBadgeLabel = (slug: string) => {
+  switch (slug) {
+    case 'sbi': return 'Banking & Finance';
+    case 'tatasteel': return 'Steel & Supply Chain';
+    case 'delhiairport': return 'Aviation & Airport Ops';
+    case 'passportseva': return 'Official Consular Portal';
+    case 'infosys': return 'Enterprise IT & Services';
+    default: return 'Omnichannel AI Support';
+  }
+};
 
 /** `/`: one card per company portal (name, sector, tagline, brand swatch). Plain links: each portal is its own page load. */
 export default function CompanyPickerPage() {
@@ -33,19 +56,30 @@ export default function CompanyPickerPage() {
             {q.data.map((c) => (
               <li key={c.slug} className="min-w-0">
                 <a href={basenameFor(c.slug)}
-                  className="group flex h-full min-w-0 flex-col rounded-md border border-line bg-surface p-5 shadow-card transition-colors hover:border-line-strong">
-                  <span className="flex min-w-0 w-full items-center gap-3">
-                    <span aria-hidden className="size-10 shrink-0 rounded-sm" style={{ background: `linear-gradient(135deg, ${c.primaryColor}, ${c.accentColor})` }} />
-                    <span className="min-w-0 flex-1">
-                      <span className="block truncate font-display text-lg font-bold text-ink">{c.name}</span>
-                      <span className="block text-sm text-muted">{c.sector}</span>
+                  className="group flex h-full min-w-0 flex-col rounded-2xl border border-line bg-surface p-6 shadow-sm transition-all hover:border-sky-500/50 hover:shadow-md hover:-translate-y-0.5">
+                  <div className="flex items-center justify-between">
+                    <span
+                      aria-hidden
+                      className="grid size-12 shrink-0 place-items-center rounded-2xl shadow-sm"
+                      style={{ background: `linear-gradient(135deg, ${c.primaryColor}, ${c.accentColor})` }}
+                    >
+                      {companyDomainIcon(c.slug)}
                     </span>
-                  </span>
-                  <span className="mt-3 flex-1 text-[15px] text-ink-2">{c.tagline}</span>
-                  <span className="mt-4 flex items-center justify-between text-sm font-semibold">
-                    {c.demo ? <span className="rounded-pill bg-surface-2 px-2.5 py-1 text-xs text-ink-2">{t('picker.demo')}</span> : <span />}
-                    <ArrowRight aria-hidden size={18} className="text-ink-2 transition-transform group-hover:translate-x-0.5" />
-                  </span>
+                    <span className="rounded-full bg-surface-2 px-2.5 py-0.5 text-[11px] font-bold text-muted border border-line/60">
+                      {companyBadgeLabel(c.slug)}
+                    </span>
+                  </div>
+                  <div className="mt-4 flex-1 min-w-0">
+                    <span className="block truncate font-display text-xl font-extrabold text-ink group-hover:text-sky-600 transition-colors">
+                      {c.name}
+                    </span>
+                    <span className="block text-xs font-semibold text-muted uppercase tracking-wider mt-0.5">{c.sector}</span>
+                    <p className="mt-2.5 text-sm text-ink-2 leading-relaxed">{c.tagline}</p>
+                  </div>
+                  <div className="mt-5 flex items-center justify-between pt-3 border-t border-line/50 text-xs font-bold text-sky-600">
+                    <span>Enter {c.name} Portal &gt;</span>
+                    <ArrowRight aria-hidden size={16} className="transition-transform group-hover:translate-x-1" />
+                  </div>
                 </a>
               </li>
             ))}
