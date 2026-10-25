@@ -25,13 +25,32 @@ export function Logo() {
   );
 }
 
+export function companyTopBarGradient(slug: string): string {
+  switch (slug) {
+    case 'sbi':
+      return 'from-[#002D62] via-[#004b99] to-[#00A3E0] border-sky-400/30';
+    case 'tatasteel':
+      return 'from-[#0f172a] via-[#1e293b] to-[#0284c7] border-slate-700/40';
+    case 'delhiairport':
+      return 'from-[#0284c7] via-[#0369a1] to-[#0f172a] border-sky-400/30';
+    case 'passportseva':
+      return 'from-[#0a1931] via-[#0c1e3d] to-[#150050] border-amber-500/20';
+    case 'infosys':
+      return 'from-[#005587] via-[#007cc3] to-[#0091d5] border-sky-400/30';
+    default:
+      return 'from-[#0082f5] via-[#00b9f5] to-[#00d2ff] border-sky-400/20';
+  }
+}
+
 /** All widths. Logo + inline nav below 1280 (SideNav takes over above); search, language, bell and account on the right. */
 export function TopBar({ user, onSearch, onSignOut }: { user: User | null | undefined; onSearch(): void; onSignOut(): void }) {
   const { t } = useTranslation();
+  const current = company();
+  const gradientClass = companyTopBarGradient(current.slug);
   const shortcut = isMac() ? '⌘K' : 'Ctrl K';
 
   return (
-    <header className="sticky top-0 z-30 border-b border-sky-400/20 bg-gradient-to-r from-[#0082f5] via-[#00b9f5] to-[#00d2ff] text-white shadow-sm print:hidden">
+    <header className={`sticky top-0 z-30 border-b bg-gradient-to-r ${gradientClass} text-white shadow-sm print:hidden transition-colors duration-300`}>
       <div className="mx-auto flex h-14 md:h-16 items-center justify-between gap-2 px-3 sm:px-6 xl:px-10">
         <div className="flex items-center gap-2">
           <CompanySwitcher variant="light" />

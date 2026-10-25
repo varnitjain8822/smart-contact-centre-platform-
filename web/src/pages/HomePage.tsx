@@ -17,6 +17,7 @@ import { SlaRing } from '../ui/SlaRing';
 import { StatCard } from '../ui/StatCard';
 import { buttonClass } from '../ui/Button';
 import { FeatureShowcase } from '../features/home/FeatureShowcase';
+import { CompanyDashboardWidget } from '../features/home/CompanyDashboardWidget';
 
 const OPEN: Status[] = ['ai_handling', 'in_progress', 'waiting_on_customer'];
 const href = (s: Status[]) => `/tickets?status=${s.join(',')}`;
@@ -44,6 +45,8 @@ export default function HomePage() {
         </div>
         <QuickActions />
       </div>
+
+      <CompanyDashboardWidget />
 
       {fresh ? <FirstRun popular={o.popularArticles} name={first} /> : (
         <>
