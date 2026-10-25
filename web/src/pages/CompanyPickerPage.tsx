@@ -188,119 +188,78 @@ export default function CompanyPickerPage() {
   }, [items, query, selectedFilter]);
 
   return (
-    <div className="min-h-dvh bg-slate-50 text-slate-900 flex flex-col font-sans selection:bg-sky-500 selection:text-white">
-      {/* Top Navbar */}
-      <header className="sticky top-0 z-40 border-b border-slate-200/80 bg-white/95 backdrop-blur-md shadow-2xs">
+    <div className="ts relative min-h-dvh flex flex-col overflow-x-hidden">
+      {/* Top bar — glass, hairline */}
+      <header className="ts-glass sticky top-0 z-40 border-x-0 border-t-0">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-          {/* Logo Brand */}
           <div className="flex items-center gap-3">
-            <span className="grid size-10 place-items-center rounded-xl bg-gradient-to-tr from-sky-600 via-blue-600 to-indigo-600 text-white shadow-md shadow-sky-500/20">
-              <Sparkles size={20} />
+            <span className="grid size-9 place-items-center rounded-xl border ts-hair bg-white/[.04]">
+              <Sparkles size={18} className="text-white" />
             </span>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="font-display font-black text-xl tracking-tight leading-none text-slate-900">
-                  SmartCC
-                </span>
-                <span className="rounded-full bg-sky-100 border border-sky-300/60 px-2 py-0.5 text-[10px] font-bold text-sky-800 uppercase tracking-wide">
-                  Enterprise
-                </span>
-              </div>
-              <span className="text-[11px] text-slate-500 font-medium block mt-0.5">
-                Multi-Tenant Operations Network
-              </span>
+            <div className="leading-none">
+              <span className="ts-steel text-[19px] font-semibold tracking-[-0.03em]">SmartCC</span>
+              <span className="ts-label mt-1 block text-[9.5px] tracking-[.28em]">Enterprise Hub</span>
             </div>
           </div>
 
-          {/* Quick Info & Actions */}
-          <div className="flex items-center gap-2.5 sm:gap-3.5">
-            {/* Universal Login Badge with Copy */}
+          <div className="flex items-center gap-2 sm:gap-2.5">
             <button
               type="button"
               onClick={handleCopyCredentials}
               title="Click to copy universal demo email"
-              className="hidden lg:flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 hover:bg-slate-100/80 px-3.5 py-1.5 text-xs text-slate-700 transition-all shadow-2xs active:scale-95"
+              className="ts-chip hidden lg:inline-flex px-3.5 py-1.5 text-xs"
             >
-              <span className="text-slate-500 font-medium">Universal Login:</span>
-              <code className="font-mono font-bold text-sky-700 bg-sky-50 px-2 py-0.5 rounded border border-sky-200/60 text-[11px]">
-                xyz@gmail.com / 1234
-              </code>
-              {copied ? (
-                <span className="flex items-center gap-1 text-[11px] font-bold text-emerald-600">
-                  <Check size={12} strokeWidth={3} /> Copied!
-                </span>
-              ) : (
-                <Copy size={12} className="text-slate-400 hover:text-slate-600" />
-              )}
+              <span className="ts-ink3">Demo login</span>
+              <code className="ts-mono text-[11px] text-white">xyz@gmail.com / 1234</code>
+              {copied ? <Check size={12} strokeWidth={3} className="text-emerald-400" /> : <Copy size={12} className="ts-ink3" />}
             </button>
-
-            {/* Google SSO Indicator */}
-            <div className="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-2xs">
-              <span className="grid size-4 place-items-center">
-                <GoogleIcon size={13} />
-              </span>
-              <span>Google SSO Ready</span>
-            </div>
-
-            {/* Admin Desk Link */}
-            <a
-              href={adminUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-full border border-sky-300 bg-sky-50 px-3.5 py-1.5 text-xs font-bold text-sky-900 hover:bg-sky-100 hover:border-sky-400 transition-all shadow-2xs"
-            >
-              <ShieldCheck size={13} className="text-sky-600" />
-              <span>Admin Portal</span>
-              <ExternalLink size={12} className="text-sky-500" />
+            <span className="ts-chip hidden sm:inline-flex px-3 py-1.5 text-xs">
+              <GoogleIcon size={13} /> Google SSO
+            </span>
+            <a href={adminUrl} target="_blank" rel="noopener noreferrer" className="ts-btn ts-btn--steel !h-9 !rounded-full !px-4 !text-xs">
+              <ShieldCheck size={13} /> Admin Portal <ExternalLink size={12} className="opacity-60" />
             </a>
-
-            <LanguageSwitch variant="default" />
+            <div className="rounded-full bg-white/90"><LanguageSwitch variant="default" /></div>
           </div>
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="relative overflow-hidden bg-white border-b border-slate-200/80 pt-12 pb-10 px-4 sm:px-6 lg:px-8">
-        <div className="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:20px_20px] opacity-60 pointer-events-none" />
-
+      {/* Hero */}
+      <section className="relative px-4 sm:px-6 lg:px-8 pt-20 pb-14">
+        <div aria-hidden className="ts-glow pointer-events-none absolute inset-0" />
+        <div aria-hidden className="ts-grid pointer-events-none absolute inset-0" />
         <div className="relative mx-auto max-w-4xl text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-sky-200 bg-sky-50 px-4 py-1.5 text-xs font-bold text-sky-800 shadow-2xs">
-            <Zap size={14} className="text-sky-600" />
-            <span>Unified Customer Support Platform • 6 Connected Enterprise Workspaces</span>
-          </div>
-
-          <h1 className="mt-5 font-display text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-slate-900 leading-[1.12]">
-            One Intelligent Platform for India's Critical Operations
+          <p className="ts-label">Unified customer support · 6 connected workspaces</p>
+          <h1 className="mt-6 text-[clamp(38px,6vw,72px)] font-bold leading-[1.02] tracking-[-0.045em]">
+            <span className="block text-white">One platform for</span>
+            <span className="ts-dim block">India's critical operations</span>
           </h1>
-
-          <p className="mt-4 text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
-            Select any enterprise portal below to experience custom industry workflows, real-time database customer record lookups, and bilingual Hindi & English Voice AI.
+          <p className="ts-ink2 mx-auto mt-6 max-w-2xl text-[17px] leading-relaxed">
+            Pick a portal to try its industry workflows, live customer record lookups and bilingual Hindi &amp; English voice AI.
           </p>
 
-          {/* Search Box */}
-          <div className="mt-8 mx-auto max-w-xl relative">
-            <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+          <div className="relative mx-auto mt-10 max-w-xl">
+            <Search size={18} className="ts-ink3 absolute left-4 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search by company, sector, or workflow (e.g. SBI, Airport, Tata Steel, Passport, IT)..."
-              className="w-full rounded-2xl border border-slate-300 bg-white py-3.5 pl-11 pr-10 text-sm text-slate-900 placeholder:text-slate-400 shadow-sm transition-all focus:border-sky-500 focus:outline-none focus:ring-4 focus:ring-sky-500/15"
+              placeholder="Search a company, sector or workflow — SBI, airport, passport…"
+              className="ts-field w-full rounded-2xl py-3.5 pl-11 pr-10 text-sm"
             />
             {query && (
               <button
                 type="button"
                 onClick={() => setQuery('')}
                 aria-label={t('picker.clearSearch')}
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 bg-slate-100 hover:bg-slate-200 size-5 rounded-full grid place-items-center"
+                className="absolute right-3.5 top-1/2 grid size-5 -translate-y-1/2 place-items-center rounded-full bg-white/10 text-white/70 hover:bg-white/20"
               >
                 <X size={12} strokeWidth={3} />
               </button>
             )}
           </div>
 
-          {/* Filter Pills */}
-          <div className="mt-5 flex flex-wrap items-center justify-center gap-2 text-xs font-semibold">
+          <div className="mt-5 flex flex-wrap items-center justify-center gap-2 text-xs font-medium">
             {[
               { id: 'all', label: `All portals (${items.length || 6})`, icon: null },
               { id: 'banking', label: 'Banking & Finance', icon: Landmark },
@@ -309,18 +268,8 @@ export default function CompanyPickerPage() {
               { id: 'govt', label: 'Passport & Public', icon: ScanFace },
               { id: 'tech', label: 'Enterprise IT & SMB', icon: Laptop },
             ].map((f) => (
-              <button
-                key={f.id}
-                type="button"
-                onClick={() => setSelectedFilter(f.id)}
-                aria-pressed={selectedFilter === f.id}
-                className={`inline-flex items-center gap-1.5 rounded-full px-4 py-2 transition-all ${
-                  selectedFilter === f.id
-                    ? 'bg-slate-900 text-white shadow-sm ring-2 ring-slate-900/10'
-                    : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-slate-900'
-                }`}
-              >
-                {f.icon && <f.icon size={13} className={selectedFilter === f.id ? 'text-white/80' : 'text-slate-400'} />}
+              <button key={f.id} type="button" onClick={() => setSelectedFilter(f.id)} aria-pressed={selectedFilter === f.id} className="ts-chip px-4 py-2 transition-colors">
+                {f.icon && <f.icon size={13} className="opacity-70" />}
                 {f.label}
               </button>
             ))}
@@ -328,140 +277,67 @@ export default function CompanyPickerPage() {
         </div>
       </section>
 
-      {/* Main Grid Section */}
-      <main id="main" className="mx-auto max-w-7xl flex-1 px-4 sm:px-6 lg:px-8 py-10 w-full">
+      {/* Portals */}
+      <main id="main" className="relative mx-auto w-full max-w-7xl flex-1 px-4 pb-10 sm:px-6 lg:px-8">
         {q.isPending ? (
-          <Loading label={t('common.loading')} className="grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
-            {[0, 1, 2, 3, 4, 5].map((i) => (
-              <Skeleton key={i} className="h-80 rounded-3xl" />
-            ))}
+          <Loading label={t('common.loading')} className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {[0, 1, 2, 3, 4, 5].map((i) => <Skeleton key={i} className="h-80 rounded-[18px] !bg-white/[.04]" />)}
           </Loading>
         ) : q.isError ? (
-          <div className="mt-4"><RetryBlock onRetry={() => q.refetch()} /></div>
+          <div className="mt-4 rounded-2xl bg-white p-4"><RetryBlock onRetry={() => q.refetch()} /></div>
         ) : filteredItems.length === 0 ? (
-          <div className="text-center py-20 bg-white rounded-3xl border border-slate-200 shadow-sm">
-            <span className="grid size-12 place-items-center rounded-2xl bg-slate-100 text-slate-400 mx-auto">
-              <Search size={22} />
-            </span>
-            <p className="mt-4 text-lg font-bold text-slate-900">No enterprise portals match "{query}"</p>
-            <p className="mt-1 text-sm text-slate-500">Try searching for keywords like "Banking", "Airport", "Tata", or "Passport".</p>
-            <button
-              type="button"
-              onClick={() => { setQuery(''); setSelectedFilter('all'); }}
-              className="mt-5 inline-flex items-center gap-1.5 rounded-full bg-sky-600 text-white px-5 py-2 text-xs font-bold hover:bg-sky-700 transition-colors shadow-xs"
-            >
-              Reset Search & Filters
+          <div className="ts-card py-20 text-center">
+            <span className="mx-auto grid size-12 place-items-center rounded-2xl border ts-hair bg-white/[.04]"><Search size={20} className="ts-ink3" /></span>
+            <p className="mt-4 text-lg font-semibold">No portal matches “{query}”</p>
+            <p className="ts-ink3 mt-1 text-sm">Try “Banking”, “Airport”, “Tata” or “Passport”.</p>
+            <button type="button" onClick={() => { setQuery(''); setSelectedFilter('all'); }} className="ts-btn ts-btn--primary mt-6 !h-10 !text-sm">
+              Reset search &amp; filters
             </button>
           </div>
         ) : (
-          <ul className="grid grid-cols-1 gap-7 md:grid-cols-2 lg:grid-cols-3">
+          <ul className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
             {filteredItems.map((c) => (
-              <li key={c.slug} className="min-w-0 flex">
-                <div className="group flex flex-col justify-between w-full rounded-3xl border border-slate-200/90 bg-white p-6 sm:p-7 shadow-xs transition-all duration-300 hover:border-sky-400 hover:shadow-xl hover:-translate-y-1.5 relative overflow-hidden">
-                  {/* Brand Color Top Header Strip */}
-                  <div
-                    className="absolute top-0 inset-x-0 h-2 opacity-90 transition-opacity group-hover:opacity-100"
-                    style={{ background: `linear-gradient(90deg, ${c.primaryColor}, ${c.accentColor})` }}
-                  />
-
+              <li key={c.slug} className="flex min-w-0">
+                <div className="ts-card group relative flex w-full flex-col justify-between overflow-hidden p-6 sm:p-7">
+                  <div aria-hidden className="absolute inset-x-6 top-0 h-px opacity-70" style={{ background: `linear-gradient(90deg, transparent, ${c.accentColor || '#fff'}, transparent)` }} />
                   <div>
-                    {/* Top Row: Icon Badge & Status Pill */}
                     <div className="flex items-start justify-between gap-3">
-                      <span
-                        aria-hidden
-                        className="grid size-14 shrink-0 place-items-center rounded-2xl shadow-md text-white transition-transform duration-300 group-hover:scale-105"
-                        style={{ background: `linear-gradient(135deg, ${c.primaryColor}, ${c.accentColor})` }}
-                      >
+                      <span aria-hidden className="grid size-12 shrink-0 place-items-center rounded-xl text-white ring-1 ring-white/10"
+                        style={{ background: `linear-gradient(135deg, ${c.primaryColor}, ${c.accentColor})` }}>
                         {companyDomainIcon(c.slug)}
                       </span>
-
-                      <div className="flex flex-col items-end gap-1">
-                        <span className="rounded-full bg-slate-100 px-3 py-1 text-[11px] font-bold text-slate-600 border border-slate-200/80">
-                          {companyBadgeLabel(c.slug)}
-                        </span>
-                        <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200/60">
-                          <span className="size-1.5 rounded-full bg-emerald-500" />
-                          <span>{companyLiveStatus(c.slug)}</span>
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Company Name & Sector */}
-                    <div className="mt-5">
-                      <h2 className="font-display text-2xl font-black leading-tight text-slate-900 group-hover:text-sky-600 transition-colors tracking-tight line-clamp-2 min-h-[3.75rem]" title={c.name}>
-                        {c.name}
-                      </h2>
-                      <span className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mt-0.5">
-                        {c.sector}
+                      <span className="inline-flex items-center gap-1.5 rounded-full border ts-hair bg-white/[.03] px-2.5 py-1 text-[10.5px] text-emerald-300/90">
+                        <span className="size-1.5 rounded-full bg-emerald-400" />
+                        <span className="ts-mono">{companyLiveStatus(c.slug)}</span>
                       </span>
-                      <p className="mt-2.5 text-sm text-slate-600 leading-relaxed line-clamp-2 min-h-[2.75rem]">
-                        {c.tagline}
-                      </p>
                     </div>
 
-                    {/* Capabilities Tags */}
+                    <div className="mt-6">
+                      <p className="ts-label !text-[10px] !tracking-[.24em]">{companyBadgeLabel(c.slug)}</p>
+                      <h2 className="mt-2 line-clamp-2 min-h-[3.5rem] text-[22px] font-semibold leading-tight tracking-[-0.02em]" title={c.name}>{c.name}</h2>
+                      <p className="ts-ink2 mt-2 line-clamp-2 min-h-[2.75rem] text-sm leading-relaxed">{c.tagline}</p>
+                    </div>
+
                     <div className="mt-5 flex flex-wrap gap-1.5">
                       {companyCapabilities(c.slug).map((cap, i) => (
-                        <span
-                          key={i}
-                          className="inline-flex items-center gap-1 rounded-lg bg-slate-50 border border-slate-200/80 px-2.5 py-1 text-[11px] font-medium text-slate-700"
-                        >
-                          <cap.icon size={12} className="shrink-0 text-slate-400" />
+                        <span key={i} className="ts-chip px-2.5 py-1 text-[11px]">
+                          <cap.icon size={12} className="shrink-0 opacity-60" />
                           <span>{cap.label}</span>
                         </span>
                       ))}
                     </div>
                   </div>
 
-                  {/* Actions & Links Footer */}
-                  <div className="mt-7 pt-5 border-t border-slate-100">
-                    {/* Primary Button */}
-                    <a
-                      href={basenameFor(c.slug)}
-                      aria-label={t('picker.enterAria', { name: c.name })}
-                      className="flex items-center justify-between w-full rounded-2xl bg-gradient-to-r from-sky-600 to-blue-600 px-5 py-3 text-sm font-bold text-white shadow-sm hover:from-sky-500 hover:to-blue-500 transition-all group-hover:shadow-md"
-                    >
+                  <div className="mt-7 border-t ts-hair pt-5">
+                    <a href={basenameFor(c.slug)} aria-label={t('picker.enterAria', { name: c.name })} className="ts-btn ts-btn--primary w-full !justify-between">
                       <span>{t('picker.enter')}</span>
-                      <ArrowRight size={16} className="transition-transform group-hover:translate-x-1.5" />
+                      <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
                     </a>
-
-                    {/* Micro-actions row */}
-                    <div className="mt-3.5 grid grid-cols-4 gap-1 text-center text-[11px] font-semibold text-slate-600">
-                      <a
-                        href={`${basenameFor(c.slug)}/login`}
-                        className="rounded-lg py-1.5 hover:bg-slate-100 hover:text-slate-900 transition-colors flex items-center justify-center gap-1"
-                        title="Sign in with credentials"
-                      >
-                        <LogIn size={12} className="text-slate-400" />
-                        <span>Login</span>
-                      </a>
-
-                      <a
-                        href={`${basenameFor(c.slug)}/login`}
-                        className="rounded-lg py-1.5 hover:bg-slate-100 text-emerald-700 hover:text-emerald-800 transition-colors flex items-center justify-center gap-1 font-bold"
-                        title="1-Click Google Single Sign-On"
-                      >
-                        <GoogleIcon size={12} />
-                        <span>Google</span>
-                      </a>
-
-                      <a
-                        href={`${basenameFor(c.slug)}/help`}
-                        className="rounded-lg py-1.5 hover:bg-slate-100 hover:text-slate-900 transition-colors flex items-center justify-center gap-1"
-                        title="Search knowledge articles"
-                      >
-                        <BookOpen size={12} className="text-slate-400" />
-                        <span>Help</span>
-                      </a>
-
-                      <a
-                        href={`${basenameFor(c.slug)}/assistant`}
-                        className="rounded-lg py-1.5 hover:bg-sky-50 text-sky-700 hover:text-sky-800 transition-colors flex items-center justify-center gap-1 font-bold"
-                        title="Talk to Bilingual Voice AI"
-                      >
-                        <Mic size={12} className="text-sky-600" />
-                        <span>Voice AI</span>
-                      </a>
+                    <div className="ts-ink3 mt-3 grid grid-cols-4 gap-1 text-center text-[11.5px] font-medium">
+                      <a href={`${basenameFor(c.slug)}/login`} title="Sign in with credentials" className="flex items-center justify-center gap-1 rounded-lg py-1.5 hover:bg-white/5 hover:text-white"><LogIn size={12} /> Login</a>
+                      <a href={`${basenameFor(c.slug)}/login`} title="1-Click Google Single Sign-On" className="flex items-center justify-center gap-1 rounded-lg py-1.5 hover:bg-white/5 hover:text-white"><GoogleIcon size={12} /> Google</a>
+                      <a href={`${basenameFor(c.slug)}/help`} title="Search knowledge articles" className="flex items-center justify-center gap-1 rounded-lg py-1.5 hover:bg-white/5 hover:text-white"><BookOpen size={12} /> Help</a>
+                      <a href={`${basenameFor(c.slug)}/assistant`} title="Talk to Bilingual Voice AI" className="flex items-center justify-center gap-1 rounded-lg py-1.5 hover:bg-white/5 hover:text-white"><Mic size={12} /> Voice AI</a>
                     </div>
                   </div>
                 </div>
@@ -470,112 +346,56 @@ export default function CompanyPickerPage() {
           </ul>
         )}
 
-        {/* Feature Highlights Grid */}
-        <section className="mt-16">
-          <div className="text-center max-w-2xl mx-auto mb-8">
-            <span className="text-xs font-bold text-sky-700 uppercase tracking-wider bg-sky-50 border border-sky-200 px-3 py-1 rounded-full">
-              Core Architecture
-            </span>
-            <h2 className="mt-3 font-display text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-              Enterprise Technology Behind SmartCC
-            </h2>
+        {/* Architecture */}
+        <section className="mt-24">
+          <div className="mx-auto mb-10 max-w-2xl text-center">
+            <p className="ts-label">Core architecture</p>
+            <h2 className="ts-steel mt-4 text-[clamp(28px,3.4vw,44px)] font-bold tracking-[-0.035em]">The technology behind SmartCC</h2>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-xs hover:border-slate-300 transition-all">
-              <span className="grid size-12 place-items-center rounded-2xl bg-sky-50 text-sky-600 mb-4 border border-sky-100">
-                <Mic size={22} />
-              </span>
-              <h3 className="font-display font-bold text-base text-slate-900">Bilingual Voice AI</h3>
-              <p className="mt-2 text-xs text-slate-600 leading-relaxed">
-                Groq Whisper Turbo speech-to-text with browser TTS. Natural Hindi Devanagari responses for Hinglish inquiries.
-              </p>
-            </div>
-
-            <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-xs hover:border-slate-300 transition-all">
-              <span className="grid size-12 place-items-center rounded-2xl bg-indigo-50 text-indigo-600 mb-4 border border-indigo-100">
-                <Database size={22} />
-              </span>
-              <h3 className="font-display font-bold text-base text-slate-900">Multi-Tenant Database RAG</h3>
-              <p className="mt-2 text-xs text-slate-600 leading-relaxed">
-                Live customer records (passbooks, GPS lorry tracking, PNRs, payslips) isolated with strict tenant security and zero leaks.
-              </p>
-            </div>
-
-            <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-xs hover:border-slate-300 transition-all">
-              <span className="grid size-12 place-items-center rounded-2xl bg-emerald-50 text-emerald-600 mb-4 border border-emerald-100">
-                <ShieldCheck size={22} />
-              </span>
-              <h3 className="font-display font-bold text-base text-slate-900">Google SSO & Universal Demo</h3>
-              <p className="mt-2 text-xs text-slate-600 leading-relaxed">
-                Instant Google OAuth sign-in with automatic tenant profile provisioning, plus universal credentials (<code className="font-mono text-emerald-700 bg-emerald-100/60 px-1 rounded">xyz@gmail.com / 1234</code>).
-              </p>
-            </div>
-
-            <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-xs hover:border-slate-300 transition-all flex flex-col justify-between">
-              <div>
-                <span className="grid size-12 place-items-center rounded-2xl bg-amber-50 text-amber-600 mb-4 border border-amber-100">
-                  <Headphones size={22} />
-                </span>
-                <h3 className="font-display font-bold text-base text-slate-900">Chatwoot Agent CRM</h3>
-                <p className="mt-2 text-xs text-slate-600 leading-relaxed">
-                  Dedicated company inboxes, live webhooks, SLA enforcement, and seamless bot-to-human agent escalation in real-time.
-                </p>
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4">
+            {[
+              { icon: Mic, title: 'Bilingual Voice AI', body: <>Groq Whisper Turbo speech-to-text with browser TTS. Natural Hindi Devanagari replies for Hinglish questions.</> },
+              { icon: Database, title: 'Multi-tenant database RAG', body: <>Live customer records — passbooks, lorry GPS, PNRs, payslips — isolated per tenant, with no cross-tenant reads.</> },
+              { icon: ShieldCheck, title: 'Google SSO & demo login', body: <>Google sign-in provisions a tenant profile on first use, plus a universal demo login (<code className="ts-mono text-white">xyz@gmail.com / 1234</code>).</> },
+              { icon: Headphones, title: 'Chatwoot agent CRM', body: <>Company inboxes, live webhooks, SLA enforcement and bot-to-human handover in real time.</>, link: true },
+            ].map((f) => (
+              <div key={f.title} className="ts-card flex flex-col p-6">
+                <span className="mb-5 grid size-11 place-items-center rounded-xl border ts-hair bg-white/[.04]"><f.icon size={20} className="text-white" /></span>
+                <h3 className="text-base font-semibold">{f.title}</h3>
+                <p className="ts-ink2 mt-2 flex-1 text-[13px] leading-relaxed">{f.body}</p>
+                {f.link && (
+                  <a href={adminUrl} target="_blank" rel="noopener noreferrer" className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-[color:var(--ts-gold)] hover:brightness-110">
+                    Open agent workspace <ArrowRight size={13} />
+                  </a>
+                )}
               </div>
-              <a
-                href={adminUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-amber-700 hover:text-amber-800 transition-colors"
-              >
-                <span>Open Agent Workspace</span>
-                <ArrowRight size={13} />
-              </a>
-            </div>
+            ))}
           </div>
         </section>
 
-        {/* Stats Strip */}
-        <section className="mt-12 rounded-3xl border border-slate-200 bg-white p-7 sm:p-10 shadow-xs">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center divide-x-0 lg:divide-x divide-slate-100">
-            <div>
-              <p className="font-display text-3xl sm:text-4xl font-black text-sky-600">6</p>
-              <p className="mt-1 text-sm font-bold text-slate-900">Enterprise Desks</p>
-              <p className="text-xs text-slate-500 mt-0.5">Banking, Steel, Aviation, Passport, IT & SME</p>
-            </div>
-
-            <div>
-              <p className="font-display text-3xl sm:text-4xl font-black text-sky-600">&lt; 1s</p>
-              <p className="mt-1 text-sm font-bold text-slate-900">RAG Query Latency</p>
-              <p className="text-xs text-slate-500 mt-0.5">Sub-second database tool execution</p>
-            </div>
-
-            <div>
-              <p className="font-display text-3xl sm:text-4xl font-black text-sky-600">100%</p>
-              <p className="mt-1 text-sm font-bold text-slate-900">Tenant Isolation</p>
-              <p className="text-xs text-slate-500 mt-0.5">Automated regulatory card & account redaction</p>
-            </div>
-
-            <div>
-              <p className="font-display text-3xl sm:text-4xl font-black text-sky-600">3-Tier</p>
-              <p className="mt-1 text-sm font-bold text-slate-900">Autonomous Resolution</p>
-              <p className="text-xs text-slate-500 mt-0.5">Direct AI resolve, agent drafts & escalations</p>
-            </div>
+        {/* Stats */}
+        <section className="ts-card mt-10 !transform-none p-8 sm:p-10">
+          <div className="grid grid-cols-2 gap-8 text-center lg:grid-cols-4 lg:divide-x lg:divide-white/[.08]">
+            {[
+              ['6', 'Enterprise desks', 'Banking, steel, aviation, passport, IT & SME'],
+              ['< 1s', 'RAG query latency', 'Sub-second database tool calls'],
+              ['100%', 'Tenant isolation', 'Card and account numbers redacted'],
+              ['3-tier', 'Autonomous resolution', 'AI resolves, drafts for agents, escalates'],
+            ].map(([n, l, d]) => (
+              <div key={l}>
+                <p className="ts-steel text-4xl font-bold tracking-[-0.03em]">{n}</p>
+                <p className="mt-2 text-sm font-semibold">{l}</p>
+                <p className="ts-ink3 mt-1 text-xs">{d}</p>
+              </div>
+            ))}
           </div>
         </section>
       </main>
 
-      {/* Footer */}
-      <footer className="mt-auto border-t border-slate-200 bg-white py-8 text-center text-xs text-slate-500">
-        <div className="mx-auto max-w-7xl px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p>© 2026 SmartCC Multi-Tenant Enterprise Customer Support Ecosystem.</p>
-          <div className="flex items-center gap-4 text-slate-400">
-            <span>Powered by Groq Whisper Turbo</span>
-            <span>•</span>
-            <span>Chatwoot Rails & Sidekiq</span>
-            <span>•</span>
-            <span>MongoDB Multi-Tenancy</span>
-          </div>
+      <footer className="mt-auto border-t ts-hair py-8 text-xs">
+        <div className="ts-ink3 mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 sm:flex-row">
+          <p>© 2026 SmartCC · Multi-tenant customer support</p>
+          <p className="ts-mono">Groq Whisper Turbo · Chatwoot · MongoDB</p>
         </div>
       </footer>
     </div>
