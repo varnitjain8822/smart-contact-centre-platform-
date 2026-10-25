@@ -203,7 +203,7 @@ export default function CompanyPickerPage() {
       <section className="relative overflow-hidden px-4 pb-16 pt-16 sm:px-6 lg:px-8 lg:pt-24">
         <div aria-hidden className="ts-glow pointer-events-none absolute inset-0" />
         <div aria-hidden className="ts-grid pointer-events-none absolute inset-0" />
-        <div className="relative mx-auto grid w-full max-w-7xl items-center gap-14 lg:grid-cols-[1.05fr_1fr]">
+        <div className="relative mx-auto grid w-full max-w-7xl items-center gap-12 lg:grid-cols-[0.9fr_1.1fr]">
           <div className="text-center lg:text-left">
             <p className="ts-label ts-rise">Unified customer support · {items.length || 6} workspaces</p>
             <h1 className="ts-rise ts-rise-2 mt-6 text-[clamp(40px,5.6vw,76px)] font-bold leading-[1.0] tracking-[-0.05em]">
@@ -418,6 +418,11 @@ const CHATS: Chat[] = [
     chips: ['Escalated', 'Handed to an agent'], secs: '1m 04s', by: 'Handed to a person · context passed' },
 ];
 
+const QUEUED = [
+  { ticket: 'INF-7741', ask: 'Payslip for September shows wrong PF.', state: 'agent' },
+  { ticket: 'SCC-1206', ask: 'GST invoice not generated for order 5521.', state: 'AI' },
+];
+
 /** The hero's product card: conversations play one after another (ask → records check → typing → answer). */
 function LiveChats() {
   const [i, setI] = useState(0);
@@ -436,13 +441,45 @@ function LiveChats() {
   const c = CHATS[i] ?? CHATS[0]!;
   const show = (n: number) => (step >= n ? 'opacity-100 translate-y-0' : 'pointer-events-none opacity-0 translate-y-2');
   return (
-    <div aria-hidden className="ts-rise ts-rise-3 ts-glass relative mx-auto w-full max-w-[560px] overflow-hidden rounded-[18px] shadow-[0_40px_120px_-40px_rgba(120,145,190,.45)]">
+    <div aria-hidden className="ts-rise ts-rise-3 ts-glass relative mx-auto w-full max-w-[700px] overflow-hidden rounded-[18px] shadow-[0_40px_120px_-40px_rgba(120,145,190,.45)]">
       <div className="flex items-center gap-3 border-b ts-hair px-4 py-3">
         <span className="flex gap-1.5">{[0, 1, 2].map((d) => <span key={d} className="size-2.5 rounded-full bg-white/15" />)}</span>
-        <span className="ts-mono ts-ink3 text-xs">ticket {c.ticket}</span>
+        <span className="ts-mono ts-ink3 text-xs">inbox · {CHATS.length + QUEUED.length} open</span>
         <span className="ts-mono ml-auto text-[11px] text-[color:var(--ts-gold)]">{c.org}</span>
       </div>
-      <div className="flex min-h-[300px] flex-col gap-3 px-5 py-5 text-[13.5px] leading-relaxed">
+      <div className="grid sm:grid-cols-[200px_1fr]">
+      {/* Inbox: every ticket in flight; the one playing is lit, earlier ones settled, later ones waiting */}
+      <ul className="hidden border-r ts-hair sm:block">
+        {CHATS.map((t, n) => {
+          const state = n === i ? 'live' : n < i ? 'done' : 'next';
+          return (
+            <li key={t.ticket}>
+              <button type="button" tabIndex={-1} onClick={() => { setI(n); setStep(0); }}
+                className={`flex w-full flex-col gap-1 border-b ts-hair px-3.5 py-3 text-left transition-colors ${state === 'live' ? 'bg-white/[.06]' : 'hover:bg-white/[.03]'}`}>
+                <span className="flex items-center gap-2">
+                  <span className={`size-1.5 shrink-0 rounded-full ${state === 'live' ? 'animate-pulse bg-[color:var(--ts-gold)]' : state === 'done' ? (t.by.startsWith('Handed') ? 'bg-sky-400' : 'bg-emerald-400') : 'bg-white/25'}`} />
+                  <span className="ts-mono text-[11px] text-white">{t.ticket}</span>
+                  {t.voice && <Mic size={10} className="ts-ink3" />}
+                  <span className="ts-mono ts-ink3 ml-auto text-[10px]">{state === 'live' ? 'live' : state === 'done' ? t.secs : 'AI'}</span>
+                </span>
+                <span className={`line-clamp-1 text-[11.5px] ${state === 'live' ? 'text-white' : 'ts-ink3'}`}>{t.ask}</span>
+              </button>
+            </li>
+          );
+        })}
+        {QUEUED.map((q) => (
+          <li key={q.ticket} className="flex flex-col gap-1 border-b ts-hair px-3.5 py-3 last:border-b-0">
+            <span className="flex items-center gap-2">
+              <span className="size-1.5 shrink-0 rounded-full bg-white/25" />
+              <span className="ts-mono text-[11px] text-white/80">{q.ticket}</span>
+              <span className="ts-mono ts-ink3 ml-auto text-[10px]">{q.state}</span>
+            </span>
+            <span className="ts-ink3 line-clamp-1 text-[11.5px]">{q.ask}</span>
+          </li>
+        ))}
+      </ul>
+      <div className="flex min-h-[340px] flex-col gap-3 px-5 py-5 text-[13.5px] leading-relaxed">
+        <span className="ts-mono ts-ink3 -mb-1 text-[11px]">ticket {c.ticket}</span>
         <div className={`max-w-[85%] self-end rounded-2xl rounded-br-md bg-white/[.07] px-4 py-2.5 text-white transition-all duration-500 ${show(1)}`}>
           {c.voice && <VoiceStrip live={step === 1} label="0:04" />}
           {c.voice ? <span className="ts-ink2 mt-1.5 block text-[12.5px] italic">“{c.ask}”</span> : c.ask}
@@ -463,6 +500,7 @@ function LiveChats() {
         <div className={`flex flex-wrap gap-2 pt-1 transition-all duration-500 ${show(5)}`}>
           {c.chips.map((x) => <span key={x} className="ts-chip px-3 py-1 text-[11px]">{x}</span>)}
         </div>
+      </div>
       </div>
       <div className="flex items-center justify-between border-t ts-hair px-5 py-3 text-[12px]">
         <span className={`ts-ink3 transition-opacity duration-500 ${step >= 5 ? 'opacity-100' : 'opacity-0'}`}>{c.by}</span>
