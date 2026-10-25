@@ -199,21 +199,69 @@ export default function CompanyPickerPage() {
         </div>
       </header>
 
-      {/* Hero */}
-      <section className="relative px-4 sm:px-6 lg:px-8 pt-20 pb-14">
+      {/* Hero — two columns, like the ThinqScript landing: the pitch, and the product doing its job */}
+      <section className="relative overflow-hidden px-4 pb-16 pt-16 sm:px-6 lg:px-8 lg:pt-24">
         <div aria-hidden className="ts-glow pointer-events-none absolute inset-0" />
         <div aria-hidden className="ts-grid pointer-events-none absolute inset-0" />
-        <div className="relative mx-auto max-w-4xl text-center">
-          <p className="ts-label ts-rise">Unified customer support · 6 connected workspaces</p>
-          <h1 className="ts-rise ts-rise-2 mt-6 text-[clamp(38px,6vw,72px)] font-bold leading-[1.02] tracking-[-0.045em]">
-            <span className="block text-white">One platform for</span>
-            <span className="ts-dim block">India's critical operations</span>
-          </h1>
-          <p className="ts-rise ts-rise-3 ts-ink2 mx-auto mt-6 max-w-2xl text-[17px] leading-relaxed">
-            Pick a portal to try its industry workflows, live customer record lookups and bilingual Hindi &amp; English voice AI.
-          </p>
+        <div className="relative mx-auto grid max-w-7xl items-center gap-14 lg:grid-cols-[1.05fr_1fr]">
+          <div className="text-center lg:text-left">
+            <p className="ts-label ts-rise">Unified customer support · {items.length || 6} workspaces</p>
+            <h1 className="ts-rise ts-rise-2 mt-6 text-[clamp(40px,5.6vw,76px)] font-bold leading-[1.0] tracking-[-0.05em]">
+              <span className="block text-white">Ask once.</span>
+              <span className="ts-dim block">Get it resolved.</span>
+            </h1>
+            <p className="ts-rise ts-rise-3 ts-ink2 mx-auto mt-6 max-w-xl text-[17px] leading-relaxed lg:mx-0">
+              One help desk for banks, airports, factories and government offices. The AI reads the customer's own records,
+              answers in Hindi or English, and hands over to a person when it should.
+            </p>
+            <div className="ts-rise ts-rise-4 mt-9 flex flex-wrap justify-center gap-3 lg:justify-start">
+              <a href="#portals" className="ts-btn ts-btn--primary !h-12 !px-6">Explore portals <ArrowRight size={16} /></a>
+              <a href={adminUrl} target="_blank" rel="noopener noreferrer" className="ts-btn ts-btn--steel !h-12 !px-6">Agent workspace</a>
+            </div>
+            <ul className="ts-rise ts-rise-4 ts-ink3 mt-6 flex flex-wrap justify-center gap-x-5 gap-y-2 text-[13px] lg:justify-start">
+              {['Hindi & English voice', 'Reads live records', 'Human handover'].map((x) => (
+                <li key={x} className="flex items-center gap-1.5"><span className="text-[color:var(--ts-gold)]">✓</span>{x}</li>
+              ))}
+            </ul>
+          </div>
 
-          <div className="ts-rise ts-rise-4 relative mx-auto mt-10 max-w-xl">
+          {/* Product card: a ticket the AI resolves from the customer's records */}
+          <div aria-hidden className="ts-rise ts-rise-3 ts-glass relative mx-auto w-full max-w-[560px] overflow-hidden rounded-[18px] shadow-[0_40px_120px_-40px_rgba(120,145,190,.45)]">
+            <div className="flex items-center gap-3 border-b ts-hair px-4 py-3">
+              <span className="flex gap-1.5">{[0, 1, 2].map((i) => <span key={i} className="size-2.5 rounded-full bg-white/15" />)}</span>
+              <span className="ts-mono ts-ink3 text-xs">ticket SBI-2207</span>
+              <span className="ts-mono ml-auto text-[11px] text-[color:var(--ts-gold)]">STATE BANK · हिंदी</span>
+            </div>
+            <div className="flex flex-col gap-3 px-5 py-5 text-[13.5px] leading-relaxed">
+              <div className="max-w-[85%] self-end rounded-2xl rounded-br-md bg-white/[.07] px-4 py-2.5 text-white">
+                ATM se paise nahi nikle par account se ₹5,000 kat gaye.
+              </div>
+              <div className="ts-mono ts-ink3 flex items-center gap-2 text-[11px]">
+                <span className="size-1.5 rounded-full bg-emerald-400" /> checked passbook · txn 08:41 · ATM DEL-0193
+              </div>
+              <div className="max-w-[90%] rounded-2xl rounded-bl-md border ts-hair bg-white/[.03] px-4 py-2.5 text-[color:var(--ts-ink1)]">
+                Mil gaya — 25 Oct, 08:41 ka ₹5,000 debit failed dispense hai. Reversal shuru kar diya hai;
+                RBI ke T+5 niyam se 30 Oct tak wapas aa jaayega.
+              </div>
+              <div className="flex flex-wrap gap-2 pt-1">
+                <span className="ts-chip px-3 py-1 text-[11px]">Dispute raised · UPI/ATM</span>
+                <span className="ts-chip px-3 py-1 text-[11px]">Refund by 30 Oct</span>
+              </div>
+            </div>
+            <div className="flex items-center justify-between border-t ts-hair px-5 py-3 text-[12px]">
+              <span className="ts-ink3">Resolved by AI · no agent needed</span>
+              <span className="ts-mono text-white">38s</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Find a portal */}
+      <section id="portals" className="relative scroll-mt-20 px-4 pb-8 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-4xl text-center">
+          <p className="ts-label">Pick a portal</p>
+          <h2 className="ts-steel mt-4 text-[clamp(28px,3.4vw,44px)] font-bold tracking-[-0.035em]">Six help desks, one platform</h2>
+          <div className="relative mx-auto mt-8 max-w-xl">
             <Search size={18} className="ts-ink3 absolute left-4 top-1/2 -translate-y-1/2" />
             <input
               type="text"

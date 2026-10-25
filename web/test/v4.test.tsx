@@ -88,7 +88,7 @@ describe('v4 picker + records chip', () => {
     render(<CompanyPickerPage />, { wrapper: wrap() });
     const card = await screen.findByRole('link', { name: /Enter Acme Retail/ });
     expect(card.getAttribute('href')).toBe('/c/acme');
-    expect(screen.getByRole('heading', { level: 1, name: /One platform for/ })).toBeTruthy();
+    expect(screen.getByRole('heading', { level: 1, name: /Ask once/ })).toBeTruthy();
   });
   it('demo ribbon is silenced per requirements and returns null', () => {
     const { container } = render(<DemoRibbon />, { wrapper: wrap() });
