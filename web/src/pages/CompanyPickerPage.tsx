@@ -200,7 +200,7 @@ export default function CompanyPickerPage() {
       </header>
 
       {/* Hero — two columns, like the ThinqScript landing: the pitch, and the product doing its job */}
-      <section className="relative flex min-h-[calc(100dvh-4rem)] items-center overflow-hidden px-4 py-16 sm:px-6 lg:px-8">
+      <section className="relative overflow-hidden px-4 pb-16 pt-16 sm:px-6 lg:px-8 lg:pt-24">
         <div aria-hidden className="ts-glow pointer-events-none absolute inset-0" />
         <div aria-hidden className="ts-grid pointer-events-none absolute inset-0" />
         <div className="relative mx-auto grid w-full max-w-7xl items-center gap-14 lg:grid-cols-[1.05fr_1fr]">
@@ -230,7 +230,7 @@ export default function CompanyPickerPage() {
       </section>
 
       {/* Find a portal */}
-      <section id="portals" className="relative scroll-mt-20 px-4 pb-8 pt-16 sm:px-6 lg:px-8">
+      <section id="portals" className="relative scroll-mt-20 px-4 pb-8 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-4xl text-center">
           <p className="ts-label">Pick a portal</p>
           <h2 className="ts-steel mt-4 text-[clamp(28px,3.4vw,44px)] font-bold tracking-[-0.035em]">Six help desks, one platform</h2>
@@ -398,9 +398,9 @@ export default function CompanyPickerPage() {
   );
 }
 
-type Chat = { ticket: string; org: string; ask: string; check: string; reply: string; chips: string[]; secs: string; by: string };
+type Chat = { ticket: string; org: string; ask: string; check: string; reply: string; chips: string[]; secs: string; by: string; voice?: boolean };
 const CHATS: Chat[] = [
-  { ticket: 'SBI-2207', org: 'STATE BANK · हिंदी', ask: 'ATM se paise nahi nikle par account se ₹5,000 kat gaye.',
+  { ticket: 'SBI-2207', org: 'STATE BANK · VOICE · हिंदी', voice: true, ask: 'ATM se paise nahi nikle par account se ₹5,000 kat gaye.',
     check: 'checked passbook · txn 08:41 · ATM DEL-0193',
     reply: 'Mil gaya — 25 Oct, 08:41 ka ₹5,000 debit failed dispense hai. Reversal shuru kar diya hai; RBI ke T+5 niyam se 30 Oct tak wapas aa jaayega.',
     chips: ['Dispute raised · ATM', 'Refund by 30 Oct'], secs: '38s', by: 'Resolved by AI · no agent needed' },
@@ -408,7 +408,7 @@ const CHATS: Chat[] = [
     check: 'checked PNR X7K2QD · belt 6 · T1 baggage desk',
     reply: 'Found it: your bag missed the connection and arrives on 6E2178 at 19:40. A delivery to your address is booked for tonight.',
     chips: ['PIR filed · DEL-BG-118', 'Home delivery tonight'], secs: '52s', by: 'Resolved by AI · no agent needed' },
-  { ticket: 'TSL-0931', org: 'TATA STEEL · हिंदी', ask: 'Mera Fe 550D ka truck kab tak pahunchega?',
+  { ticket: 'TSL-0931', org: 'TATA STEEL · VOICE · हिंदी', voice: true, ask: 'Mera Fe 550D ka truck kab tak pahunchega?',
     check: 'checked dispatch LR JSR-LR-778201 · GPS',
     reply: 'Truck JH-05-CD-4421 Ranchi stockyard se 42 km door hai. Aaj shaam 6:30 tak pahunch jaayega; mill test certificate attach kar diya hai.',
     chips: ['ETA 18:30', 'MTC attached'], secs: '27s', by: 'Resolved by AI · no agent needed' },
@@ -425,13 +425,14 @@ function LiveChats() {
   useEffect(() => {
     const still = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
     if (still) { setStep(5); return; }
-    const delays = [500, 900, 900, 1500, 900, 3200];
+    // a voice note plays a little longer than a typed message takes to read
+    const delays = CHATS[i]?.voice ? [500, 1900, 900, 1300, 2300, 3200] : [500, 900, 900, 1500, 900, 3200];
     const id = window.setTimeout(() => {
       if (step < 5) setStep(step + 1);
       else { setStep(0); setI((n) => (n + 1) % CHATS.length); }
     }, delays[step]);
     return () => window.clearTimeout(id);
-  }, [step]);
+  }, [step, i]);
   const c = CHATS[i] ?? CHATS[0]!;
   const show = (n: number) => (step >= n ? 'opacity-100 translate-y-0' : 'pointer-events-none opacity-0 translate-y-2');
   return (
@@ -442,7 +443,10 @@ function LiveChats() {
         <span className="ts-mono ml-auto text-[11px] text-[color:var(--ts-gold)]">{c.org}</span>
       </div>
       <div className="flex min-h-[300px] flex-col gap-3 px-5 py-5 text-[13.5px] leading-relaxed">
-        <div className={`max-w-[85%] self-end rounded-2xl rounded-br-md bg-white/[.07] px-4 py-2.5 text-white transition-all duration-500 ${show(1)}`}>{c.ask}</div>
+        <div className={`max-w-[85%] self-end rounded-2xl rounded-br-md bg-white/[.07] px-4 py-2.5 text-white transition-all duration-500 ${show(1)}`}>
+          {c.voice && <VoiceStrip live={step === 1} label="0:04" />}
+          {c.voice ? <span className="ts-ink2 mt-1.5 block text-[12.5px] italic">“{c.ask}”</span> : c.ask}
+        </div>
         <div className={`ts-mono ts-ink3 flex items-center gap-2 text-[11px] transition-all duration-500 ${show(2)}`}>
           <span className="size-1.5 rounded-full bg-emerald-400" /> {c.check}
         </div>
@@ -451,7 +455,10 @@ function LiveChats() {
             {[0, 1, 2].map((d) => <span key={d} className="size-1.5 animate-bounce rounded-full bg-white/50" style={{ animationDelay: `${d * 120}ms` }} />)}
           </div>
         ) : (
-          <div className={`max-w-[90%] rounded-2xl rounded-bl-md border ts-hair bg-white/[.03] px-4 py-2.5 text-[color:var(--ts-ink1)] transition-all duration-500 ${show(4)}`}>{c.reply}</div>
+          <div className={`max-w-[90%] rounded-2xl rounded-bl-md border ts-hair bg-white/[.03] px-4 py-2.5 text-[color:var(--ts-ink1)] transition-all duration-500 ${show(4)}`}>
+            {c.voice && <VoiceStrip live={step === 4} label="Ask AI · speaking" ai />}
+            <span className={c.voice ? 'mt-1.5 block' : ''}>{c.reply}</span>
+          </div>
         )}
         <div className={`flex flex-wrap gap-2 pt-1 transition-all duration-500 ${show(5)}`}>
           {c.chips.map((x) => <span key={x} className="ts-chip px-3 py-1 text-[11px]">{x}</span>)}
@@ -465,5 +472,24 @@ function LiveChats() {
         </span>
       </div>
     </div>
+  );
+}
+
+/** A voice note: mic or speaker, bars that move while it plays, and a label. */
+function VoiceStrip({ live, label, ai }: { live: boolean; label: string; ai?: boolean }) {
+  const bars = [6, 12, 18, 10, 16, 22, 14, 8, 18, 12, 20, 9, 15, 7, 13, 19, 11, 6];
+  return (
+    <span className="flex items-center gap-2.5">
+      <span className={`grid size-6 shrink-0 place-items-center rounded-full ${ai ? 'bg-white text-black' : 'bg-white/10 text-white'}`}>
+        {ai ? <Sparkles size={12} /> : <Mic size={12} />}
+      </span>
+      <span className="flex h-6 items-center gap-[3px]">
+        {bars.map((h, n) => (
+          <span key={n} className={`w-[3px] rounded-full ${ai ? 'bg-[color:var(--ts-gold)]' : 'bg-white/70'} ${live ? 'ts-wave' : ''}`}
+            style={{ height: h, animationDelay: `${(n % 6) * 90}ms` }} />
+        ))}
+      </span>
+      <span className="ts-mono ts-ink3 text-[10.5px]">{label}</span>
+    </span>
   );
 }

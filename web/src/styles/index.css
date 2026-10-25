@@ -112,4 +112,6 @@
 .ts .ts-glow { animation: ts-breathe 9s ease-in-out infinite; transform-origin: 50% 0; }
 .ts .ts-rise { animation: ts-rise .9s cubic-bezier(.2,.7,.2,1) both; }
 .ts .ts-rise-2 { animation-delay: .12s; } .ts .ts-rise-3 { animation-delay: .24s; } .ts .ts-rise-4 { animation-delay: .36s; }
-@media (prefers-reduced-motion: reduce) { .ts .ts-grid, .ts .ts-glow, .ts .ts-rise { animation: none; } }
+@keyframes ts-wave { 0%, 100% { transform: scaleY(.35); } 50% { transform: scaleY(1); } }
+.ts .ts-wave { animation: ts-wave .7s ease-in-out infinite; transform-origin: center; }
+@media (prefers-reduced-motion: reduce) { .ts .ts-grid, .ts .ts-glow, .ts .ts-rise, .ts .ts-wave { animation: none; } }
