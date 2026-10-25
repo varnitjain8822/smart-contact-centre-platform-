@@ -103,3 +103,13 @@
 .ts .ts-field:focus { outline: none; border-color: rgba(255,255,255,.4); box-shadow: 0 0 0 4px rgba(255,255,255,.06); }
 .ts :focus-visible { outline: 2px solid #e9e9eb; outline-offset: 3px; }
 .ts ::selection { background: rgba(255,255,255,.18); }
+
+/* Landing motion: the grid drifts, the glow breathes, the hero rises in once. Off under reduced motion. */
+@keyframes ts-drift { to { background-position: 56px 56px, 56px 56px; } }
+@keyframes ts-breathe { 0%, 100% { opacity: .75; transform: scale(1); } 50% { opacity: 1; transform: scale(1.08); } }
+@keyframes ts-rise { from { opacity: 0; transform: translateY(14px); filter: blur(6px); } to { opacity: 1; transform: none; filter: none; } }
+.ts .ts-grid { animation: ts-drift 14s linear infinite; }
+.ts .ts-glow { animation: ts-breathe 9s ease-in-out infinite; transform-origin: 50% 0; }
+.ts .ts-rise { animation: ts-rise .9s cubic-bezier(.2,.7,.2,1) both; }
+.ts .ts-rise-2 { animation-delay: .12s; } .ts .ts-rise-3 { animation-delay: .24s; } .ts .ts-rise-4 { animation-delay: .36s; }
+@media (prefers-reduced-motion: reduce) { .ts .ts-grid, .ts .ts-glow, .ts .ts-rise { animation: none; } }

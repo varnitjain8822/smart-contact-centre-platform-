@@ -204,16 +204,16 @@ export default function CompanyPickerPage() {
         <div aria-hidden className="ts-glow pointer-events-none absolute inset-0" />
         <div aria-hidden className="ts-grid pointer-events-none absolute inset-0" />
         <div className="relative mx-auto max-w-4xl text-center">
-          <p className="ts-label">Unified customer support · 6 connected workspaces</p>
-          <h1 className="mt-6 text-[clamp(38px,6vw,72px)] font-bold leading-[1.02] tracking-[-0.045em]">
+          <p className="ts-label ts-rise">Unified customer support · 6 connected workspaces</p>
+          <h1 className="ts-rise ts-rise-2 mt-6 text-[clamp(38px,6vw,72px)] font-bold leading-[1.02] tracking-[-0.045em]">
             <span className="block text-white">One platform for</span>
             <span className="ts-dim block">India's critical operations</span>
           </h1>
-          <p className="ts-ink2 mx-auto mt-6 max-w-2xl text-[17px] leading-relaxed">
+          <p className="ts-rise ts-rise-3 ts-ink2 mx-auto mt-6 max-w-2xl text-[17px] leading-relaxed">
             Pick a portal to try its industry workflows, live customer record lookups and bilingual Hindi &amp; English voice AI.
           </p>
 
-          <div className="relative mx-auto mt-10 max-w-xl">
+          <div className="ts-rise ts-rise-4 relative mx-auto mt-10 max-w-xl">
             <Search size={18} className="ts-ink3 absolute left-4 top-1/2 -translate-y-1/2" />
             <input
               type="text"
